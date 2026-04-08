@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUẢN TRỊ HỆ THỐNG — ĐOÀN CƠ SỞ TRUNG ĐOÀN 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:       #D0021B;
+  --red-dark:  #A50015;
+  --gold:      #F5C518;
+  --gold-dark: #D4A017;
+  --blue:      #0047AB;
+  --blue-mid:  #0056CE;
+  --blue-light:#E8F0FE;
+  --blue-pale: #F0F5FF;
+  --green:     #1B8B3D;
+  --gray-50:   #F8FAFC;
+  --gray-100:  #F1F5F9;
+  --gray-200:  #E2E8F0;
+  --gray-400:  #94A3B8;
+  --gray-600:  #475569;
+  --gray-800:  #1E293B;
+  --shadow-sm: 0 2px 8px rgba(0,71,171,0.08);
+  --shadow-md: 0 8px 32px rgba(0,71,171,0.14);
+  --shadow-lg: 0 20px 60px rgba(0,71,171,0.20);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Be Vietnam Pro', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.site-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 10px,
+    rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.01) 20px
+  );
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+.header-icon { font-size: 48px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+.header-text { flex: 1; }
+.header-org  { font-size:11px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+.header-title { font-family:'Playfair Display',serif; font-size:clamp(18px,3vw,26px); font-weight:800; color:#fff; line-height:1.2; }
+.header-subtitle { font-size:13px; color:var(--gold); font-weight:600; margin-top:4px; }
+.admin-badge {
+  background: rgba(208,2,27,0.8);
+  border: 1px solid rgba(208,2,27,1);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* MAIN */
+.main { max-width: 820px; margin: 0 auto; padding: 32px 20px 60px; }
+
+/* LOGIN SCREEN */
+.login-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+.login-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  width: 100%;
+  max-width: 440px;
+}
+.login-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+  padding: 36px 32px;
+  text-align: center;
+  color: white;
+}
+.login-icon { font-size: 56px; margin-bottom: 12px; }
+.login-header h2 { font-family:'Playfair Display',serif; font-size:24px; font-weight:800; margin-bottom:6px; }
+.login-header p  { font-size:13px; opacity:.7; }
+.login-body { padding: 32px; }
+.field-label { display:block; font-size:13px; font-weight:600; color:var(--gray-600); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px; }
+.field-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--gray-800);
+  background: var(--gray-50);
+  transition: var(--transition);
+  outline: none;
+  letter-spacing: 3px;
+}
+.field-input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 4px rgba(0,71,171,.08); }
+.field-input.shake { animation: shake .4s ease; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-8px)} 40%,80%{transform:translateX(8px)}
+}
+.login-err { color:var(--red); font-size:13px; font-weight:600; margin-top:8px; min-height:20px; }
+.btn-login {
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: .5px;
+}
+.btn-login:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(15,52,96,.4); }
+.lock-notice { text-align:center; margin-top:16px; font-size:12px; color:var(--gray-400); }
+
+/* ADMIN PANEL */
+.panel-section { display:none; }
+.panel-section.active { display:block; animation: fadeSlideUp .4s ease forwards; }
+@keyframes fadeSlideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.admin-user { display:flex; align-items:center; gap:10px; }
+.admin-avatar { width:40px; height:40px; background:linear-gradient(135deg,#1a1a2e,#0f3460); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; }
+.admin-name { font-weight:700; font-size:15px; color:var(--gray-800); }
+.admin-role { font-size:12px; color:var(--gray-400); }
+.btn-logout {
+  padding: 8px 18px;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-logout:hover { background:#FFF5F5; color:var(--red); border-color:var(--red); }
+
+/* STATS CARDS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+.stat-card-icon { font-size:28px; margin-bottom:8px; }
+.stat-card-num  { font-size:28px; font-weight:800; color:var(--blue); }
+.stat-card-lbl  { font-size:12px; color:var(--gray-600); font-weight:500; margin-top:2px; }
+
+/* LEADERBOARD IN ADMIN */
+.admin-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 24px;
+}
+.admin-card-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.admin-card-header h3 { font-size:18px; font-weight:800; color:var(--gray-800); }
+.admin-card-header p  { font-size:13px; color:var(--gray-400); margin-top:2px; }
+
+/* DANGER ZONE */
+.danger-zone {
+  background: white;
+  border-radius: var(--radius);
+  border: 2px solid #FEE2E2;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.danger-header {
+  background: #FFF5F5;
+  padding: 16px 24px;
+  border-bottom: 1px solid #FEE2E2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.danger-header h3 { font-size:16px; font-weight:800; color:var(--red); }
+.danger-body { padding: 24px; }
+.danger-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.danger-item-info h4 { font-size:15px; font-weight:700; color:var(--gray-800); margin-bottom:4px; }
+.danger-item-info p  { font-size:13px; color:var(--gray-600); line-height:1.5; }
+
+.btn {
+  display: inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding: 12px 24px; border-radius:var(--radius-sm); font-family:inherit;
+  font-size:14px; font-weight:700; cursor:pointer; border:none;
+  transition:var(--transition); white-space:nowrap;
+}
+.btn-red {
+  background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(208,2,27,.3);
+}
+.btn-red:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(208,2,27,.4); }
+.btn-green { background:linear-gradient(135deg,var(--green) 0%,#147A33 100%); color:white; box-shadow:0 4px 12px rgba(27,139,61,.3); }
+.btn-green:hover { transform:translateY(-2px); }
+.btn-gray { background:var(--gray-100); color:var(--gray-600); border:1px solid var(--gray-200); }
+.btn-gray:hover { background:var(--gray-200); }
+
+/* LB TABLE */
+.lb-table { width:100%; border-collapse:collapse; }
+.lb-table th { background:var(--gray-50); padding:10px 16px; font-size:12px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:.5px; text-align:left; border-bottom:1px solid var(--gray-200); }
+.lb-table td { padding:12px 16px; font-size:14px; border-bottom:1px solid var(--gray-100); vertical-align:middle; }
+.lb-table tr:last-child td { border-bottom:none; }
+.lb-table tr:hover td { background:var(--blue-pale); }
+.rank-badge { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; font-weight:800; font-size:13px; }
+.rank-1 { background:var(--gold); color:#7A5200; }
+.rank-2 { background:#C0C0C0; color:#4A4A4A; }
+.rank-3 { background:#CD7F32; color:white; }
+.rank-n { background:var(--gray-200); color:var(--gray-600); }
+.score-chip { background:var(--blue-light); color:var(--blue); font-weight:800; padding:4px 10px; border-radius:20px; font-size:14px; }
+.passed-chip { background:#F0FBF4; color:var(--green); font-weight:700; padding:3px 10px; border-radius:20px; font-size:12px; }
+.failed-chip { background:#FFF5F5; color:var(--red); font-weight:700; padding:3px 10px; border-radius:20px; font-size:12px; }
+
+.lb-empty { text-align:center; padding:48px; color:var(--gray-400); }
+.lb-empty-icon { font-size:48px; margin-bottom:12px; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:9999; opacity:0; pointer-events:none; transition:opacity .25s ease; padding:20px; }
+.modal-overlay.show { opacity:1; pointer-events:all; }
+.modal { background:white; border-radius:var(--radius); padding:36px 32px; max-width:440px; width:100%; text-align:center; box-shadow:0 40px 80px rgba(0,0,0,.3); transform:scale(.9); transition:transform .25s ease; }
+.modal-overlay.show .modal { transform:scale(1); }
+.modal-icon { font-size:52px; margin-bottom:16px; }
+.modal h3 { font-size:20px; font-weight:800; color:var(--gray-800); margin-bottom:10px; }
+.modal p  { font-size:14px; color:var(--gray-600); line-height:1.6; margin-bottom:24px; }
+.modal-btns { display:flex; gap:12px; justify-content:center; }
+
+/* TOAST */
+.toast { position:fixed; bottom:28px; right:28px; background:var(--gray-800); color:white; padding:14px 22px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; box-shadow:var(--shadow-lg); z-index:9999; transform:translateY(100px); opacity:0; transition:all .3s ease; max-width:340px; }
+.toast.show { transform:translateY(0); opacity:1; }
+
+/* SECTION TITLE */
+.section-title { font-size:13px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.section-title::after { content:''; flex:1; height:1px; background:var(--gray-200); }
+.divider { height:1px; background:var(--gray-200); margin:20px 0; }
+
+@media (max-width:600px) {
+  .stats-grid { grid-template-columns:1fr 1fr; }
+  .admin-topbar { flex-direction:column; align-items:flex-start; }
+}
+
+/* SEARCH / FILTER */
+.filter-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
+.filter-input { padding:9px 14px; border:1px solid var(--gray-200); border-radius:var(--radius-sm); font-family:inherit; font-size:14px; color:var(--gray-800); background:white; outline:none; flex:1; min-width:180px; }
+.filter-input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,71,171,.08); }
+
+/* Export hint */
+.export-hint { font-size:12px; color:var(--gray-400); margin-top:8px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-icon">🛡️</div>
+    <div class="header-text">
+      <div class="header-org">ĐOÀN CƠ SỞ TRUNG ĐOÀN 1</div>
+      <div class="header-title">TRANG QUẢN TRỊ HỆ THỐNG</div>
+      <div class="header-subtitle">Dành riêng cho Ban Tổ Chức — Không dành cho thí sinh</div>
+    </div>
+    <div class="admin-badge">⚙️ ADMIN</div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ===== LOGIN ===== -->
+  <div id="loginWrap" class="login-wrap">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-icon">🔐</div>
+        <h2>Xác Thực Quản Trị Viên</h2>
+        <p>Nhập mật khẩu để truy cập trang quản trị</p>
+      </div>
+      <div class="login-body">
+        <label class="field-label">Mật Khẩu Admin</label>
+        <input type="password" class="field-input" id="pwdInput" placeholder="••••••••"
+          maxlength="30" onkeydown="if(event.key==='Enter') doLogin()">
+        <div class="login-err" id="loginErr"></div>
+        <button class="btn-login" onclick="doLogin()">🔓 Đăng Nhập</button>
+        <div class="lock-notice">🔒 Trang này được bảo vệ. Nhập sai 5 lần sẽ bị khoá 10 phút.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ADMIN PANEL ===== -->
+  <div id="adminPanel" class="panel-section">
+
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <div class="admin-user">
+        <div class="admin-avatar">⚙️</div>
+        <div>
+          <div class="admin-name">Quản Trị Viên</div>
+          <div class="admin-role" id="loginTimeLabel">Đăng nhập lúc --</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-green" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
+        <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="section-title">📊 Thống Kê Tổng Quan</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-icon">👥</div>
+        <div class="stat-card-num" id="statTotal">0</div>
+        <div class="stat-card-lbl">Thí sinh đã thi</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">✅</div>
+        <div class="stat-card-num" id="statPassed">0</div>
+        <div class="stat-card-lbl">Đạt yêu cầu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">📈</div>
+        <div class="stat-card-num" id="statAvg">0</div>
+        <div class="stat-card-lbl">Điểm trung bình</div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div>
+          <h3>🏆 Bảng Xếp Hạng Chi Tiết</h3>
+          <p>Toàn bộ kết quả được lưu trong trình duyệt này</p>
+        </div>
+        <button class="btn btn-green" onclick="exportCSV()">⬇️ Xuất CSV</button>
+      </div>
+      <div style="padding:16px 20px 8px">
+        <div class="filter-row">
+          <input type="text" class="filter-input" id="searchInput" placeholder="🔍 Tìm kiếm tên, đơn vị..."
+            oninput="renderTable()">
+          <select class="filter-input" id="filterResult" onchange="renderTable()" style="flex:0;min-width:140px">
+            <option value="">Tất cả kết quả</option>
+            <option value="dat">✅ ĐẠT</option>
+            <option value="chuadat">❌ CHƯA ĐẠT</option>
+          </select>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="lb-table" id="lbTable">
+          <thead>
+            <tr>
+              <th style="width:50px">Hạng</th>
+              <th>Họ và Tên</th>
+              <th>Đơn Vị</th>
+              <th>Chức Vụ</th>
+              <th>Điểm</th>
+              <th>Kết Quả</th>
+              <th>Thời Gian</th>
+            </tr>
+          </thead>
+          <tbody id="lbBody">
+            <tr><td colspan="7"><div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có dữ liệu</div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="danger-zone">
+      <div class="danger-header">
+        <span style="font-size:20px">⚠️</span>
+        <h3>VÙNG NGUY HIỂM — Chỉ dành cho Admin</h3>
+      </div>
+      <div class="danger-body">
+        <div class="danger-item">
+          <div class="danger-item-info">
+            <h4>Xóa toàn bộ Bảng Xếp Hạng</h4>
+            <p>Xóa tất cả dữ liệu kết quả thi đang lưu trong trình duyệt này.<br>
+               <strong>Lưu ý:</strong> Dữ liệu đã gửi lên Google Sheets sẽ không bị ảnh hưởng.</p>
+          </div>
+          <button class="btn btn-red" onclick="confirmClearLB()">🗑️ Xóa Bảng Xếp Hạng</button>
+        </div>
+        <div class="divider"></div>
+        <div class="danger-item">
+          <div class="danger-item-info">
+            <h4>Xuất dữ liệu dự phòng</h4>
+            <p>Tải toàn bộ dữ liệu bảng xếp hạng về máy dưới dạng file JSON (để phục hồi nếu cần).</p>
+          </div>
+          <button class="btn btn-gray" onclick="exportJSON()">💾 Xuất JSON</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- MODAL: XÁC NHẬN XÓA -->
+<div class="modal-overlay" id="modalClear">
+  <div class="modal">
+    <div class="modal-icon">🗑️</div>
+    <h3>Xác Nhận Xóa Bảng Xếp Hạng</h3>
+    <p>Thao tác này sẽ xóa <strong>toàn bộ dữ liệu</strong> bảng xếp hạng đang lưu trong trình duyệt. Hành động <strong>không thể hoàn tác</strong>. Bạn có chắc chắn?</p>
+    <div class="modal-btns">
+      <button class="btn btn-gray" onclick="closeModal('modalClear')">Hủy Bỏ</button>
+      <button class="btn btn-red" onclick="doClearLB()">🗑️ Xóa Ngay</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div style="text-align:center;font-size:11px;color:var(--gray-400);padding:6px 0 18px">
+  Tác giả: <strong>Đậu Quang Vũ</strong> — CTV/c12/d3/e1/f324 &nbsp;|&nbsp; Trang Admin — Không chia sẻ đường dẫn này
+</div>
+
+<script>
+// ============================================================
+// ⚠️  ĐỔI MẬT KHẨU TẠI ĐÂY TRƯỚC KHI TRIỂN KHAI
+// ============================================================
+const ADMIN_PASSWORD = 'DoanE1@2026';   // ← ĐỔI MẬT KHẨU TẠI ĐÂY
+const MAX_ATTEMPTS   = 5;               // Số lần thử tối đa
+const LOCK_MINUTES   = 10;             // Khoá bao nhiêu phút sau khi thử sai
+
+// ============================================================
+// BRUTE-FORCE PROTECTION
+// ============================================================
+function getLockState() {
+  try {
+    const raw = sessionStorage.getItem('admin_lock');
+    return raw ? JSON.parse(raw) : { attempts: 0, lockedUntil: 0 };
+  } catch(e) { return { attempts: 0, lockedUntil: 0 }; }
+}
+function saveLockState(s) {
+  try { sessionStorage.setItem('admin_lock', JSON.stringify(s)); } catch(e) {}
+}
+
+function doLogin() {
+  const lock = getLockState();
+  const now  = Date.now();
+
+  if (lock.lockedUntil > now) {
+    const mins = Math.ceil((lock.lockedUntil - now) / 60000);
+    document.getElementById('loginErr').textContent =
+      `🔒 Tài khoản tạm khoá. Thử lại sau ${mins} phút.`;
+    return;
+  }
+
+  const pwd = document.getElementById('pwdInput').value;
+  if (pwd === ADMIN_PASSWORD) {
+    saveLockState({ attempts: 0, lockedUntil: 0 });
+    enterAdmin();
+  } else {
+    lock.attempts++;
+    if (lock.attempts >= MAX_ATTEMPTS) {
+      lock.lockedUntil = now + LOCK_MINUTES * 60000;
+      lock.attempts    = 0;
+      saveLockState(lock);
+      document.getElementById('loginErr').textContent =
+        `🔒 Nhập sai quá ${MAX_ATTEMPTS} lần. Khoá trong ${LOCK_MINUTES} phút.`;
+    } else {
+      saveLockState(lock);
+      const remaining = MAX_ATTEMPTS - lock.attempts;
+      document.getElementById('loginErr').textContent =
+        `❌ Mật khẩu sai. Còn ${remaining} lần thử.`;
+    }
+    const inp = document.getElementById('pwdInput');
+    inp.value = '';
+    inp.classList.remove('shake');
+    void inp.offsetWidth; // reflow
+    inp.classList.add('shake');
+  }
+}
+
+function enterAdmin() {
+  document.getElementById('loginWrap').style.display = 'none';
+  const panel = document.getElementById('adminPanel');
+  panel.classList.add('active');
+  document.getElementById('loginTimeLabel').textContent =
+    'Đăng nhập lúc ' + new Date().toLocaleTimeString('vi-VN');
+  loadData();
+}
+
+function doLogout() {
+  document.getElementById('loginWrap').style.display = 'flex';
+  document.getElementById('adminPanel').classList.remove('active');
+  document.getElementById('pwdInput').value = '';
+  document.getElementById('loginErr').textContent = '';
+}
+
+// ============================================================
+// DATA
+// ============================================================
+let allData = [];
+const NUM_QUESTIONS = 20;
+const PASS_SCORE    = 10;
+
+function loadData() {
+  try {
+    allData = JSON.parse(localStorage.getItem('doan_lb') || '[]');
+  } catch(e) { allData = []; }
+  updateStats();
+  renderTable();
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent  = allData.length;
+  const passed = allData.filter(e => (e.score || 0) >= PASS_SCORE).length;
+  document.getElementById('statPassed').textContent = passed;
+  const avg = allData.length
+    ? (allData.reduce((s,e) => s + (e.score||0), 0) / allData.length).toFixed(1)
+    : '0';
+  document.getElementById('statAvg').textContent = avg;
+}
+
+function renderTable() {
+  const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const filter = document.getElementById('filterResult').value;
+
+  let data = [...allData].sort((a,b) => b.score - a.score);
+
+  if (search) {
+    data = data.filter(e =>
+      (e.name||'').toLowerCase().includes(search) ||
+      (e.unit||'').toLowerCase().includes(search)
+    );
+  }
+  if (filter === 'dat')      data = data.filter(e => (e.score||0) >= PASS_SCORE);
+  if (filter === 'chuadat')  data = data.filter(e => (e.score||0) < PASS_SCORE);
+
+  const tbody = document.getElementById('lbBody');
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Không có dữ liệu phù hợp</div></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map((entry, i) => {
+    const passed = (entry.score||0) >= PASS_SCORE;
+    const rankClass = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+    const rankLabel = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+    return `<tr>
+      <td><div class="rank-badge ${rankClass}">${rankLabel}</div></td>
+      <td><strong>${escHtml(entry.name||'')}</strong></td>
+      <td>${escHtml(entry.unit||'')}</td>
+      <td>${escHtml(entry.title||'—')}</td>
+      <td><span class="score-chip">${entry.score||0}/${NUM_QUESTIONS}</span></td>
+      <td><span class="${passed?'passed-chip':'failed-chip'}">${passed?'✅ ĐẠT':'❌ CHƯA ĐẠT'}</span></td>
+      <td style="font-size:12px;color:var(--gray-400)">${escHtml(entry.time||'')}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// CLEAR LEADERBOARD (chỉ admin mới có chức năng này)
+// ============================================================
+function confirmClearLB() {
+  openModal('modalClear');
+}
+function doClearLB() {
+  try { localStorage.removeItem('doan_lb'); } catch(e) {}
+  allData = [];
+  updateStats();
+  renderTable();
+  closeModal('modalClear');
+  showToast('🗑️ Đã xóa toàn bộ bảng xếp hạng thành công.');
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+function exportCSV() {
+  if (!allData.length) { showToast('⚠️ Không có dữ liệu để xuất.'); return; }
+  const header = ['Hạng','Họ Tên','Đơn Vị','Chức Vụ','Điểm','Kết Quả','Thời Gian'];
+  const sorted = [...allData].sort((a,b) => b.score - a.score);
+  const rows = sorted.map((e, i) => [
+    i+1,
+    e.name||'',
+    e.unit||'',
+    e.title||'',
+    e.score||0,
+    (e.score||0)>=PASS_SCORE?'ĐẠT':'CHƯA ĐẠT',
+    e.time||'',
+  ]);
+  const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const bom  = '\uFEFF'; // UTF-8 BOM cho Excel
+  downloadFile(bom + csv, `BangXepHang_${dateStamp()}.csv`, 'text/csv;charset=utf-8');
+  showToast('✅ Đã xuất file CSV thành công!');
+}
+
+function exportJSON() {
+  if (!allData.length) { showToast('⚠️ Không có dữ liệu để xuất.'); return; }
+  downloadFile(JSON.stringify(allData, null, 2), `DuPhong_BXH_${dateStamp()}.json`, 'application/json');
+  showToast('✅ Đã xuất file JSON dự phòng!');
+}
+
+function downloadFile(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function dateStamp() {
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ============================================================
+// MODAL / TOAST / HELPER
+// ============================================================
+function openModal(id)  { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Enter to login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+});
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('show'); });
+});
+</script>
+</body>
+</html>
