@@ -199,6 +199,33 @@ body { user-select: none; -webkit-user-select: none; }
 .info-card-label { font-size: 12px; color: var(--gray-600); font-weight: 500; margin-top: 2px; }
 
 /* =========================================
+   COUNTDOWN SCREEN
+========================================= */
+.countdown-block {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.cd-unit {
+  border-radius: 12px;
+  padding: 20px 24px;
+  min-width: 80px;
+  text-align: center;
+  color: white;
+}
+.cd-num {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+}
+.cd-lbl {
+  font-size: 12px;
+  opacity: .8;
+  margin-top: 4px;
+}
+
+/* =========================================
    FORM SCREEN
 ========================================= */
 .form-card {
@@ -654,6 +681,22 @@ body { user-select: none; -webkit-user-select: none; }
 }
 .lb-empty-icon { font-size: 48px; margin-bottom: 12px; }
 
+/* Clear leaderboard button */
+.lb-clear-btn {
+  margin: 0 24px 16px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--gray-600);
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.lb-clear-btn:hover { background: #FFF5F5; color: var(--red); border-color: var(--red); }
+
 /* =========================================
    MODAL
 ========================================= */
@@ -722,6 +765,7 @@ body { user-select: none; -webkit-user-select: none; }
   transform: translateY(100px);
   opacity: 0;
   transition: all 0.3s ease;
+  max-width: 320px;
 }
 .toast.show { transform: translateY(0); opacity: 1; }
 
@@ -742,6 +786,9 @@ body { user-select: none; -webkit-user-select: none; }
   .question-header { padding: 16px 18px; }
   .options-grid { padding: 16px 18px; }
   .modal { padding: 28px 20px; }
+  .countdown-block { gap: 10px; }
+  .cd-unit { padding: 14px 16px; min-width: 64px; }
+  .cd-num { font-size: 32px; }
 }
 
 /* =========================================
@@ -830,6 +877,7 @@ body { user-select: none; -webkit-user-select: none; }
         <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--gray-600)"><span style="color:var(--red);font-size:18px;flex-shrink:0">•</span> Bài thi gồm <strong>20 câu hỏi</strong> được chọn ngẫu nhiên từ ngân hàng 200 câu</li>
         <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--gray-600)"><span style="color:var(--red);font-size:18px;flex-shrink:0">•</span> Thứ tự đáp án được <strong>xáo trộn ngẫu nhiên</strong> cho mỗi người</li>
         <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--gray-600)"><span style="color:var(--red);font-size:18px;flex-shrink:0">•</span> Bài thi sẽ <strong>tự động nộp</strong> khi hết thời gian</li>
+        <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--gray-600)"><span style="color:var(--red);font-size:18px;flex-shrink:0">•</span> <strong>Phải trả lời tất cả câu hỏi</strong> mới được nộp bài</li>
         <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--gray-600)"><span style="color:var(--red);font-size:18px;flex-shrink:0">•</span> Cấm sao chép, chụp màn hình hoặc thoát khỏi trang thi</li>
         <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--gray-600)"><span style="color:var(--red);font-size:18px;flex-shrink:0">•</span> Kết quả sẽ được <strong>lưu tự động</strong> vào hệ thống</li>
       </ul>
@@ -840,6 +888,31 @@ body { user-select: none; -webkit-user-select: none; }
     <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="showScreen('screenLeaderboard')">
       🏆 Xem Bảng Xếp Hạng
     </button>
+  </div>
+
+  <!-- ===== SCREEN COUNTDOWN: ĐẾM NGƯỢC GIỜ THI ===== -->
+  <div class="screen" id="screenCountdown">
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:48px 32px;text-align:center;border:1px solid var(--gray-200)">
+      <div style="font-size:56px;margin-bottom:16px">⏳</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--gray-800);margin-bottom:10px">Bài Thi Chưa Bắt Đầu</h2>
+      <p style="font-size:15px;color:var(--gray-600);margin-bottom:32px">Vui lòng chờ đến giờ thi chính thức</p>
+      <div class="countdown-block">
+        <div class="cd-unit" style="background:var(--blue)">
+          <div class="cd-num" id="cdH">00</div>
+          <div class="cd-lbl">Giờ</div>
+        </div>
+        <div class="cd-unit" style="background:var(--red)">
+          <div class="cd-num" id="cdM">00</div>
+          <div class="cd-lbl">Phút</div>
+        </div>
+        <div class="cd-unit" style="background:var(--gold-dark)">
+          <div class="cd-num" id="cdS">00</div>
+          <div class="cd-lbl">Giây</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--gray-400)">Giờ thi chính thức: <strong id="cdStartLabel"></strong></p>
+    </div>
+    <button class="btn btn-outline" style="width:100%;margin-top:16px" onclick="showScreen('screenWelcome')">← Quay Lại</button>
   </div>
 
   <!-- ===== SCREEN 2: FORM ===== -->
@@ -959,9 +1032,7 @@ body { user-select: none; -webkit-user-select: none; }
         <button class="btn btn-primary" style="width:100%" onclick="showScreen('screenLeaderboard')">
           🏆 Xem Bảng Xếp Hạng
         </button>
-        <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="restartAll()">
-          🔄 Thi Lại
-        </button>
+        <!-- Nút "Thi Lại" đã bị xóa theo yêu cầu -->
       </div>
     </div>
   </div>
@@ -978,6 +1049,9 @@ body { user-select: none; -webkit-user-select: none; }
           <div class="lb-empty-icon">📊</div>
           <div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div>
         </div>
+      </div>
+      <div style="padding:12px 24px 20px">
+        <button class="lb-clear-btn" onclick="clearLeaderboard()">🗑️ Xóa bảng xếp hạng</button>
       </div>
     </div>
     <button class="btn btn-outline" style="width:100%;margin-top:16px" onclick="showScreen('screenWelcome')">
@@ -1003,6 +1077,11 @@ body { user-select: none; -webkit-user-select: none; }
 <!-- ==================== TOAST ==================== -->
 <div class="toast" id="toast"></div>
 
+<!-- ==================== FOOTER TÁC GIẢ ==================== -->
+<div style="text-align:center;font-size:11px;color:var(--gray-400);padding:6px 0 18px;user-select:none">
+  Tác giả: <strong>Đậu Quang Vũ</strong> — CTV/c12/d3/e1/f324
+</div>
+
 <!-- ==================== SCRIPTS ==================== -->
 <script src="questions.js"></script>
 <script>
@@ -1015,10 +1094,13 @@ const CONFIG = {
   PASS_SCORE:     10,      // Điểm đạt (trên 20)
   ALLOW_CHANGE:   true,    // Cho phép đổi đáp án
 
-  // Google Sheets: Thay bằng URL Web App của bạn sau khi deploy
-  // Hướng dẫn ở README.md
+  // Đếm ngược giờ thi — đổi thành ngày giờ thi thực tế (định dạng: 'YYYY-MM-DD HH:MM')
+  EXAM_START_TIME: '2026-04-08 14:00',
+  USE_COUNTDOWN:   true,   // Đặt false để tắt tính năng đếm ngược
+
+  // Google Sheets
   SHEET_URL: 'https://script.google.com/macros/s/AKfycbxghPNrgAkg9prajEL8hoocBvqAuIdvYJIvGSEcjGPr_4j9p9X-o_UlhYtFEsc3MN1O/exec',
-  SEND_TO_SHEET: true,    // Đặt true khi đã cấu hình Sheet URL
+  SEND_TO_SHEET: true,
 };
 
 // ============================================================
@@ -1026,8 +1108,8 @@ const CONFIG = {
 // ============================================================
 let state = {
   candidate:    {},
-  questions:    [],   // 20 câu đã random
-  answers:      [],   // answers[i] = index chọn (null nếu chưa)
+  questions:    [],
+  answers:      [],
   currentIdx:   0,
   timerInterval: null,
   timeLeft:     CONFIG.TIME_MINUTES * 60,
@@ -1044,9 +1126,58 @@ function showScreen(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Override để load leaderboard khi mở màn hình đó
+const _baseShowScreen = showScreen;
+window.showScreen = function(id) {
+  _baseShowScreen(id);
+  if (id === 'screenLeaderboard') loadLeaderboard();
+};
+
 function goToForm() {
+  if (CONFIG.USE_COUNTDOWN) {
+    const startTime = new Date(CONFIG.EXAM_START_TIME).getTime();
+    if (Date.now() < startTime) {
+      showScreen('screenCountdown');
+      startCountdownToExam(startTime);
+      return;
+    }
+  }
   showScreen('screenForm');
   setTimeout(() => document.getElementById('fName').focus(), 300);
+}
+
+// ============================================================
+// COUNTDOWN ĐẾM NGƯỢC GIỜ THI
+// ============================================================
+let cdInterval = null;
+
+function startCountdownToExam(startTime) {
+  document.getElementById('cdStartLabel').textContent =
+    new Date(startTime).toLocaleString('vi-VN');
+
+  if (cdInterval) clearInterval(cdInterval);
+
+  function tick() {
+    const diff = startTime - Date.now();
+    if (diff <= 0) {
+      clearInterval(cdInterval);
+      document.getElementById('cdH').textContent = '00';
+      document.getElementById('cdM').textContent = '00';
+      document.getElementById('cdS').textContent = '00';
+      showToast('🎉 Đã đến giờ thi! Mời bạn điền thông tin.');
+      showScreen('screenForm');
+      setTimeout(() => document.getElementById('fName').focus(), 300);
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cdH').textContent = String(h).padStart(2, '0');
+    document.getElementById('cdM').textContent = String(m).padStart(2, '0');
+    document.getElementById('cdS').textContent = String(s).padStart(2, '0');
+  }
+  tick();
+  cdInterval = setInterval(tick, 1000);
 }
 
 // ============================================================
@@ -1066,14 +1197,13 @@ function startQuiz() {
     { val: unit,  errId: 'errUnit',  msg: 'Vui lòng nhập đơn vị' },
   ];
 
-  fields.forEach(({ val, errId, msg, input }) => {
+  fields.forEach(({ val, errId, msg }) => {
     const el = document.getElementById(errId);
     if (!val) { el.textContent = msg; valid = false; }
     else el.textContent = '';
   });
   if (!valid) return;
 
-  // Phone validation
   if (!/^[0-9+\s\-]{8,15}$/.test(phone)) {
     document.getElementById('errPhone').textContent = 'Số điện thoại không hợp lệ';
     return;
@@ -1087,28 +1217,24 @@ function startQuiz() {
 // QUIZ INIT
 // ============================================================
 function initQuiz() {
-  // Random 20 câu từ ngân hàng
   const shuffled = [...QUESTION_BANK].sort(() => Math.random() - 0.5);
   state.questions = shuffled.slice(0, CONFIG.NUM_QUESTIONS).map(q => {
-    // Shuffle đáp án
     const opts = q.options.map((o, i) => ({ text: o, origIdx: i }));
     opts.sort(() => Math.random() - 0.5);
     const newCorrect = opts.findIndex(o => o.origIdx === q.correct);
     return { text: q.text, options: opts.map(o => o.text), correct: newCorrect };
   });
 
-  state.answers   = new Array(CONFIG.NUM_QUESTIONS).fill(null);
+  state.answers    = new Array(CONFIG.NUM_QUESTIONS).fill(null);
   state.currentIdx = 0;
-  state.timeLeft  = CONFIG.TIME_MINUTES * 60;
-  state.submitted = false;
+  state.timeLeft   = CONFIG.TIME_MINUTES * 60;
+  state.submitted  = false;
   state.tabWarnings = 0;
 
   buildNavDots();
   renderQuestion();
   startTimer();
   showScreen('screenQuiz');
-
-  // Anti-cheat
   enableAntiCheat();
 }
 
@@ -1123,7 +1249,6 @@ function renderQuestion() {
   document.getElementById('qText').textContent = q.text;
   document.getElementById('qCounter').textContent = `Câu ${i+1} / ${CONFIG.NUM_QUESTIONS}`;
 
-  // Options
   const grid = document.getElementById('optionsGrid');
   grid.innerHTML = '';
   const letters = ['A','B','C','D'];
@@ -1140,11 +1265,9 @@ function renderQuestion() {
     grid.appendChild(btn);
   });
 
-  // Nav buttons
   document.getElementById('btnPrev').disabled = i === 0;
   document.getElementById('btnNext').disabled = i === CONFIG.NUM_QUESTIONS - 1;
 
-  // Update dots
   updateNavDots();
   updateProgress();
 }
@@ -1153,9 +1276,19 @@ function selectAnswer(j) {
   const i = state.currentIdx;
   if (!CONFIG.ALLOW_CHANGE && state.answers[i] !== null) return;
   state.answers[i] = j;
+
+  // Lưu trạng thái vào sessionStorage để phát hiện tải lại trang
+  try {
+    sessionStorage.setItem('doan_exam_state', JSON.stringify({
+      candidate: state.candidate,
+      questions: state.questions,
+      answers:   state.answers,
+      timeLeft:  state.timeLeft,
+    }));
+  } catch(e) {}
+
   renderQuestion();
 
-  // Auto advance if not last
   if (i < CONFIG.NUM_QUESTIONS - 1) {
     setTimeout(() => navigate(1), 400);
   }
@@ -1182,8 +1315,7 @@ function buildNavDots() {
 }
 
 function updateNavDots() {
-  const dots = document.querySelectorAll('.nav-dot');
-  dots.forEach((dot, i) => {
+  document.querySelectorAll('.nav-dot').forEach((dot, i) => {
     dot.className = 'nav-dot';
     if (i === state.currentIdx) dot.classList.add('current');
     else if (state.answers[i] !== null) dot.classList.add('answered');
@@ -1233,12 +1365,16 @@ function autoSubmit() {
 // SUBMIT
 // ============================================================
 function confirmSubmit() {
-  const answered  = state.answers.filter(a => a !== null).length;
+  const answered   = state.answers.filter(a => a !== null).length;
   const unanswered = CONFIG.NUM_QUESTIONS - answered;
-  const msg = unanswered > 0
-    ? `Bạn còn <strong>${unanswered} câu chưa trả lời</strong>. Bạn có chắc muốn nộp bài?`
-    : 'Bạn đã trả lời tất cả câu hỏi. Xác nhận nộp bài?';
-  document.getElementById('modalSubmitMsg').innerHTML = msg;
+
+  // BẮT BUỘC trả lời hết mới được nộp
+  if (unanswered > 0) {
+    showToast(`⚠️ Còn ${unanswered} câu chưa trả lời! Phải hoàn thành tất cả câu hỏi mới được nộp bài.`, 4000);
+    return;
+  }
+
+  document.getElementById('modalSubmitMsg').innerHTML = 'Bạn đã trả lời tất cả câu hỏi. Xác nhận nộp bài?';
   openModal('modalSubmit');
 }
 
@@ -1248,7 +1384,9 @@ function submitQuiz() {
   clearInterval(state.timerInterval);
   closeModal('modalSubmit');
 
-  // Calculate score
+  // Xóa state đã lưu khi nộp thành công
+  try { sessionStorage.removeItem('doan_exam_state'); } catch(e) {}
+
   let correct = 0, wrong = 0, skip = 0;
   state.questions.forEach((q, i) => {
     if (state.answers[i] === null) skip++;
@@ -1271,6 +1409,49 @@ function submitQuiz() {
 }
 
 // ============================================================
+// PHÁT HIỆN TẢI LẠI TRANG KHI ĐANG THI → TỰ ĐỘNG NỘP
+// ============================================================
+(function checkPageReload() {
+  const saved = sessionStorage.getItem('doan_exam_state');
+  if (!saved) return;
+  sessionStorage.removeItem('doan_exam_state');
+
+  try {
+    const s = JSON.parse(saved);
+    state.candidate = s.candidate;
+    state.questions = s.questions;
+    state.answers   = s.answers;
+    state.submitted = false;
+
+    setTimeout(() => {
+      showToast('⚠️ Phát hiện tải lại trang! Bài thi đã tự động nộp.', 5000);
+
+      let correct = 0, wrong = 0, skip = 0;
+      s.questions.forEach((q, i) => {
+        const a = s.answers[i];
+        if (a === null || a === undefined) skip++;
+        else if (a === q.correct) correct++;
+        else wrong++;
+      });
+
+      const result = {
+        ...s.candidate,
+        score:   correct,
+        total:   CONFIG.NUM_QUESTIONS,
+        correct, wrong, skip,
+        time:    new Date().toLocaleString('vi-VN'),
+        passed:  correct >= CONFIG.PASS_SCORE,
+      };
+
+      state.submitted = true;
+      showResult(result);
+      sendToGoogleSheets(result);
+      saveToLocalLeaderboard(result);
+    }, 600);
+  } catch(e) {}
+})();
+
+// ============================================================
 // SHOW RESULT
 // ============================================================
 function showResult(result) {
@@ -1279,8 +1460,8 @@ function showResult(result) {
   const hero = document.getElementById('resultHero');
   hero.className = 'result-hero ' + (result.passed ? 'pass' : 'fail');
 
-  document.getElementById('resultEmoji').textContent  = result.passed ? '🏆' : '💪';
-  document.getElementById('resultScore').textContent  = `${result.score}/${result.total}`;
+  document.getElementById('resultEmoji').textContent   = result.passed ? '🏆' : '💪';
+  document.getElementById('resultScore').textContent   = `${result.score}/${result.total}`;
   document.getElementById('resultVerdict').textContent = result.passed
     ? '✅ ĐẠT — Chúc mừng!' : '❌ CHƯA ĐẠT — Cố gắng hơn nhé!';
 
@@ -1370,7 +1551,7 @@ async function sendToGoogleSheets(result) {
 
     await fetch(`${CONFIG.SHEET_URL}?${params}`, { method: 'GET', mode: 'no-cors' });
     updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
-  } catch (e) {
+  } catch(e) {
     updateSendingStatus('⚠️ Lưu cục bộ. Kết nối máy chủ không khả dụng.', 'error');
   }
 }
@@ -1415,12 +1596,13 @@ function loadLeaderboard() {
   } catch(e) {}
 }
 
-// Load LB whenever screen shows
-const origShowScreen = showScreen;
-window.showScreen = function(id) {
-  origShowScreen(id);
-  if (id === 'screenLeaderboard') loadLeaderboard();
-};
+function clearLeaderboard() {
+  if (confirm('Bạn có chắc muốn xóa toàn bộ bảng xếp hạng? Hành động này không thể hoàn tác.')) {
+    try { localStorage.removeItem('doan_lb'); } catch(e) {}
+    loadLeaderboard();
+    showToast('🗑️ Đã xóa bảng xếp hạng.');
+  }
+}
 
 // ============================================================
 // MODAL
@@ -1442,14 +1624,12 @@ function showToast(msg, duration = 3000) {
 // ANTI-CHEAT
 // ============================================================
 function enableAntiCheat() {
-  // Block context menu
   document.addEventListener('contextmenu', e => {
     if (state.submitted) return;
     e.preventDefault();
     showToast('❌ Nhấp chuột phải bị vô hiệu hóa trong khi thi.');
   });
 
-  // Block F12, DevTools shortcuts
   document.addEventListener('keydown', e => {
     if (state.submitted) return;
     if (e.key === 'F12' ||
@@ -1462,7 +1642,6 @@ function enableAntiCheat() {
     }
   });
 
-  // Tab visibility change
   document.addEventListener('visibilitychange', () => {
     if (state.submitted || !document.getElementById('screenQuiz').classList.contains('active')) return;
     if (document.hidden) {
@@ -1473,19 +1652,6 @@ function enableAntiCheat() {
       showToast(`⚠️ Cảnh báo ${state.tabWarnings}: Không được rời trang thi!`);
     }
   });
-}
-
-// ============================================================
-// RESTART
-// ============================================================
-function restartAll() {
-  clearInterval(state.timerInterval);
-  state = { candidate:{}, questions:[], answers:[], currentIdx:0, timerInterval:null, timeLeft:0, submitted:false, tabWarnings:0 };
-  document.getElementById('fName').value = '';
-  document.getElementById('fPhone').value = '';
-  document.getElementById('fTitle').value = '';
-  document.getElementById('fUnit').value = '';
-  showScreen('screenWelcome');
 }
 
 // ============================================================
