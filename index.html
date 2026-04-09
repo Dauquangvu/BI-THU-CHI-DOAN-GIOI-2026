@@ -633,6 +633,96 @@ body.violation-flash::after {
 #screenshotGuard.active { opacity: 1; pointer-events: all; }
 #screenshotGuard p { color: white; font-size: 24px; font-weight: 800; text-align: center; }
 
+/* ===== ANTI-CAMERA MOIRÉ LAYER =====
+   Lớp vân sọc mảnh nháy liên tục ở tần số cao.
+   Mắt người gần như không thấy (blend mode + opacity thấp), nhưng khi
+   camera điện thoại chụp lại màn hình máy tính, tần số quét của màn hình
+   và tần số chụp của cảm biến camera sẽ tạo ra hiệu ứng moiré/rolling-shutter
+   khiến ảnh chụp bị sọc đen lớn, lòe, mờ đục, nhòe nhoẹt không đọc được nội dung. */
+#antiCamLayer {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99990;
+  mix-blend-mode: difference;
+  opacity: 0.055;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,1) 1px,
+    rgba(0,0,0,1)       1px,
+    rgba(0,0,0,1)       2px
+  );
+  animation: antiCamFlicker 0.05s steps(2) infinite;
+  will-change: background-position, opacity;
+}
+@keyframes antiCamFlicker {
+  0%   { background-position: 0 0;   opacity: 0.055; }
+  50%  { background-position: 0 1px; opacity: 0.085; }
+  100% { background-position: 0 0;   opacity: 0.055; }
+}
+#antiCamLayer2 {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99991;
+  mix-blend-mode: overlay;
+  opacity: 0.08;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.9) 0px,
+    rgba(255,255,255,0.9) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: antiCamSlide 1.8s linear infinite;
+}
+@keyframes antiCamSlide {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(3px); }
+}
+
+/* Watermark động — chạy chéo màn hình, in thông tin thí sinh.
+   Khi ai đó chụp lại thì ảnh chụp luôn dính tên họ, rất khó xoá. */
+#liveWatermark {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99989;
+  overflow: hidden;
+  opacity: 0.11;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 800;
+  color: #C8102E;
+  display: none;
+}
+#liveWatermark.active { display: block; }
+#liveWatermark .wm-row {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 15px;
+  letter-spacing: 2px;
+  transform: rotate(-28deg);
+  text-transform: uppercase;
+}
+
+/* Chế độ ẩn toàn bộ nội dung khi phát hiện có thể đang chụp
+   (PrintScreen, blur, v.v.). Trang biến thành một khối đen nhiễu sóng. */
+body.hide-all .main,
+body.hide-all .site-header,
+body.hide-all .quiz-topbar,
+body.hide-all .question-card,
+body.hide-all .quiz-footer {
+  filter: blur(28px) contrast(0.2) brightness(0.3) !important;
+  transition: filter 0.05s;
+}
+body.hide-all::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0 2px, rgba(255,255,255,0.05) 2px 4px),
+    #000;
+  z-index: 99988;
+  pointer-events: none;
+}
+
 /* Khi in (Ctrl+P), ẩn sạch — không in được gì */
 @media print {
   html, body { background: #000 !important; }
