@@ -99,13 +99,26 @@ Mở `questions.js`, thêm vào mảng `QUESTION_BANK`:
 
 | Tính năng | Trạng thái |
 |-----------|------------|
-| Chặn chuột phải | ✅ |
-| Chặn F12 / DevTools | ✅ |
-| Chặn Ctrl+U, Ctrl+S | ✅ |
-| Cảnh báo thoát tab | ✅ |
-| Random 20/200 câu | ✅ |
-| Random thứ tự đáp án | ✅ |
+| Chặn chuột phải, kéo thả, chọn text | ✅ |
+| Chặn F1–F12 / DevTools | ✅ |
+| Chặn Ctrl+U, Ctrl+S, Ctrl+P, Ctrl+A | ✅ |
+| Chặn Ctrl+Shift+I/J/C/K | ✅ |
+| Chặn PrintScreen + xoá clipboard | ✅ |
+| Chặn Win+Shift+S (Snipping Tool) | ✅ |
+| **Anti-camera moiré layer** (lòe ảnh chụp từ điện thoại) | ✅ |
+| **Live watermark** chéo màn hình in tên thí sinh | ✅ |
+| Phát hiện DevTools mở → ẩn nội dung | ✅ |
+| Chặn Ctrl+P (in trang) | ✅ |
+| Cảnh báo thoát tab — **3 lần tự nộp** | ✅ |
+| Random 20/200 câu + xáo trộn đáp án | ✅ |
 | Tự nộp khi hết giờ | ✅ |
+| Phím tắt 1·2·3·4 chọn đáp án, ←→ chuyển câu | ✅ |
+
+### 🛡️ Cơ chế chống chụp ảnh điện thoại
+Hệ thống dùng 3 lớp chồng nhau:
+1. **`#antiCamLayer`** — vân sọc 1px nháy ~20Hz với `mix-blend-mode: difference`. Mắt người không thấy nhưng cảm biến CMOS điện thoại sẽ tạo moiré/rolling-shutter → ảnh chụp bị sọc đen, lòe, mờ đục.
+2. **`#antiCamLayer2`** — vân sọc dọc trượt chậm chồng lên bằng `overlay`.
+3. **`#liveWatermark`** — 14 dòng watermark chéo in `Tên • SĐT • Đơn vị • KHÔNG CHỤP • Thời gian` — ảnh chụp nào cũng dính, rất khó xoá.
 
 ---
 

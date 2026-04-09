@@ -356,32 +356,120 @@ body {
   border: 1px solid rgba(255,255,255,0.3);
 }
 .q-text { color: white; font-size: 16px; font-weight: 600; line-height: 1.6; }
-.options-grid { padding: 26px 30px; display: flex; flex-direction: column; gap: 13px; }
+.options-grid { padding: 26px 30px; display: flex; flex-direction: column; gap: 14px; }
 .option-btn {
-  display: flex; align-items: center; gap: 16px;
-  padding: 15px 20px;
+  display: flex; align-items: center; gap: 18px;
+  padding: 18px 22px 18px 20px;
   border: 2px solid var(--gray-200);
   border-radius: var(--radius-sm);
-  background: var(--gray-50);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%);
   cursor: pointer; text-align: left;
-  font-family: inherit; font-size: 15px; color: var(--gray-800);
-  transition: var(--transition); position: relative; overflow: hidden; width: 100%;
+  font-family: inherit; font-size: 15.5px; color: var(--gray-800);
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+              border-color 0.2s ease,
+              background 0.25s ease,
+              box-shadow 0.25s ease;
+  position: relative; overflow: hidden; width: 100%;
+  box-shadow: 0 1px 3px rgba(0,48,135,0.04);
 }
-.option-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: transparent; transition: var(--transition); border-radius: 2px; }
-.option-btn:hover:not(:disabled) { border-color: var(--blue); background: var(--blue-pale); transform: translateX(5px); }
-.option-btn:hover:not(:disabled)::before { background: var(--blue); }
-.option-btn.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); font-weight: 600; }
-.option-btn.selected::before { background: var(--blue); }
-.option-btn:disabled { cursor: default; }
+.option-btn::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; background: transparent;
+  transition: background 0.25s ease, width 0.25s ease;
+  border-radius: 0 4px 4px 0;
+}
+/* Ripple effect container */
+.option-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(0,48,135,0.18);
+  pointer-events: none;
+  animation: rippleExpand 0.65s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes rippleExpand {
+  to { transform: scale(4); opacity: 0; }
+}
+.option-btn:hover:not(:disabled) {
+  border-color: var(--blue-mid);
+  background: linear-gradient(180deg, var(--blue-pale) 0%, #E3EDFF 100%);
+  transform: translateX(6px) translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0,48,135,0.10);
+}
+.option-btn:hover:not(:disabled)::before { background: var(--blue-mid); width: 5px; }
+.option-btn:hover:not(:disabled) .option-letter {
+  border-color: var(--blue-mid);
+  color: var(--blue);
+  transform: scale(1.05);
+}
+.option-btn:active:not(:disabled) { transform: translateX(6px) translateY(0) scale(0.99); }
+
+.option-btn.selected {
+  border-color: var(--blue);
+  background: linear-gradient(135deg, #003087 0%, #0056CE 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,48,135,0.28), 0 0 0 3px rgba(0,48,135,0.08);
+  transform: translateX(6px);
+  animation: selectedPop 0.45s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes selectedPop {
+  0%   { transform: translateX(6px) scale(1); }
+  40%  { transform: translateX(6px) scale(1.025); }
+  100% { transform: translateX(6px) scale(1); }
+}
+.option-btn.selected::before { background: var(--gold); width: 5px; }
+.option-btn.selected .option-letter {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(244,196,48,0.25);
+  transform: scale(1.08) rotate(-6deg);
+}
+.option-btn.selected .option-text { color: #FFFFFF; }
+.option-btn.selected .option-check {
+  opacity: 1; transform: scale(1) rotate(0deg);
+}
+.option-btn:disabled { cursor: not-allowed; }
+
 .option-letter {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: white; border: 2px solid #CBD5E1;
+  width: 40px; height: 40px; border-radius: 12px;
+  background: #FFFFFF; border: 2px solid #CBD5E1;
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; flex-shrink: 0;
-  transition: var(--transition);
+  font-size: 15px; font-weight: 800; flex-shrink: 0;
+  color: var(--gray-600);
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  font-family: 'Cormorant Garamond', serif;
 }
-.option-btn.selected .option-letter { background: var(--blue); border-color: var(--blue); color: white; }
-.option-text { flex: 1; line-height: 1.55; }
+.option-text { flex: 1; line-height: 1.6; font-weight: 500; }
+.option-check {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--gold); color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900; flex-shrink: 0;
+  opacity: 0;
+  transform: scale(0) rotate(-180deg);
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 2px 8px rgba(244,196,48,0.5);
+}
+/* Keyboard hint */
+.option-kbd {
+  position: absolute;
+  top: 8px; right: 10px;
+  font-size: 9px; font-weight: 700;
+  color: var(--gray-400);
+  background: var(--gray-100);
+  padding: 2px 6px; border-radius: 4px;
+  border: 1px solid var(--gray-200);
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+  font-family: 'Be Vietnam Pro', monospace;
+}
+.option-btn.selected .option-kbd {
+  background: rgba(255,255,255,0.18);
+  color: #FFFFFF;
+  border-color: rgba(255,255,255,0.3);
+}
 .quiz-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 
 /* ===== RESULT ===== */
@@ -498,6 +586,21 @@ body {
 .tab-alert.warn1 { background: linear-gradient(90deg, #E06000, #FF8C00); }
 .tab-alert.warn2 { background: linear-gradient(90deg, #8B0000, var(--red)); }
 
+/* Flash đỏ toàn trang khi vi phạm */
+body.violation-flash::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(200,16,46,0.35) 0%, rgba(200,16,46,0.1) 50%, transparent 80%);
+  z-index: 99997;
+  pointer-events: none;
+  animation: violationFlash 0.6s ease-out;
+}
+@keyframes violationFlash {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* ===== TOAST ===== */
 .toast {
   position:fixed; bottom:30px; right:30px;
@@ -530,6 +633,110 @@ body {
 #screenshotGuard.active { opacity: 1; pointer-events: all; }
 #screenshotGuard p { color: white; font-size: 24px; font-weight: 800; text-align: center; }
 
+/* ===== ANTI-CAMERA MOIRÉ LAYER =====
+   Lớp vân sọc mảnh nháy liên tục ở tần số cao.
+   Mắt người gần như không thấy (blend mode + opacity thấp), nhưng khi
+   camera điện thoại chụp lại màn hình máy tính, tần số quét của màn hình
+   và tần số chụp của cảm biến camera sẽ tạo ra hiệu ứng moiré/rolling-shutter
+   khiến ảnh chụp bị sọc đen lớn, lòe, mờ đục, nhòe nhoẹt không đọc được nội dung. */
+#antiCamLayer {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99990;
+  mix-blend-mode: difference;
+  opacity: 0.055;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,1) 1px,
+    rgba(0,0,0,1)       1px,
+    rgba(0,0,0,1)       2px
+  );
+  animation: antiCamFlicker 0.05s steps(2) infinite;
+  will-change: background-position, opacity;
+}
+@keyframes antiCamFlicker {
+  0%   { background-position: 0 0;   opacity: 0.055; }
+  50%  { background-position: 0 1px; opacity: 0.085; }
+  100% { background-position: 0 0;   opacity: 0.055; }
+}
+#antiCamLayer2 {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99991;
+  mix-blend-mode: overlay;
+  opacity: 0.08;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.9) 0px,
+    rgba(255,255,255,0.9) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: antiCamSlide 1.8s linear infinite;
+}
+@keyframes antiCamSlide {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(3px); }
+}
+
+/* Watermark động — chạy chéo màn hình, in thông tin thí sinh.
+   Khi ai đó chụp lại thì ảnh chụp luôn dính tên họ, rất khó xoá. */
+#liveWatermark {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99989;
+  overflow: hidden;
+  opacity: 0.11;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 800;
+  color: #C8102E;
+  display: none;
+}
+#liveWatermark.active { display: block; }
+#liveWatermark .wm-row {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 15px;
+  letter-spacing: 2px;
+  transform: rotate(-28deg);
+  text-transform: uppercase;
+}
+
+/* Chế độ ẩn toàn bộ nội dung khi phát hiện có thể đang chụp
+   (PrintScreen, blur, v.v.). Trang biến thành một khối đen nhiễu sóng. */
+body.hide-all .main,
+body.hide-all .site-header,
+body.hide-all .quiz-topbar,
+body.hide-all .question-card,
+body.hide-all .quiz-footer {
+  filter: blur(28px) contrast(0.2) brightness(0.3) !important;
+  transition: filter 0.05s;
+}
+body.hide-all::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0 2px, rgba(255,255,255,0.05) 2px 4px),
+    #000;
+  z-index: 99988;
+  pointer-events: none;
+}
+
+/* Khi in (Ctrl+P), ẩn sạch — không in được gì */
+@media print {
+  html, body { background: #000 !important; }
+  body * { visibility: hidden !important; }
+  body::before {
+    content: '🚫 BÀI THI KHÔNG ĐƯỢC PHÉP IN';
+    visibility: visible !important;
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; background: #000;
+    font-size: 32px; font-weight: 900;
+  }
+}
+
 @media (max-width:600px) {
   .info-cards { grid-template-columns:repeat(3,1fr); gap:8px; }
   .info-card { padding:14px 8px; }
@@ -544,6 +751,13 @@ body {
 </style>
 </head>
 <body>
+
+<!-- Anti-camera moiré layers (kích hoạt khi vào màn thi) -->
+<div id="antiCamLayer" style="display:none"></div>
+<div id="antiCamLayer2" style="display:none"></div>
+
+<!-- Live watermark (in tên thí sinh chéo màn hình khi đang thi) -->
+<div id="liveWatermark"></div>
 
 <!-- Screenshot guard -->
 <div id="screenshotGuard">
@@ -602,8 +816,8 @@ body {
         <li><span class="note-icon">•</span> Thứ tự đáp án được <strong>xáo trộn ngẫu nhiên</strong> cho mỗi người thi</li>
         <li><span class="note-icon">•</span> Bài thi sẽ <strong>tự động nộp</strong> khi hết thời gian</li>
         <li><span class="note-icon">•</span> Phải trả lời tất cả câu hỏi và <strong>tối thiểu 5 phút mới được nộp bài</strong></li>
-        <li><span class="note-icon">•</span> <strong>Rời khỏi trang 2 lần</strong> sẽ bị tự động nộp bài và ghi lại vi phạm</li>
-        <li><span class="note-icon">•</span> <strong>Cấm chụp màn hình</strong> bằng máy tính hoặc điện thoại trong khi thi</li>
+        <li><span class="note-icon">•</span> <strong>Rời khỏi trang / chuyển tab / Alt-Tab 3 lần</strong> sẽ bị tự động nộp bài và ghi lại vi phạm</li>
+        <li><span class="note-icon">•</span> <strong>Cấm chụp màn hình</strong> bằng máy tính hoặc điện thoại — hệ thống có lớp chống chụp nhiều tầng</li>
         <li><span class="note-icon">•</span> Kết quả sẽ được <strong>lưu tự động</strong> vào hệ thống quản trị</li>
       </ul>
     </div>
@@ -696,6 +910,7 @@ body {
       <div style="text-align:center">
         <div style="font-size:13px;color:var(--gray-600);font-weight:600" id="qCounter">Câu 1 / 20</div>
         <div style="font-size:11px;color:var(--gray-400);margin-top:2px" id="submitLockMsg"></div>
+        <div style="font-size:10px;color:var(--gray-400);margin-top:3px;letter-spacing:.3px">⌨️ Phím <b>1·2·3·4</b> chọn đáp án — <b>← →</b> chuyển câu</div>
       </div>
       <button class="btn btn-outline" id="btnNext" onclick="navigate(1)">Câu Sau →</button>
     </div>
@@ -764,7 +979,7 @@ body {
   <div class="modal">
     <div class="modal-icon">🚨</div>
     <h3>Vi Phạm — Tự Động Nộp Bài</h3>
-    <p>Bạn đã rời khỏi trang thi <strong>2 lần</strong>. Bài thi đã bị tự động nộp và vi phạm đã được ghi lại.</p>
+    <p>Bạn đã rời khỏi trang thi <strong>3 lần</strong>. Bài thi đã bị tự động nộp và vi phạm đã được ghi lại vào hệ thống quản trị.</p>
     <div class="modal-btns">
       <button class="btn btn-danger" onclick="closeModal('modalAutoSubmit')">Đã Hiểu</button>
     </div>
@@ -788,7 +1003,7 @@ const CONFIG = {
   PASS_SCORE:      10,   // điểm đạt (thực ra không hiển thị đạt/chưa đạt)
   ALLOW_CHANGE:    true,
   MIN_SUBMIT_MINS: 5,    // phải qua ít nhất 5 phút mới được nộp
-  MAX_TAB_WARNINGS: 2,   // số lần rời trang trước khi tự nộp
+  MAX_TAB_WARNINGS: 3,   // số lần rời trang trước khi tự nộp (cảnh báo 1, 2, lần 3 tự nộp)
   EXAM_START_TIME: '2026-04-08 14:00',
   USE_COUNTDOWN:   false,
   SHEET_URL: 'https://script.google.com/macros/s/AKfycbxghPNrgAkg9prajEL8hoocBvqAuIdvYJIvGSEcjGPr_4j9p9X-o_UlhYtFEsc3MN1O/exec',
@@ -985,9 +1200,25 @@ function renderQuestion() {
   q.options.forEach((opt, j) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn' + (state.answers[i] === j ? ' selected' : '');
-    btn.innerHTML = `<div class="option-letter">${letters[j]}</div><div class="option-text">${opt}</div>`;
+    btn.innerHTML = `
+      <div class="option-letter">${letters[j]}</div>
+      <div class="option-text">${escHtml(opt)}</div>
+      <div class="option-check">✓</div>
+      <div class="option-kbd">${j+1}</div>`;
     if (!CONFIG.ALLOW_CHANGE && state.answers[i] !== null) btn.disabled = true;
-    btn.addEventListener('click', () => selectAnswer(j));
+    btn.addEventListener('click', (e) => {
+      // Ripple effect
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+      ripple.style.top  = (e.clientY - rect.top  - size/2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+      selectAnswer(j);
+    });
     grid.appendChild(btn);
   });
   document.getElementById('btnPrev').disabled = i === 0;
@@ -1272,8 +1503,14 @@ function saveToLocalLeaderboard(result) {
   try {
     const lb = JSON.parse(localStorage.getItem('doan_lb') || '[]');
     lb.push({
-      name: result.name, unit: result.unit, title: result.title,
-      score: result.score, correctCount: result.correctCount, time: result.time,
+      name: result.name, unit: result.unit, title: result.title, phone: result.phone,
+      score: result.score,
+      correctCount: result.correctCount,
+      correct: result.correct,   // FIX: lưu rõ correct
+      wrong:   result.wrong,     // FIX: lưu wrong (trước đây thiếu → admin luôn hiển thị 0)
+      skip:    result.skip,      // FIX: lưu skip
+      total:   result.total,
+      time: result.time,
       tabWarnings: result.tabWarnings,
       completionTime: result.completionTime,
       forceSubmitted: result.forceSubmitted,
@@ -1318,6 +1555,9 @@ function showToast(msg, duration = 3200) {
 // ANTI-CHEAT
 // ============================================================
 function enableAntiCheat() {
+  // Kích hoạt các lớp chống chụp ảnh
+  activateAntiScreenshotLayers();
+
   // Chuột phải
   document.addEventListener('contextmenu', e => {
     if (state.submitted) return;
@@ -1325,24 +1565,105 @@ function enableAntiCheat() {
     showToast('❌ Nhấp chuột phải bị vô hiệu hóa trong khi thi.');
   });
 
+  // Chặn kéo thả, chọn text
+  document.addEventListener('dragstart', e => { if (!state.submitted) e.preventDefault(); });
+  document.addEventListener('selectstart', e => {
+    if (state.submitted) return;
+    // cho phép chọn trong input
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag !== 'input' && tag !== 'textarea') e.preventDefault();
+  });
+
   // Phím tắt
   document.addEventListener('keydown', e => {
     if (state.submitted) return;
-    // Chặn screenshot: PrtScr, Ctrl+Shift+S, Win+Shift+S, Ctrl+P
-    if (e.key === 'PrintScreen' || e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && ['I','J','C','U','S'].includes(e.key)) ||
-        (e.ctrlKey && ['U','S','P'].includes(e.key)) ||
-        (e.metaKey && e.shiftKey && ['3','4','S'].includes(e.key)) ||
-        (e.key === 'F1')) {
-      e.preventDefault();
-      flashScreenshotGuard();
-      showToast('❌ Hành động này bị cấm trong khi thi!');
+    const k = e.key;
+
+    // Chặn tất cả F1–F12
+    if (/^F([1-9]|1[0-2])$/.test(k)) {
+      e.preventDefault(); flashScreenshotGuard();
+      showToast('❌ Phím chức năng bị cấm trong khi thi!'); return;
     }
-  });
+    // PrintScreen
+    if (k === 'PrintScreen') {
+      e.preventDefault();
+      hideEverythingBriefly();
+      try { navigator.clipboard.writeText('🚫 Bài thi được bảo vệ'); } catch(e2) {}
+      showToast('❌ Chụp màn hình bị cấm! Vi phạm đã được ghi nhận.'); return;
+    }
+    // Ctrl/Cmd + phím nguy hiểm
+    if ((e.ctrlKey || e.metaKey)) {
+      // Ctrl+P in trang, Ctrl+S lưu, Ctrl+U xem nguồn, Ctrl+A chọn tất cả
+      if (['p','P','s','S','u','U','a','A'].includes(k)) {
+        e.preventDefault(); flashScreenshotGuard();
+        showToast('❌ Thao tác này bị cấm trong khi thi!'); return;
+      }
+      // Ctrl+Shift+I/J/C DevTools
+      if (e.shiftKey && ['I','J','C','K'].includes(k.toUpperCase())) {
+        e.preventDefault(); flashScreenshotGuard();
+        showToast('❌ Không được mở công cụ phát triển!'); return;
+      }
+    }
+    // Win+Shift+S (Snipping Tool trên Windows)
+    if (e.metaKey && e.shiftKey && ['s','S','3','4','5'].includes(k)) {
+      e.preventDefault(); hideEverythingBriefly();
+      showToast('❌ Công cụ chụp màn hình bị cấm!'); return;
+    }
+    // Alt+Tab cố gắng chặn (trình duyệt thường không cho phép, nhưng vẫn thử)
+    if (e.altKey && (k === 'Tab' || k === 'F4')) {
+      e.preventDefault();
+    }
+  }, true);
 
   // Alt+Tab / chuyển cửa sổ
   document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('blur', handleWindowBlur);
+  window.addEventListener('focus', () => {
+    // Khi quay lại, bỏ chế độ ẩn
+    document.body.classList.remove('hide-all');
+  });
+
+  // Phát hiện DevTools mở (heuristic: cửa sổ bị thu hẹp bất thường)
+  setInterval(() => {
+    if (state.submitted) return;
+    const widthThreshold  = window.outerWidth  - window.innerWidth  > 200;
+    const heightThreshold = window.outerHeight - window.innerHeight > 200;
+    if (widthThreshold || heightThreshold) {
+      document.body.classList.add('hide-all');
+    }
+  }, 1000);
+}
+
+// Kích hoạt các lớp chống chụp ảnh từ camera điện thoại
+function activateAntiScreenshotLayers() {
+  document.getElementById('antiCamLayer').style.display  = 'block';
+  document.getElementById('antiCamLayer2').style.display = 'block';
+  buildLiveWatermark();
+}
+
+// Tạo watermark động in tên thí sinh chéo màn hình
+function buildLiveWatermark() {
+  const wm = document.getElementById('liveWatermark');
+  wm.innerHTML = '';
+  const text = `${state.candidate.name || ''} • ${state.candidate.phone || ''} • ${state.candidate.unit || ''} • KHÔNG CHỤP • ${new Date().toLocaleString('vi-VN')}`;
+  const rows = 14;
+  for (let i = 0; i < rows; i++) {
+    const row = document.createElement('div');
+    row.className = 'wm-row';
+    row.textContent = (text + '    ').repeat(8);
+    row.style.top  = (i * 8 - 10) + '%';
+    row.style.left = '-20%';
+    row.style.width = '200%';
+    wm.appendChild(row);
+  }
+  wm.classList.add('active');
+}
+
+// Ẩn toàn bộ nội dung trong thời gian ngắn (khi nghi ngờ chụp ảnh)
+function hideEverythingBriefly() {
+  document.body.classList.add('hide-all');
+  flashScreenshotGuard();
+  setTimeout(() => document.body.classList.remove('hide-all'), 1800);
 }
 
 function handleVisibilityChange() {
@@ -1362,23 +1683,30 @@ function handleWindowBlur() {
 function handleTabSwitch() {
   state.tabWarnings++;
   const alert = document.getElementById('tabAlert');
+  const max = CONFIG.MAX_TAB_WARNINGS;
 
-  // Cảnh báo lần 1
-  if (state.tabWarnings === 1) {
-    alert.textContent = '⚠️ CẢNH BÁO LẦN 1: Bạn đã rời trang thi! Thêm 1 lần nữa sẽ bị tự động nộp bài.';
-    alert.className = 'tab-alert warn1 show';
+  // Lưu lại state sau mỗi lần vi phạm
+  try {
+    const saved = JSON.parse(sessionStorage.getItem('doan_exam_state') || '{}');
+    saved.tabWarnings = state.tabWarnings;
+    sessionStorage.setItem('doan_exam_state', JSON.stringify(saved));
+  } catch(e) {}
+
+  if (state.tabWarnings < max) {
+    // Các lần cảnh báo trước khi đạt max
+    const remaining = max - state.tabWarnings;
+    alert.textContent = `⚠️ CẢNH BÁO LẦN ${state.tabWarnings}/${max}: Bạn đã rời trang thi! Còn ${remaining} lần nữa sẽ bị tự động nộp bài.`;
+    alert.className = state.tabWarnings === 1 ? 'tab-alert warn1 show' : 'tab-alert warn2 show';
     setTimeout(() => alert.classList.remove('show'), 6000);
-    showToast(`⚠️ Cảnh báo 1/2: Không được rời khỏi trang thi!`, 5000);
-    // Lưu lại state
-    try {
-      const saved = JSON.parse(sessionStorage.getItem('doan_exam_state') || '{}');
-      saved.tabWarnings = state.tabWarnings;
-      sessionStorage.setItem('doan_exam_state', JSON.stringify(saved));
-    } catch(e) {}
+    showToast(`⚠️ Cảnh báo ${state.tabWarnings}/${max}: Không được rời khỏi trang thi!`, 5500);
+
+    // Flash đỏ toàn màn hình để gây chú ý
+    document.body.classList.add('violation-flash');
+    setTimeout(() => document.body.classList.remove('violation-flash'), 600);
   }
-  // Cảnh báo lần 2 — tự nộp
-  else if (state.tabWarnings >= 2) {
-    alert.textContent = '🚨 VI PHẠM: Đã rời trang 2 lần. Bài thi đang được tự động nộp!';
+  // Đạt đến số lần tối đa — tự nộp
+  else {
+    alert.textContent = `🚨 VI PHẠM NGHIÊM TRỌNG: Đã rời trang ${max} lần. Bài thi đang được tự động nộp!`;
     alert.className = 'tab-alert warn2 show';
     openModal('modalAutoSubmit');
     setTimeout(() => {
@@ -1417,6 +1745,32 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+
+  // Phím tắt khi đang làm bài
+  const quizActive = document.getElementById('screenQuiz').classList.contains('active');
+  if (!quizActive || state.submitted) return;
+
+  // 1/2/3/4 → chọn đáp án A/B/C/D
+  if (['1','2','3','4'].includes(e.key)) {
+    const idx = parseInt(e.key) - 1;
+    const q = state.questions[state.currentIdx];
+    if (q && idx < q.options.length) {
+      const btn = document.querySelectorAll('.option-btn')[idx];
+      if (btn && !btn.disabled) {
+        // Visual feedback
+        btn.style.transform = 'translateX(6px) scale(0.98)';
+        setTimeout(() => btn.style.transform = '', 150);
+        selectAnswer(idx);
+      }
+    }
+  }
+  // ← / → điều hướng câu trước/sau
+  else if (e.key === 'ArrowLeft' && state.currentIdx > 0) {
+    navigate(-1);
+  }
+  else if (e.key === 'ArrowRight' && state.currentIdx < CONFIG.NUM_QUESTIONS - 1) {
+    navigate(1);
+  }
 });
 </script>
 </body>

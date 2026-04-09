@@ -541,8 +541,18 @@ function renderTable() {
     const timeStr = ct ? `${mins}p ${secs}s` : '—';
 
     const correct = entry.correctCount !== undefined ? entry.correctCount : (entry.correct || 0);
-    const wrong   = entry.wrong || 0;
-    const skip    = entry.skip  || 0;
+    // Fallback cho dữ liệu cũ chưa lưu wrong/skip:
+    // tổng câu = total (nếu có) hoặc đoán từ score (mỗi câu = 0.5 điểm) hoặc 20.
+    const total = entry.total || Math.round((parseFloat(entry.score)||0) / 0.5) || 20;
+    let wrong = (entry.wrong !== undefined && entry.wrong !== null) ? entry.wrong : null;
+    let skip  = (entry.skip  !== undefined && entry.skip  !== null) ? entry.skip  : null;
+    if (wrong === null || skip === null) {
+      // Không có dữ liệu chi tiết → giả định: sai = total - đúng, bỏ = 0
+      // (chính xác hơn không có cách nào suy từ chỉ score + correct)
+      const remaining = Math.max(0, total - correct);
+      if (wrong === null) wrong = remaining;
+      if (skip  === null) skip  = 0;
+    }
     const score   = parseFloat(entry.score) || 0;
 
     const isViolation = entry.forceSubmitted || warnings >= 2;
@@ -589,12 +599,20 @@ function exportCSV() {
   const rows = sorted.map((e, i) => {
     const ct = parseInt(e.completionTime)||0;
     const timeStr = ct ? `${Math.floor(ct/60)}p${ct%60}s` : '';
+    const correct = e.correctCount !== undefined ? e.correctCount : (e.correct||0);
+    const total = e.total || Math.round((parseFloat(e.score)||0) / 0.5) || 20;
+    let wrong = (e.wrong !== undefined && e.wrong !== null) ? e.wrong : null;
+    let skip  = (e.skip  !== undefined && e.skip  !== null) ? e.skip  : null;
+    if (wrong === null || skip === null) {
+      const remaining = Math.max(0, total - correct);
+      if (wrong === null) wrong = remaining;
+      if (skip  === null) skip  = 0;
+    }
     return [
       i+1,
       e.name||'', e.unit||'', e.title||'',
       (parseFloat(e.score)||0).toFixed(1),
-      e.correctCount !== undefined ? e.correctCount : (e.correct||0),
-      e.wrong||0, e.skip||0,
+      correct, wrong, skip,
       parseInt(e.tabWarnings)||0,
       timeStr,
       e.forceSubmitted ? 'Bị buộc nộp' : 'Tự nộp',
