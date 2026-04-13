@@ -590,10 +590,9 @@ function deleteEntry(phone, name, unit) {
   try {
     const normPhone = (phone||'').trim().replace(/[\s\-]/g,'');
     const normName  = (name||'').trim().toLowerCase().replace(/\s+/g,' ');
-    const normUnit  = (unit||'').trim().toLowerCase().replace(/\s+/g,' ');
     let attempted = JSON.parse(localStorage.getItem('doan_attempted') || '[]');
     attempted = attempted.filter(e =>
-      !(e.phone === normPhone || e.name === normName || e.unit === normUnit)
+      !(e.phone === normPhone || e.name === normName)
     );
     localStorage.setItem('doan_attempted', JSON.stringify(attempted));
   } catch(e) {}

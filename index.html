@@ -1153,9 +1153,8 @@ function startQuiz() {
   const normalizedName  = name.trim().toLowerCase().replace(/\s+/g, ' ');
   const normalizedUnit  = unit.trim().toLowerCase().replace(/\s+/g, ' ');
 
-  const dupField = checkDuplicate(normalizedPhone, normalizedName, normalizedUnit);
+  const dupField = checkDuplicate(normalizedPhone, normalizedName);
   if (dupField) {
-    // Lưu lý do để hiện trong modal
     window._dupReason = dupField;
     openModal('modalAlreadyTaken');
     return;
@@ -1165,18 +1164,17 @@ function startQuiz() {
   initQuiz();
 }
 
-// ── QUẢN LÝ DANH SÁCH ĐÃ THI (lưu theo object {phone, name, unit}) ──
+// ── QUẢN LÝ DANH SÁCH ĐÃ THI (lưu theo object {phone, name}) ──
 function getAttemptedList() {
   try { return JSON.parse(localStorage.getItem('doan_attempted') || '[]'); }
   catch(e) { return []; }
 }
 // Trả về field trùng đầu tiên, hoặc null nếu chưa thi
-function checkDuplicate(phone, name, unit) {
+function checkDuplicate(phone, name) {
   const list = getAttemptedList();
   for (const entry of list) {
     if (entry.phone === phone) return 'Số điện thoại';
     if (entry.name  === name)  return 'Họ và tên';
-    if (entry.unit  === unit)  return 'Đơn vị';
   }
   return null;
 }
@@ -1185,10 +1183,8 @@ function markAttempted(phone, name, unit) {
     const list = getAttemptedList();
     const normPhone = phone.trim().replace(/[\s\-]/g,'');
     const normName  = name.trim().toLowerCase().replace(/\s+/g,' ');
-    const normUnit  = unit.trim().toLowerCase().replace(/\s+/g,' ');
-    // Chỉ ghi nếu chưa có
-    const exists = list.some(e => e.phone === normPhone || e.name === normName || e.unit === normUnit);
-    if (!exists) list.push({ phone: normPhone, name: normName, unit: normUnit });
+    const exists = list.some(e => e.phone === normPhone || e.name === normName);
+    if (!exists) list.push({ phone: normPhone, name: normName });
     localStorage.setItem('doan_attempted', JSON.stringify(list));
   } catch(e) {}
 }
