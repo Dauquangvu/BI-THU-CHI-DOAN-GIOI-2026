@@ -1,221 +1,769 @@
 // ============================================================
-// NGÂN HÀNG CÂU HỎI - 200 CÂU - ĐOÀN TNCS HỒ CHÍ MINH
+// NGÂN HÀNG CÂU HỎI - ĐỀ CƯƠNG ÔN THI CÁN BỘ ĐOÀN GIỎI
 // Cấu trúc: { text, options[4], correct (index 0-3) }
 // ============================================================
 const QUESTION_BANK = [
-  // === LỊCH SỬ ĐOÀN (1-30) ===
-  { text: "Đoàn Thanh niên Cộng sản Hồ Chí Minh được thành lập vào ngày tháng năm nào?", options: ["26/3/1930","19/5/1941","02/9/1945","03/2/1930"], correct: 0 },
-  { text: "Đoàn Thanh niên Cộng sản Hồ Chí Minh được thành lập tại địa điểm nào?", options: ["Hà Nội","Sài Gòn","Hội An, Quảng Nam","Huế"], correct: 2 },
-  { text: "Tên gọi đầu tiên của Đoàn khi thành lập năm 1930 là gì?", options: ["Đoàn Thanh niên Dân chủ Đông Dương","Đoàn Thanh niên Cộng sản Đông Dương","Hội Liên hiệp Thanh niên Việt Nam","Đoàn Thanh niên Phản đế Đông Dương"], correct: 1 },
-  { text: "Tổ chức nào đã sáng lập ra Đoàn Thanh niên Cộng sản Hồ Chí Minh?", options: ["Chủ tịch Hồ Chí Minh trực tiếp sáng lập","Quốc tế Cộng sản","Đảng Cộng sản Việt Nam","Hội Thanh niên Cách mạng Đồng chí"], correct: 2 },
-  { text: "Đại hội Đoàn toàn quốc lần thứ mấy quyết định lấy tên Đoàn TNCS Hồ Chí Minh?", options: ["Đại hội lần II","Đại hội lần III","Đại hội lần IV","Đại hội lần V"], correct: 1 },
-  { text: "Ngày 26/3 hàng năm là ngày gì?", options: ["Ngày thành lập Đảng CSVN","Ngày Quốc tế Lao động","Ngày thành lập Đoàn TNCS HCM","Ngày Quốc tế Phụ nữ"], correct: 2 },
-  { text: "Cờ Đoàn TNCS Hồ Chí Minh có màu sắc như thế nào?", options: ["Nền vàng, sao đỏ","Nền xanh, sao vàng","Nền đỏ, sao vàng 5 cánh, phù hiệu Đoàn","Nền đỏ, búa liềm vàng"], correct: 2 },
-  { text: "Khẩu hiệu hành động nổi tiếng nhất của Đoàn Thanh niên là gì?", options: ["Thanh niên xung phong","Đâu cần thanh niên có, đâu khó có thanh niên","Tuổi trẻ sẵn sàng","Xung kích, tình nguyện, sáng tạo, phát triển"], correct: 1 },
-  { text: "Tuổi đoàn viên theo Điều lệ Đoàn hiện hành là từ bao nhiêu tuổi đến bao nhiêu tuổi?", options: ["Từ 15 đến 30 tuổi","Từ 16 đến 30 tuổi","Từ 15 đến 35 tuổi","Từ 16 đến 35 tuổi"], correct: 1 },
-  { text: "Lý Tự Trọng là chiến sĩ cách mạng trẻ tuổi nổi tiếng với câu nói nào?", options: ['"Tuổi trẻ là mùa xuân của đất nước"','"Con đường của thanh niên chỉ có thể là con đường cách mạng"','"Không có gì quý hơn độc lập tự do"','"Đâu cần thanh niên có"'], correct: 1 },
-  { text: "Phong trào 'Ba sẵn sàng' của thanh niên miền Bắc thời chống Mỹ có nội dung là gì?", options: ["Sẵn sàng chiến đấu, sẵn sàng hy sinh, sẵn sàng phục vụ","Sẵn sàng nhập ngũ, sẵn sàng vào chiến trường miền Nam, sẵn sàng làm bất cứ việc gì Tổ quốc cần","Sẵn sàng lao động, sẵn sàng học tập, sẵn sàng chiến đấu","Sẵn sàng đi bất cứ đâu, sẵn sàng làm bất cứ việc gì, sẵn sàng hy sinh"], correct: 1 },
-  { text: "Phong trào 'Ba đảm đang' là phong trào của tầng lớp nào?", options: ["Thanh niên nam toàn miền Bắc","Thanh niên nông thôn","Phụ nữ thanh niên miền Bắc thời chống Mỹ","Công nhân viên chức"], correct: 2 },
-  { text: "Tháng Thanh niên được tổ chức vào tháng mấy hàng năm?", options: ["Tháng 1","Tháng 2","Tháng 3","Tháng 4"], correct: 2 },
-  { text: "Đại hội Đoàn toàn quốc được tổ chức mấy năm một lần?", options: ["3 năm","4 năm","5 năm","6 năm"], correct: 2 },
-  { text: "Cơ quan lãnh đạo cao nhất của Đoàn giữa hai kỳ đại hội là gì?", options: ["Ban Thường vụ Trung ương Đoàn","Ban Bí thư Trung ương Đoàn","Ban Chấp hành Trung ương Đoàn","Đại hội Đoàn toàn quốc"], correct: 2 },
-  { text: "Nguyên tắc tổ chức và hoạt động cơ bản của Đoàn là gì?", options: ["Tập trung dân chủ","Tự do dân chủ","Tập thể lãnh đạo cá nhân phụ trách","Tập trung dân chủ và tập thể lãnh đạo cá nhân phụ trách"], correct: 3 },
-  { text: "Chi đoàn là gì trong hệ thống tổ chức của Đoàn?", options: ["Cơ quan lãnh đạo cấp cao nhất","Tế bào cơ sở của Đoàn","Đơn vị hành chính của Đoàn","Ban chuyên trách của Đoàn"], correct: 1 },
-  { text: "Đoàn viên được kết nạp vào Đoàn phải có độ tuổi tối thiểu là bao nhiêu?", options: ["15 tuổi","16 tuổi","17 tuổi","18 tuổi"], correct: 1 },
-  { text: "Hội Liên hiệp Thanh niên Việt Nam được thành lập ngày tháng năm nào?", options: ["26/3/1930","15/10/1956","19/5/1941","02/9/1945"], correct: 1 },
-  { text: "Đội Thiếu niên Tiền phong Hồ Chí Minh được thành lập ngày tháng năm nào?", options: ["26/3/1931","15/5/1941","01/6/1941","19/5/1941"], correct: 1 },
-  { text: "Đoàn viên Đoàn TNCS HCM khi đủ điều kiện được Đoàn giới thiệu vào tổ chức nào?", options: ["Hội Liên hiệp Thanh niên Việt Nam","Hội Sinh viên Việt Nam","Đảng Cộng sản Việt Nam","Mặt trận Tổ quốc Việt Nam"], correct: 2 },
-  { text: "Tuổi đội viên Đội Thiếu niên Tiền phong Hồ Chí Minh là từ bao nhiêu đến bao nhiêu tuổi?", options: ["6 đến 14 tuổi","9 đến 14 tuổi","9 đến 15 tuổi","6 đến 15 tuổi"], correct: 2 },
-  { text: "Khăn quàng đỏ là biểu tượng của tổ chức nào?", options: ["Hội Sinh viên Việt Nam","Đoàn TNCS Hồ Chí Minh","Đội Thiếu niên Tiền phong Hồ Chí Minh","Hội Liên hiệp Thanh niên Việt Nam"], correct: 2 },
-  { text: "Hội đồng Đội Trung ương trực thuộc tổ chức nào?", options: ["Bộ Giáo dục và Đào tạo","Trung ương Đoàn TNCS Hồ Chí Minh","Ủy ban Quốc gia về Thanh niên Việt Nam","Chính phủ nước CHXHCN Việt Nam"], correct: 1 },
-  { text: "Bí thư thứ nhất Trung ương Đoàn nhiệm kỳ XII (2017-2022) là ai?", options: ["Nguyễn Anh Tuấn","Lê Quốc Phong","Bùi Quang Huy","Nguyễn Tấn Tuân"], correct: 1 },
-  { text: "Bí thư thứ nhất Trung ương Đoàn hiện nay (nhiệm kỳ XIII, 2022-2027) là ai?", options: ["Nguyễn Anh Tuấn","Lê Quốc Phong","Bùi Quang Huy","Nguyễn Minh Triết"], correct: 2 },
-  { text: "Kim Đồng - Đội trưởng đầu tiên của Đội Thiếu niên Tiền phong tên thật là gì?", options: ["Nguyễn Văn Kim","Nông Văn Dền","Lê Văn Đồng","Trần Kim Đồng"], correct: 1 },
-  { text: "Giải thưởng cao nhất của Đoàn dành cho thanh niên có thành tích xuất sắc là gì?", options: ["Giải thưởng Hồ Chí Minh","Giải thưởng Lý Tự Trọng","Giải thưởng Nguyễn Du","Giải thưởng Nguyễn Văn Trỗi"], correct: 1 },
-  { text: "Giải thưởng 'Sao Tháng Giêng' dành cho đối tượng nào?", options: ["Học sinh THPT xuất sắc","Sinh viên tiêu biểu","Đoàn viên thanh niên lao động xuất sắc","Thanh niên nông thôn tiêu biểu"], correct: 1 },
-  { text: "Ngày truyền thống của lực lượng Thanh niên xung phong Việt Nam là ngày nào?", options: ["15/7","26/3","19/5","02/9"], correct: 0 },
-  { text: "Phong trào 'Tuổi trẻ sáng tạo' nhằm khuyến khích thanh niên điều gì?", options: ["Học tập văn hóa","Nghiên cứu khoa học và sáng tạo kỹ thuật","Tham gia thể thao","Hoạt động văn nghệ"], correct: 1 },
+  // === CÂU HỎI VỀ ĐOÀN TNCS HỒ CHÍ MINH (1-21) ===
+  {
+    text: "Đoàn Thanh niên Cộng sản Hồ Chí Minh tổ chức và hoạt động theo nguyên tắc nào?",
+    options: [
+      "Hợp tác, bình đẳng, phối hợp và thống nhất hành động.",
+      "Tập trung dân chủ.",
+      "Hiệp thương dân chủ.",
+      "Tự nguyện, tự quản."
+    ],
+    correct: 1
+  },
+  {
+    text: "Độ tuổi đoàn viên là bao nhiêu?",
+    options: ["15 - 30", "16 - 30", "18 - 35", "17 - 35"],
+    correct: 1
+  },
+  {
+    text: "Vai trò của cán bộ Đoàn là gì?",
+    options: ["Chỉ huy", "Tham mưu, tổ chức phong trào", "Hậu cần", "Kỹ thuật"],
+    correct: 1
+  },
+  {
+    text: "Ngày truyền thống Thanh niên Quân đội là ngày nào?",
+    options: ["22/12/1944", "2/9/1945", "08/02/1950", "26/3/1931"],
+    correct: 2
+  },
+  {
+    text: "Bài ca chính thức của Đoàn (Đoàn ca của Đoàn Thanh niên Cộng sản Hồ Chí Minh) có tên là gì?",
+    options: [
+      "Thanh niên làm theo lời Bác.",
+      "Tiến lên đoàn viên.",
+      "Tuổi trẻ thế hệ Bác Hồ.",
+      "Lên đàng."
+    ],
+    correct: 0
+  },
+  {
+    text: "Tác giả của bài Đoàn ca là ai?",
+    options: ["Văn Cao.", "Lưu Hữu Phước.", "Hoàng Hà.", "Hoàng Hòa."],
+    correct: 3
+  },
+  {
+    text: "Những truyền thống của Đoàn Thanh niên Cộng sản Hồ Chí Minh là gì?",
+    options: [
+      "Truyền thống trung thành tuyệt đối với sự nghiệp cách mạng của Đảng, của dân tộc, kiên quyết phấn đấu vì độc lập, tự do, vì chủ nghĩa xã hội.",
+      "Truyền thống không ngừng rèn luyện trong đấu tranh cách mạng, hoạt động thực tiễn để cống hiến nhiều nhất cho cách mạng và trưởng thành mau chóng về mọi mặt.",
+      "Truyền thống của đội quân xung kích cách mạng nêu cao chủ nghĩa anh hùng cách mạng, đoàn kết Thanh niên cả nước vượt qua mọi khó khăn, gian khổ.",
+      "Cả 3 câu trên đều đúng."
+    ],
+    correct: 3
+  },
+  {
+    text: "Khi được thành lập, Đoàn Thanh niên Cộng sản Hồ Chí Minh có tên là gì?",
+    options: [
+      "Đoàn Thanh niên Cộng sản Việt Nam.",
+      "Đoàn Thanh niên Cộng sản Đông Dương.",
+      "Đoàn Thanh niên Phản đế Đông Dương.",
+      "Đoàn Thanh niên Dân chủ Đông Dương."
+    ],
+    correct: 1
+  },
+  {
+    text: "Những truyền thống của Đoàn Thanh niên Cộng sản Hồ Chí Minh là gì?",
+    options: [
+      "Truyền thống trung thành tuyệt đối với sự nghiệp cách mạng của Đảng, của dân tộc, kiên quyết phấn đấu vì độc lập, tự do, vì chủ nghĩa xã hội.",
+      "Truyền thống không ngừng rèn luyện trong đấu tranh cách mạng, hoạt động thực tiễn để cống hiến nhiều nhất cho cách mạng.",
+      "Truyền thống của đội quân xung kích cách mạng nêu cao chủ nghĩa anh hùng cách mạng, đoàn kết Thanh niên cả nước.",
+      "Cả 3 câu trên đều đúng."
+    ],
+    correct: 3
+  },
+  {
+    text: "Đoàn Thanh niên Lao động chính thức mang tên Đoàn Thanh niên Cộng sản Hồ Chí Minh tại đâu, thời điểm nào?",
+    options: [
+      "Đại hội Đảng toàn quốc lần thứ IV (12/1976).",
+      "Hội nghị Ban Chấp hành Trung ương Đảng tháng 12/1976.",
+      "Đại hội Đảng toàn quốc lần thứ IV (11/1980).",
+      "Sau 30/4/1975, Ban Chấp hành Trung ương Đảng quyết định đổi tên."
+    ],
+    correct: 1
+  },
+  {
+    text: "Từ năm nào Ban bí thư Trung ương Đảng chọn tháng 3 hằng năm làm \"Tháng Thanh niên\"?",
+    options: ["Năm 2001.", "Năm 2002.", "Năm 2003.", "Năm 2004."],
+    correct: 2
+  },
+  {
+    text: "Đoàn Thanh niên từ khi thành lập cho đến nay đã đổi tên mấy lần?",
+    options: ["5 lần.", "6 lần.", "7 lần.", "8 lần."],
+    correct: 2
+  },
+  {
+    text: "Tuổi kết nạp Thanh niên vào Đoàn TNCS Hồ Chí Minh theo Điều lệ hiện hành là?",
+    options: [
+      "Từ 15 tuổi - 30 tuổi.",
+      "Từ đủ 15 tuổi - 30 tuổi.",
+      "Từ 16 tuổi - 30 tuổi.",
+      "Từ đủ 16 tuổi - 30 tuổi."
+    ],
+    correct: 2
+  },
+  {
+    text: "Câu nói \"Đâu Đảng cần Thanh niên có, việc gì khó Thanh niên làm\" do Chủ tịch Hồ Chí Minh đến dự và phát biểu căn dặn Đoàn viên Thanh niên tại Đại hội Đại biểu toàn quốc lần thứ mấy của Đoàn?",
+    options: ["Lần thứ hai.", "Lần thứ ba.", "Lần thứ tư.", "Lần thứ năm."],
+    correct: 1
+  },
+  {
+    text: "Cờ Đoàn được quy định cụ thể tại Điều lệ Đoàn Thanh niên Cộng sản Hồ Chí Minh (sửa đổi và bổ sung năm 2002) như thế nào?",
+    options: [
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn là 30 cm.",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/3 chiều rộng cờ.",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/5 chiều rộng cờ.",
+      "Tất cả đều sai."
+    ],
+    correct: 2
+  },
+  {
+    text: "Bác Hồ dạy: \"Không có việc gì khó / Chỉ sợ lòng không bền / Đào núi và lấp biển / Quyết chí ắt làm nên\" ra đời trong dịp nào?",
+    options: [
+      "Ngày 20/3/1951 khi Bác Hồ đến thăm đơn vị Thanh niên xung phong.",
+      "Ngày 21/3/1951 khi Bác Hồ đến thăm đơn vị Thanh niên xung phong.",
+      "Ngày 20/3/1951 khi Bác Hồ đến thăm đơn vị Đoàn Thanh niên.",
+      "Ngày 21/3/1951 khi Bác Hồ đến thăm đơn vị Đoàn Thanh niên."
+    ],
+    correct: 0
+  },
+  {
+    text: "Đoàn Thanh niên Cộng sản Hồ Chí Minh có mấy chức năng?",
+    options: ["4 chức năng.", "5 chức năng.", "6 chức năng.", "7 chức năng."],
+    correct: 2
+  },
+  {
+    text: "Đoàn Thanh niên từ khi thành lập cho đến nay đã trải qua mấy kỳ đại hội?",
+    options: ["10 lần đại hội.", "11 lần đại hội.", "12 lần đại hội.", "13 lần đại hội."],
+    correct: 2
+  },
+  {
+    text: "Cơ quan lãnh đạo cao nhất của Đoàn TNCS Hồ Chí Minh?",
+    options: [
+      "Đại hội đại biểu Đoàn toàn quốc",
+      "Ban Bí thư Trung ương Đoàn",
+      "Ban Chấp hành Trung ương Đoàn",
+      "Văn phòng Trung ương Đoàn"
+    ],
+    correct: 0
+  },
+  {
+    text: "Điều lệ Đoàn quy định chế độ sinh hoạt của chi đoàn là:",
+    options: [
+      "Mỗi tuần một lần",
+      "Mỗi tháng một lần",
+      "Ba tháng một lần",
+      "Mỗi học kỳ một lần"
+    ],
+    correct: 1
+  },
+  {
+    text: "Theo Điều lệ Đoàn hiện hành, có bao nhiêu hình thức kỷ luật đối với cán bộ, đoàn viên?",
+    options: ["Ba hình thức", "Bốn hình thức", "Năm hình thức", "Sáu hình thức"],
+    correct: 1
+  },
 
-  // === TƯ TƯỞNG HỒ CHÍ MINH (31-60) ===
-  { text: "Bác Hồ đã khẳng định vai trò của thanh niên qua câu nói nổi tiếng nào?", options: ['"Thanh niên là rường cột của nước nhà"','"Thanh niên là người chủ tương lai của nước nhà"','"Tuổi trẻ là mùa xuân của đất nước"','"Thanh niên là lực lượng nòng cốt của cách mạng"'], correct: 1 },
-  { text: "Bác Hồ sinh ngày tháng năm nào?", options: ["19/5/1890","19/5/1891","19/5/1892","19/5/1893"], correct: 0 },
-  { text: "Bác Hồ đọc Tuyên ngôn Độc lập tại đâu vào ngày 02/9/1945?", options: ["Hội trường Ba Đình Hà Nội","Quảng trường Ba Đình Hà Nội","Nhà hát lớn Hà Nội","Phủ Chủ tịch Hà Nội"], correct: 1 },
-  { text: "Bác Hồ mất ngày tháng năm nào?", options: ["02/9/1969","19/5/1969","03/9/1969","30/4/1969"], correct: 0 },
-  { text: "Câu nói 'Không có gì quý hơn độc lập, tự do' là của ai?", options: ["Lê Duẩn","Võ Nguyên Giáp","Hồ Chí Minh","Trường Chinh"], correct: 2 },
-  { text: "Tư tưởng Hồ Chí Minh về đạo đức cách mạng đề cao những phẩm chất nào trước tiên?", options: ["Dũng cảm, kiên cường","Cần, kiệm, liêm, chính, chí công vô tư","Đoàn kết, thống nhất","Trung thành, hy sinh"], correct: 1 },
-  { text: "Chỉ thị 05-CT/TW của Bộ Chính trị về học tập và làm theo tư tưởng HCM được ban hành năm nào?", options: ["2014","2016","2018","2020"], correct: 1 },
-  { text: "Theo Bác Hồ, 'Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công' thể hiện điều gì?", options: ["Tầm quan trọng của lao động","Tầm quan trọng của đoàn kết dân tộc","Tầm quan trọng của học tập","Tầm quan trọng của đấu tranh cách mạng"], correct: 1 },
-  { text: "Bác Hồ căn dặn trong Di chúc về việc 'bồi dưỡng thế hệ cách mạng cho đời sau' có nghĩa là gì?", options: ["Đào tạo cán bộ lãnh đạo","Chăm lo phát triển thế hệ trẻ","Xây dựng Đảng vững mạnh","Phát triển kinh tế đất nước"], correct: 1 },
-  { text: "Bác Hồ ra đi tìm đường cứu nước từ cảng nào?", options: ["Cảng Hải Phòng","Cảng Đà Nẵng","Cảng Nhà Rồng (Sài Gòn)","Cảng Quy Nhơn"], correct: 2 },
-  { text: "Bác Hồ ra đi tìm đường cứu nước vào năm nào?", options: ["1910","1911","1912","1913"], correct: 1 },
-  { text: "Tên khai sinh của Chủ tịch Hồ Chí Minh là gì?", options: ["Nguyễn Tất Thành","Nguyễn Ái Quốc","Nguyễn Sinh Cung","Lý Thụy"], correct: 2 },
-  { text: "Bác Hồ sáng lập ra Đảng Cộng sản Việt Nam vào năm nào?", options: ["1929","1930","1931","1932"], correct: 1 },
-  { text: "Quê hương của Bác Hồ ở tỉnh nào?", options: ["Hà Tĩnh","Nghệ An","Thanh Hóa","Quảng Bình"], correct: 1 },
-  { text: "Tác phẩm 'Đường Kách Mệnh' của Bác Hồ ra đời năm nào?", options: ["1925","1926","1927","1928"], correct: 2 },
-  { text: "Bác Hồ thành lập tổ chức nào để đào tạo cán bộ tại Quảng Châu (Trung Quốc)?", options: ["Hội Việt Nam Cách mạng Thanh niên","Đảng Cộng sản Đông Dương","Mặt trận Việt Minh","Liên đoàn Các dân tộc bị áp bức ở Á Đông"], correct: 0 },
-  { text: "Chiến dịch lịch sử mang tên Bác Hồ giải phóng Sài Gòn năm 1975 có tên là gì?", options: ["Chiến dịch Điện Biên Phủ","Chiến dịch Mùa Xuân 1975","Chiến dịch Hồ Chí Minh","Chiến dịch Tổng tiến công 1975"], correct: 2 },
-  { text: "Bác Hồ trở về nước trực tiếp lãnh đạo cách mạng Việt Nam vào năm nào?", options: ["1940","1941","1942","1943"], correct: 1 },
-  { text: "Báo 'Người Cùng Khổ' (Le Paria) do Bác Hồ sáng lập tại nước nào?", options: ["Liên Xô","Trung Quốc","Pháp","Anh"], correct: 2 },
-  { text: "Nghị quyết Trung ương 4 (khóa XII) của Đảng tập trung vào nội dung gì?", options: ["Phát triển kinh tế","Tăng cường xây dựng chỉnh đốn Đảng ngăn chặn đẩy lùi suy thoái","Cải cách giáo dục","Bảo vệ môi trường"], correct: 1 },
-  { text: "Nghị quyết 25-NQ/TW của BCH Trung ương Đảng (khóa X) về công tác thanh niên được ban hành năm nào?", options: ["2006","2007","2008","2009"], correct: 1 },
-  { text: "Luật Thanh niên 2020 quy định thanh niên là người có độ tuổi từ đủ bao nhiêu đến bao nhiêu tuổi?", options: ["15 đến 30 tuổi","16 đến 30 tuổi","16 đến 35 tuổi","18 đến 30 tuổi"], correct: 1 },
-  { text: "Ủy ban Quốc gia về Thanh niên Việt Nam do ai làm Chủ tịch?", options: ["Bí thư thứ nhất Trung ương Đoàn","Bộ trưởng Bộ Nội vụ","Phó Thủ tướng Chính phủ","Chủ tịch Mặt trận Tổ quốc"], correct: 2 },
-  { text: "Chương trình 'Mùa hè xanh' do tổ chức nào phát động?", options: ["Bộ Giáo dục và Đào tạo","Đoàn Thanh niên","Hội Sinh viên","Ủy ban Nhân dân các tỉnh"], correct: 1 },
-  { text: "Phong trào 'Thanh niên tình nguyện' được phát động chính thức từ năm nào?", options: ["1994","1996","1998","2000"], correct: 2 },
-  { text: "Cuộc vận động 'Tuổi trẻ Việt Nam học tập và làm theo lời Bác' nhằm mục đích gì?", options: ["Nâng cao trình độ học vấn","Học tập và làm theo tư tưởng đạo đức phong cách Hồ Chí Minh","Phát triển kinh tế","Xây dựng tổ chức Đoàn vững mạnh"], correct: 1 },
-  { text: "Chiến dịch Thanh niên tình nguyện hè được tổ chức thường niên từ năm nào?", options: ["1994","2000","2003","2005"], correct: 0 },
-  { text: "Phong trào '5 xung kích phát triển kinh tế - xã hội và bảo vệ Tổ quốc' gồm các nội dung nào?", options: ["Xung kích phát triển kinh tế, sáng tạo khởi nghiệp, nâng cao văn hóa, bảo vệ Tổ quốc, xây dựng Đoàn","Phát triển kinh tế, tình nguyện, sáng tạo, bảo vệ Tổ quốc, xây dựng Đảng","Lao động sáng tạo, học tập rèn luyện, vì cộng đồng, bảo vệ Tổ quốc, hội nhập quốc tế","Tất cả các đáp án trên"], correct: 0 },
-  { text: "Hội nghị lần thứ 8 BCH Trung ương Đảng (khóa XI) về phát triển bền vững biển Việt Nam đến năm nào?", options: ["2025","2030","2035","2045"], correct: 1 },
-  { text: "Nghị quyết Đại hội Đảng lần thứ XIII đề ra mục tiêu đến năm 2030 Việt Nam trở thành nước như thế nào?", options: ["Nước phát triển thu nhập cao","Nước công nghiệp hiện đại","Nước đang phát triển có công nghiệp hiện đại thu nhập trung bình cao","Nước có nền kinh tế thị trường đầy đủ"], correct: 2 },
+  // === CÂU HỎI VỀ HUẤN LUYỆN QUÂN SỰ (22-24) ===
+  {
+    text: "Có bao nhiêu quan điểm trong huấn luyện?",
+    options: ["02", "03", "04", "05"],
+    correct: 1
+  },
+  {
+    text: "Quan điểm 3 trong huấn luyện là gì?",
+    options: [
+      "Phát huy Quân sự dân chủ, động viên tính tự giác, tích cực, chủ động, sáng tạo của người học, chống áp đặt, dập khuôn, máy móc.",
+      "Lý luận liên hệ với thực tiễn, lý thuyết đi đôi với thực hành, lấy thực hành làm chính.",
+      "Quá trình huấn luyện là quá trình truyền thụ kinh nghiệm chiến đấu và truyền thống tốt đẹp của dân tộc ta cho người học.",
+      "Đáp án khác"
+    ],
+    correct: 2
+  },
+  {
+    text: "Có mấy nguyên tắc trong huấn luyện?",
+    options: ["05", "06", "07", "08"],
+    correct: 3
+  },
 
-  // === KIẾN THỨC PHÁP LUẬT (61-90) ===
-  { text: "Theo Bộ luật Hình sự, người đủ bao nhiêu tuổi trở lên phải chịu trách nhiệm hình sự về mọi tội phạm?", options: ["14 tuổi","16 tuổi","18 tuổi","20 tuổi"], correct: 2 },
-  { text: "Độ tuổi đủ điều kiện đăng ký kết hôn theo Luật Hôn nhân và Gia đình hiện hành là bao nhiêu?", options: ["Nam từ 18, nữ từ 16","Nam từ 20, nữ từ 18","Nam từ 18, nữ từ 18","Nam từ 20, nữ từ 20"], correct: 1 },
-  { text: "Tuổi bầu cử theo Hiến pháp Việt Nam năm 2013 là bao nhiêu tuổi trở lên?", options: ["16 tuổi","17 tuổi","18 tuổi","20 tuổi"], correct: 2 },
-  { text: "Theo Luật Nghĩa vụ quân sự, công dân nam đủ bao nhiêu tuổi trong năm phải đăng ký nghĩa vụ quân sự?", options: ["16 tuổi","17 tuổi","18 tuổi","20 tuổi"], correct: 1 },
-  { text: "Thời hạn phục vụ tại ngũ của hạ sĩ quan và binh sĩ theo Luật Nghĩa vụ quân sự là bao lâu?", options: ["18 tháng","24 tháng","30 tháng","36 tháng"], correct: 1 },
-  { text: "Hành vi nào sau đây là vi phạm pháp luật về an toàn giao thông đường bộ?", options: ["Đi xe máy phân khối nhỏ không cần bằng lái","Dùng điện thoại khi đang điều khiển xe máy","Đi xe đạp ban đêm","Không mang theo giấy tờ xe"], correct: 1 },
-  { text: "Độ tuổi tối thiểu được mua rượu, bia theo Luật Phòng chống tác hại rượu bia là bao nhiêu?", options: ["16 tuổi","17 tuổi","18 tuổi","20 tuổi"], correct: 2 },
-  { text: "Hành vi tàng trữ, vận chuyển, mua bán trái phép chất ma túy bị xử lý như thế nào?", options: ["Xử phạt hành chính","Cảnh cáo","Truy cứu trách nhiệm hình sự","Giáo dục tại địa phương"], correct: 2 },
-  { text: "Ngày truyền thống của Quân đội nhân dân Việt Nam là ngày nào?", options: ["22/12","30/4","19/8","02/9"], correct: 0 },
-  { text: "Chiến thắng lịch sử Điện Biên Phủ diễn ra năm nào?", options: ["1950","1952","1954","1956"], correct: 2 },
-  { text: "Ngày 30/4/1975 là ngày gì trong lịch sử Việt Nam?", options: ["Ngày ký Hiệp định Paris","Ngày giải phóng miền Nam thống nhất đất nước","Ngày thành lập nước CHXHCN Việt Nam","Ngày Cách mạng tháng Tám thành công"], correct: 1 },
-  { text: "Hiến pháp nước CHXHCN Việt Nam hiện hành được thông qua vào năm nào?", options: ["1992","2001","2013","2015"], correct: 2 },
-  { text: "Việt Nam có bao nhiêu tỉnh, thành phố trực thuộc Trung ương?", options: ["58","61","63","65"], correct: 2 },
-  { text: "Quốc hội Việt Nam họp thường kỳ mấy kỳ một năm?", options: ["1 kỳ","2 kỳ","3 kỳ","4 kỳ"], correct: 1 },
-  { text: "Nhiệm kỳ của Quốc hội Việt Nam là bao nhiêu năm?", options: ["4 năm","5 năm","6 năm","3 năm"], correct: 1 },
-  { text: "Cơ quan nào có quyền ban hành Hiến pháp và Luật ở Việt Nam?", options: ["Chính phủ","Chủ tịch nước","Quốc hội","Tòa án nhân dân tối cao"], correct: 2 },
-  { text: "Theo Hiến pháp 2013, Nhà nước Việt Nam là Nhà nước như thế nào?", options: ["Nhà nước pháp quyền xã hội chủ nghĩa của nhân dân do nhân dân vì nhân dân","Nhà nước cộng hòa","Nhà nước liên bang","Nhà nước quân chủ lập hiến"], correct: 0 },
-  { text: "Văn phòng Chính phủ Việt Nam hiện đặt tại đâu?", options: ["Phủ Chủ tịch","Tòa nhà Quốc hội","Số 1 Hoàng Hoa Thám Hà Nội","Số 1 Hoàng Văn Thụ Hà Nội"], correct: 2 },
-  { text: "Ngày Pháp luật Việt Nam được tổ chức vào ngày nào hàng năm?", options: ["9/11","10/12","19/8","02/9"], correct: 0 },
-  { text: "Theo pháp luật Việt Nam, hành vi đánh bạc sẽ bị xử lý như thế nào?", options: ["Chỉ xử phạt hành chính","Có thể bị truy cứu trách nhiệm hình sự","Chỉ bị nhắc nhở","Không bị xử lý nếu thua ít tiền"], correct: 1 },
-  { text: "Tội phạm về an ninh mạng theo Luật An ninh mạng 2018 bao gồm hành vi nào?", options: ["Tấn công mạng, phát tán phần mềm độc hại","Sử dụng không gian mạng chống Nhà nước","Tung tin giả gây hoang mang dư luận","Tất cả các hành vi trên"], correct: 3 },
-  { text: "Luật An ninh mạng Việt Nam có hiệu lực từ ngày nào?", options: ["01/01/2018","01/6/2018","01/01/2019","01/6/2019"], correct: 2 },
-  { text: "Hành vi nào sau đây vi phạm quy định về bảo vệ bí mật Nhà nước?", options: ["Đọc tin tức chính thống","Tiết lộ thông tin mật cho người không có thẩm quyền","Đăng ký tham quan các di tích lịch sử","Chụp ảnh phong cảnh đẹp"], correct: 1 },
-  { text: "Theo Luật Thanh niên 2020, Nhà nước có trách nhiệm gì với thanh niên?", options: ["Tạo điều kiện học tập","Hỗ trợ việc làm khởi nghiệp","Chăm lo sức khỏe","Tất cả các đáp án trên"], correct: 3 },
-  { text: "Phòng chống tham nhũng là trách nhiệm của ai?", options: ["Chỉ cơ quan Nhà nước","Chỉ Đảng viên","Toàn thể cán bộ đảng viên và nhân dân","Chỉ cơ quan thanh tra kiểm tra"], correct: 2 },
-  { text: "Luật Phòng chống ma túy quy định hành vi nào là vi phạm pháp luật?", options: ["Tuyên truyền về tác hại của ma túy","Sử dụng ma túy dù chỉ một lần","Hỗ trợ cai nghiện ma túy","Báo cáo người sử dụng ma túy cho cơ quan chức năng"], correct: 1 },
-  { text: "Hành vi bạo lực học đường bị xử lý theo quy định nào?", options: ["Chỉ xử lý kỷ luật trong nhà trường","Có thể bị xử lý hành chính hoặc hình sự tùy mức độ","Chỉ giáo dục nhắc nhở","Không có chế tài xử lý"], correct: 1 },
-  { text: "Quyền bầu cử và ứng cử là quyền gì của công dân?", options: ["Quyền dân sự","Quyền chính trị cơ bản","Quyền kinh tế","Quyền văn hóa xã hội"], correct: 1 },
-  { text: "Hành vi vi phạm trật tự công cộng có thể bị xử phạt như thế nào?", options: ["Chỉ bị nhắc nhở","Bị xử phạt vi phạm hành chính","Bị truy cứu trách nhiệm hình sự","Cả B và C tùy mức độ"], correct: 3 },
-  { text: "Ngày Quốc tế Nhân quyền được tổ chức vào ngày nào?", options: ["10/11","10/12","01/12","15/11"], correct: 1 },
+  // === CÂU HỎI VỀ ĐẠI HỘI ĐOÀN TNCS HCM QUÂN ĐỘI LẦN XI (25-43) ===
+  {
+    text: "Nội dung \"Tiên phong giữ gìn giá trị Bộ đội Cụ Hồ\" nhấn mạnh gì?",
+    options: [
+      "Phát triển kinh tế",
+      "Hội nhập quốc tế",
+      "Lan tỏa giá trị văn hóa truyền thống",
+      "Tăng cường huấn luyện"
+    ],
+    correct: 2
+  },
+  {
+    text: "\"Chiến sĩ số\" được hiểu là gì?",
+    options: [
+      "Người làm công tác kỹ thuật",
+      "Người sử dụng máy tính",
+      "Người làm chủ công nghệ, nền tảng số",
+      "Người làm công tác truyền thông"
+    ],
+    correct: 2
+  },
+  {
+    text: "Theo Thông tư 143/TT-BQP ngày 27/12/2023 của Bộ Quốc phòng về xử lý kỷ luật trong Quân đội nhân dân Việt Nam, có mấy hình thức kỷ luật đối với sĩ quan?",
+    options: ["6", "8", "10", "12"],
+    correct: 1
+  },
+  {
+    text: "Theo Thông tư 143/TT-BQP ngày 27/12/2023 của Bộ Quốc phòng về xử lý kỷ luật trong Quân đội nhân dân Việt Nam, có mấy hình thức kỷ luật đối với HSQ-CS?",
+    options: ["6", "7", "8", "9"],
+    correct: 0
+  },
+  {
+    text: "Yêu cầu \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\" và phương châm \"5 vững\" được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII theo yêu cầu của đồng chí nào?",
+    options: [
+      "Đồng chí Tổng Bí thư Tô Lâm",
+      "Đồng chí Chủ tịch nước trong các chỉ đạo về quốc phòng",
+      "Đồng chí Thủ tướng Chính phủ trong điều hành nhiệm vụ năm",
+      "Đồng chí Bộ trưởng Bộ Quốc phòng trong chỉ đạo toàn quân"
+    ],
+    correct: 0
+  },
+  {
+    text: "Nghị quyết QUTW về \"Nâng cao chất lượng huấn luyện giai đoạn 2023-2030 và những năm tiếp theo\" là Nghị quyết số bao nhiêu?",
+    options: [
+      "Nghị quyết số 1657-NQ/QUTW",
+      "Nghị quyết số 1658-NQ/QUTW",
+      "Nghị quyết số 1659-NQ/QUTW",
+      "Nghị quyết số 1660-NQ/QUTW"
+    ],
+    correct: 2
+  },
+  {
+    text: "Phương hướng chung công tác quần chúng LLVT Quân khu giai đoạn 2025-2030 là gì?",
+    options: [
+      "Tập trung huấn luyện quân sự, nâng cao đời sống cho bộ đội",
+      "Quán triệt, triển khai hiệu quả nghị quyết, đổi mới nội dung, phương pháp, đẩy mạnh chuyển đổi số, nâng cao năng lực số",
+      "Đẩy mạnh sản xuất, kinh doanh, phát triển kinh tế",
+      "Tăng cường giao lưu quốc tế, mở rộng hợp tác, đối ngoại quốc phòng"
+    ],
+    correct: 1
+  },
+  {
+    text: "Chỉ tiêu về bản lĩnh chính trị của cán bộ, đoàn viên Quân khu xác định là?",
+    options: [
+      "Có bản lĩnh tương đối vững vàng",
+      "Có bản lĩnh tốt, chấp hành nhiệm vụ",
+      "100% có bản lĩnh chính trị vững vàng, kiên định mục tiêu, lý tưởng độc lập dân tộc và chủ nghĩa xã hội, trung thành tuyệt đối với Đảng, Tổ quốc và Nhân dân",
+      "Trên 90% có bản lĩnh chính trị"
+    ],
+    correct: 2
+  },
+  {
+    text: "Khẩu hiệu hành động công tác quần chúng LLVT Quân khu giai đoạn 2025-2030 là gì?",
+    options: [
+      "Đoàn kết – Sáng tạo – Phát triển – Bền vững",
+      "Tiên phong – Sáng tạo – Hội nhập – Phát triển",
+      "Bản lĩnh, xung kích, sáng tạo làm chủ kỷ nguyên mới",
+      "Đoàn kết – Đổi mới – Sáng tạo – Quyết thắng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI có ý nghĩa như thế nào?",
+    options: [
+      "Sự kiện chính trị quan trọng của tuổi trẻ Thanh niên cả nước",
+      "Sự kiện chính trị có ý nghĩa sâu rộng trong Quân khu",
+      "Sự kiện chính trị có ý nghĩa quan trọng, hội tụ trí tuệ, khát vọng tuổi trẻ Quân đội",
+      "Sự kiện chính trị tiêu biểu của Thanh niên Việt Nam"
+    ],
+    correct: 2
+  },
+  {
+    text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, nhiệm vụ thứ tư mà Đại tướng Phan Văn Giang nhắc đến là:",
+    options: [
+      "Thanh niên Quân đội là lực lượng cơ bản, chủ yếu, đóng góp to lớn trong thực hiện nhiệm vụ huấn luyện, sẵn sàng chiến đấu.",
+      "Thanh niên Quân đội đã hoàn thành xuất sắc trong thực hiện nhiệm vụ phòng, chống, khắc phục hậu quả thiên tai, dịch bệnh.",
+      "Thanh niên Quân đội đóng góp chính trong phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội."
+    ],
+    correct: 3
+  },
+  {
+    text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, nhiệm vụ thứ năm mà Đại tướng Phan Văn Giang nhắc đến là:",
+    options: [
+      "Thanh niên Quân đội là lực lượng cơ bản, chủ yếu, đóng góp to lớn trong thực hiện nhiệm vụ huấn luyện, sẵn sàng chiến đấu.",
+      "Thanh niên Quân đội đã tạo nên những ấn tượng mạnh trong tổ chức kỷ niệm các ngày lễ lớn của đất nước và một số sự kiện quốc tế.",
+      "Thanh niên Quân đội tham gia tích cực, sáng tạo trong công tác đối ngoại quốc phòng.",
+      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội."
+    ],
+    correct: 1
+  },
+  {
+    text: "Đột phá thứ nhất được Đại hội đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định trong nhiệm kỳ tới là gì?",
+    options: [
+      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội.",
+      "Đẩy mạnh nghiên cứu, phát triển, ứng dụng khoa học công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+      "Xung kích thực hiện hiệu quả nhiệm vụ huấn luyện, đào tạo, sẵn sàng chiến đấu; xây dựng nền nếp chính quy, nâng cao ý thức chấp hành pháp luật, kỷ luật và bảo đảm an toàn.",
+      "Tăng cường bồi dưỡng lý tưởng cách mạng, khát vọng cống hiến, nâng cao bản lĩnh chính trị cho cán bộ, ĐVTN góp phần xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại."
+    ],
+    correct: 3
+  },
+  {
+    text: "Đột phá thứ hai được Đại hội đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định trong nhiệm kỳ tới là gì?",
+    options: [
+      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội.",
+      "Đẩy mạnh nghiên cứu, phát triển, ứng dụng khoa học công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+      "Xung kích thực hiện hiệu quả nhiệm vụ huấn luyện, đào tạo, sẵn sàng chiến đấu; xây dựng nền nếp chính quy, nâng cao ý thức chấp hành pháp luật, kỷ luật và bảo đảm an toàn.",
+      "Tăng cường bồi dưỡng lý tưởng cách mạng, khát vọng cống hiến, nâng cao bản lĩnh chính trị cho cán bộ, ĐVTN."
+    ],
+    correct: 2
+  },
+  {
+    text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, phong trào nhiệm kỳ 2025-2030 được Đại tướng Phan Văn Giang nhắc đến là gì?",
+    options: [
+      "Thanh niên tiên phong phát triển",
+      "Tuổi trẻ quyết thắng",
+      "\"3 Tiên phong quyết thắng\"",
+      "Thanh niên xung kích đổi mới"
+    ],
+    correct: 2
+  },
+  {
+    text: "Nội dung thứ nhất của Phong trào \"3 Tiên phong quyết thắng\" tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI là gì?",
+    options: [
+      "Tiên phong phát triển kinh tế, xã hội",
+      "Tiên phong đổi mới phương thức hoạt động",
+      "Tiên phong xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại",
+      "Tiên phong nâng cao chất lượng huấn luyện"
+    ],
+    correct: 2
+  },
+  {
+    text: "Nội dung thứ hai của Phong trào \"3 Tiên phong quyết thắng\" tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI là gì?",
+    options: [
+      "Tiên phong phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số",
+      "Tiên phong đổi mới phương thức hoạt động",
+      "Tiên phong xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại",
+      "Tiên phong nâng cao chất lượng huấn luyện"
+    ],
+    correct: 0
+  },
+  {
+    text: "Nội dung thứ ba của Phong trào \"3 Tiên phong quyết thắng\" tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI là gì?",
+    options: [
+      "Tiên phong phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số",
+      "Tiên phong giữ gìn, phát huy giá trị văn hóa \"Bộ đội Cụ Hồ\" thời kỳ mới",
+      "Tiên phong xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại",
+      "Tiên phong nâng cao chất lượng huấn luyện"
+    ],
+    correct: 1
+  },
+  {
+    text: "Khẩu hiệu hành động được Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định là gì?",
+    options: [
+      "Thanh niên Quân đội \"Dũng cảm, tiên phong, đột phá, quyết thắng\".",
+      "Thanh niên Quân đội \"Bản lĩnh, tiên phong, sáng tạo, phát triển\".",
+      "Thanh niên Quân đội \"Bản lĩnh, tiên phong, đột phá, phát triển\".",
+      "Thanh niên Quân đội \"Dũng cảm, tiên phong, đột phá, phát triển\"."
+    ],
+    correct: 2
+  },
 
-  // === KINH TẾ - XÃ HỘI - ĐẤT NƯỚC (91-120) ===
-  { text: "Việt Nam đặt mục tiêu đến năm 2045 trở thành nước như thế nào?", options: ["Nước công nghiệp phát triển","Nước phát triển có thu nhập cao","Nước đứng top 20 kinh tế thế giới","Nước đạt mức sống trung bình châu Á"], correct: 1 },
-  { text: "Ba trụ cột của chuyển đổi số quốc gia Việt Nam là gì?", options: ["Chính phủ số, Kinh tế số, Xã hội số","Công nghệ số, Dữ liệu số, Hạ tầng số","Giáo dục số, Y tế số, Giao thông số","Nông nghiệp số, Công nghiệp số, Dịch vụ số"], correct: 0 },
-  { text: "Việt Nam là thành viên của tổ chức khu vực nào?", options: ["ASEAN","APEC","WTO","Tất cả đáp án trên"], correct: 3 },
-  { text: "Quốc kỳ Việt Nam có màu gì?", options: ["Nền đỏ ngôi sao vàng năm cánh","Nền vàng ngôi sao đỏ năm cánh","Nền xanh ngôi sao vàng năm cánh","Nền trắng ngôi sao đỏ năm cánh"], correct: 0 },
-  { text: "Quốc ca Việt Nam (Tiến quân ca) do ai sáng tác?", options: ["Phạm Duy","Văn Cao","Đỗ Nhuận","Hoàng Việt"], correct: 1 },
-  { text: "Thủ đô của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam là thành phố nào?", options: ["TP. Hồ Chí Minh","Đà Nẵng","Hà Nội","Huế"], correct: 2 },
-  { text: "Việt Nam gia nhập ASEAN vào năm nào?", options: ["1993","1994","1995","1996"], correct: 2 },
-  { text: "Hiệp định thương mại tự do EVFTA giữa Việt Nam và EU có hiệu lực từ năm nào?", options: ["2018","2019","2020","2021"], correct: 2 },
-  { text: "Cuộc Cách mạng công nghiệp 4.0 tập trung vào những công nghệ nào?", options: ["Trí tuệ nhân tạo, IoT, Dữ liệu lớn, Điện toán đám mây","Điện và cơ khí hóa","Công nghệ thông tin và truyền thông","Năng lượng hạt nhân và vũ trụ"], correct: 0 },
-  { text: "Chiến lược phát triển kinh tế - xã hội 2021-2030 của Việt Nam đặt mục tiêu tăng trưởng GDP bình quân là bao nhiêu?", options: ["6,0-6,5%/năm","6,5-7,0%/năm","7,0-7,5%/năm","7,5-8,0%/năm"], correct: 1 },
-  { text: "Ngày Môi trường Thế giới được tổ chức vào ngày nào?", options: ["05/5","05/6","15/6","22/4"], correct: 1 },
-  { text: "Biển Đông tiếng Anh được gọi là gì?", options: ["East Sea","South China Sea","East China Sea","Pacific Sea"], correct: 1 },
-  { text: "Việt Nam có bao nhiêu di sản văn hóa và thiên nhiên được UNESCO công nhận tính đến năm 2023?", options: ["8 di sản","10 di sản","12 di sản","14 di sản"], correct: 0 },
-  { text: "Vịnh Hạ Long được UNESCO công nhận là Di sản thiên nhiên thế giới lần đầu vào năm nào?", options: ["1993","1994","1995","1996"], correct: 1 },
-  { text: "Kỳ quan thiên nhiên thế giới mới nào của Việt Nam được công nhận năm 2011?", options: ["Vịnh Hạ Long","Hang Sơn Đoòng","Ruộng bậc thang Mù Cang Chải","Vịnh Lan Hạ"], correct: 1 },
-  { text: "Trung tâm kinh tế lớn nhất cả nước là thành phố nào?", options: ["Hà Nội","Đà Nẵng","TP. Hồ Chí Minh","Bình Dương"], correct: 2 },
-  { text: "Cảng hàng không quốc tế lớn nhất Việt Nam hiện nay là cảng nào?", options: ["Sân bay Nội Bài","Sân bay Tân Sơn Nhất","Sân bay Đà Nẵng","Sân bay Long Thành"], correct: 1 },
-  { text: "Chương trình mục tiêu quốc gia xây dựng nông thôn mới hướng đến mục tiêu nào?", options: ["Phát triển hạ tầng giao thông","Nâng cao đời sống nông dân","Xây dựng nông thôn mới văn minh hiện đại","Tất cả các đáp án trên"], correct: 3 },
-  { text: "Việt Nam tham gia Công ước Liên hợp quốc về Luật Biển (UNCLOS) năm nào?", options: ["1982","1994","1995","1996"], correct: 1 },
-  { text: "Diện tích lãnh thổ đất liền của Việt Nam khoảng bao nhiêu km²?", options: ["Khoảng 310.000 km²","Khoảng 330.000 km²","Khoảng 331.000 km²","Khoảng 350.000 km²"], correct: 2 },
-  { text: "Dân số Việt Nam hiện nay (2023-2024) khoảng bao nhiêu người?", options: ["85 triệu","90 triệu","97-100 triệu","105 triệu"], correct: 2 },
-  { text: "Việt Nam có bao nhiêu dân tộc anh em?", options: ["52 dân tộc","54 dân tộc","56 dân tộc","58 dân tộc"], correct: 1 },
-  { text: "Con sông dài nhất Việt Nam là sông nào?", options: ["Sông Hồng","Sông Đồng Nai","Sông Mê Kông (phần ở Việt Nam là sông Cửu Long)","Sông Đà"], correct: 2 },
-  { text: "Núi cao nhất Việt Nam là ngọn núi nào?", options: ["Núi Bạch Mã","Núi Ngọc Linh","Núi Fansipan","Núi Pu Si Lung"], correct: 2 },
-  { text: "Chương trình OCOP (One Commune One Product) nhằm mục tiêu gì?", options: ["Phát triển sản phẩm đặc trưng của mỗi địa phương","Xây dựng thương hiệu quốc gia","Phát triển du lịch","Xúc tiến xuất khẩu"], correct: 0 },
-  { text: "Đồng tiền của Việt Nam là gì?", options: ["Đô la Việt Nam","Đồng Việt Nam (VND)","Nhân dân tệ","Baht Việt Nam"], correct: 1 },
-  { text: "Ngân hàng Nhà nước Việt Nam có chức năng gì?", options: ["Kinh doanh ngân hàng","Quản lý chính sách tiền tệ quốc gia","Cho vay doanh nghiệp","Quản lý chứng khoán"], correct: 1 },
-  { text: "Mục tiêu 'Phát triển bền vững' (SDGs) của Liên hợp quốc có bao nhiêu mục tiêu?", options: ["15 mục tiêu","17 mục tiêu","19 mục tiêu","21 mục tiêu"], correct: 1 },
-  { text: "Ngày Quốc tế Phòng chống tham nhũng là ngày nào?", options: ["09/12","10/12","11/12","12/12"], correct: 0 },
-  { text: "Đề án phát triển thanh niên giai đoạn 2021-2030 được Thủ tướng Chính phủ ban hành theo Quyết định nào?", options: ["1331/QĐ-TTg","1453/QĐ-TTg","1562/QĐ-TTg","1178/QĐ-TTg"], correct: 0 },
+  // === CÂU HỎI VỀ CHỈ THỊ 05-CT/TW VÀ HỌC TẬP BÁC HỒ (44-48) ===
+  {
+    text: "Chỉ thị số 05-CT/TW ngày 15/5/2016 của Bộ Chính trị xác định: Phải làm cho tư tưởng, đạo đức, phong cách của Hồ Chí Minh thật sự trở thành...?",
+    options: [
+      "Nền tảng tinh thần vững chắc của đời sống xã hội.",
+      "Công việc thường xuyên của cấp uỷ, tổ chức đảng, chính quyền, mặt trận Tổ quốc Việt Nam và tổ chức chính trị - xã hội các cấp.",
+      "Việc làm tự giác của mỗi cán bộ, đảng viên.",
+      "Nền tảng tinh thần vững chắc của Đảng, Quân đội và toàn dân."
+    ],
+    correct: 0
+  },
+  {
+    text: "Đảng ta xác định thời gian thực hiện Chỉ thị số 05-CT/TW ngày 15/5/2016 của Bộ Chính trị như thế nào?",
+    options: [
+      "Không giới hạn thời gian.",
+      "Từ năm 2016 - 2020.",
+      "Từ năm 2016 - 2030.",
+      "Trong nhiệm kỳ Đại hội XII."
+    ],
+    correct: 0
+  },
+  {
+    text: "Việc học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh đặt dưới sự chỉ đạo của tổ chức nào?",
+    options: [
+      "Do người chỉ huy cơ quan, đơn vị trực tiếp tổ chức chỉ đạo thực hiện.",
+      "Do cấp ủy các cấp, trực tiếp là ban thường vụ cấp ủy, đồng chí bí thư cấp ủy chỉ đạo.",
+      "Do lãnh đạo, chỉ huy của cơ quan, đơn vị trực tiếp chỉ đạo, tổ chức thực hiện.",
+      "Cả a, b, và c."
+    ],
+    correct: 1
+  },
+  {
+    text: "Theo Chỉ thị số 87-CT/QUTW việc xây dựng, hoàn thiện, ban hành và thực hiện hệ thống tiêu chí học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh theo phương châm nào?",
+    options: [
+      "Ngắn gọn, dễ nhớ, dễ thực hiện và dễ đánh giá kết quả.",
+      "Ngắn gọn, dễ nhớ, dễ thực hiện và dễ kiểm tra đánh giá kết quả.",
+      "Ngắn gọn, dễ nhớ, dễ thực hiện phê bình và phê bình, gắn với khắc phục khâu yếu, mặt yếu.",
+      "Sát chức năng, nhiệm vụ, ngắn gọn, dễ nhớ, dễ thực hiện và dễ đánh giá kết quả."
+    ],
+    correct: 3
+  },
+  {
+    text: "Theo Chỉ thị số 87-CT/QUTW việc lãnh đạo, chỉ đạo việc học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh theo phương châm nào?",
+    options: [
+      "Trên trước, dưới sau; ngoài trước, trong sau; học tập đi đôi với làm theo gắn với chức năng, chức trách, nhiệm vụ.",
+      "Trên trước, dưới sau; trong trước, ngoài sau; học tập đi đôi với làm theo gắn với chức năng, chức trách, nhiệm vụ.",
+      "Trên trước, dưới sau; trong trước, ngoài sau; học tập đi đôi với làm theo, chú trọng việc làm theo thông qua hoạt động hằng ngày.",
+      "Trên trước, dưới sau; trong trước, ngoài sau; học tập đi đôi với làm theo, chú trọng việc làm theo bằng hành động cụ thể."
+    ],
+    correct: 3
+  },
 
-  // === VĂN HÓA - XÃ HỘI - ĐẠO ĐỨC (121-150) ===
-  { text: "Phong trào 'Toàn dân đoàn kết xây dựng đời sống văn hóa' do tổ chức nào chủ trì?", options: ["Bộ Văn hóa Thể thao và Du lịch","Mặt trận Tổ quốc Việt Nam","Đoàn Thanh niên","Ủy ban Nhân dân các cấp"], correct: 1 },
-  { text: "Văn hóa ứng xử trên mạng xã hội cần đảm bảo những nguyên tắc gì?", options: ["Chỉ đăng nội dung giải trí","Tôn trọng, trách nhiệm, an toàn, lành mạnh","Không đăng thông tin cá nhân","Chỉ chia sẻ từ nguồn chính thống"], correct: 1 },
-  { text: "Hành vi nào sau đây là hành vi vi phạm đạo đức của người đoàn viên?", options: ["Tham gia hoạt động tình nguyện","Tung tin giả mạo trên mạng xã hội","Học tập nâng cao trình độ","Đóng góp ý kiến xây dựng tổ chức Đoàn"], correct: 1 },
-  { text: "Giá trị cốt lõi của người đoàn viên thanh niên Việt Nam là gì?", options: ["Trí tuệ, năng động, sáng tạo, xung kích","Bản lĩnh, trí tuệ, đoàn kết, tiên phong","Đoàn kết, trách nhiệm, cống hiến, sáng tạo","Yêu nước, tự hào, đoàn kết, tình nguyện"], correct: 1 },
-  { text: "Ngày Gia đình Việt Nam được tổ chức vào ngày nào hàng năm?", options: ["15/5","28/6","15/7","01/6"], correct: 1 },
-  { text: "Tết Nguyên Đán là Tết truyền thống của dân tộc nào ở Việt Nam?", options: ["Chỉ người Kinh","Chỉ người Hoa","Nhiều dân tộc trong cộng đồng các dân tộc Việt Nam","Tất cả 54 dân tộc"], correct: 2 },
-  { text: "Di sản phi vật thể của Việt Nam được UNESCO công nhận có bao nhiêu (tính đến 2023)?", options: ["10 di sản","13 di sản","15 di sản","17 di sản"], correct: 2 },
-  { text: "Nhã nhạc cung đình Huế được UNESCO công nhận là di sản văn hóa phi vật thể vào năm nào?", options: ["2001","2003","2005","2007"], correct: 1 },
-  { text: "Lễ hội Đền Hùng được tổ chức vào ngày nào âm lịch hàng năm?", options: ["Mùng 10 tháng 3","Mùng 5 tháng 5","Rằm tháng 7","Rằm tháng 8"], correct: 0 },
-  { text: "Ngày Giỗ Tổ Hùng Vương là ngày lễ lớn được công nhận là ngày lễ quốc gia từ năm nào?", options: ["2005","2007","2009","2011"], correct: 2 },
-  { text: "Ngày Quốc tế Phụ nữ là ngày nào?", options: ["08/3","20/10","01/5","15/5"], correct: 0 },
-  { text: "Ngày Phụ nữ Việt Nam là ngày nào?", options: ["08/3","20/10","01/5","15/5"], correct: 1 },
-  { text: "Đặc điểm của người Việt Nam trong văn hóa giao tiếp truyền thống là gì?", options: ["Trọng tình nghĩa, coi trọng cộng đồng gia đình làng xã","Đề cao cá nhân","Coi trọng vật chất hơn tinh thần","Ít giao tiếp với người ngoài"], correct: 0 },
-  { text: "Phong trào 'Xây dựng trường học thân thiện học sinh tích cực' do cơ quan nào phát động?", options: ["Đoàn Thanh niên","Hội đồng Đội","Bộ Giáo dục và Đào tạo","Mặt trận Tổ quốc"], correct: 2 },
-  { text: "Học sinh sinh viên vi phạm đạo đức như gian lận trong thi cử có thể bị xử lý như thế nào?", options: ["Chỉ nhắc nhở","Kỷ luật từ khiển trách đến đuổi học","Chỉ phạt tiền","Không có chế tài xử lý"], correct: 1 },
-  { text: "Giải thưởng 'Nhân tài Đất Việt' được tổ chức nhằm mục đích gì?", options: ["Tôn vinh tài năng trẻ Việt Nam","Tuyển chọn nhân tài cho Nhà nước","Phát triển kinh tế","Bảo tồn văn hóa dân tộc"], correct: 0 },
-  { text: "Ngày Thể thao Việt Nam được tổ chức vào ngày nào hàng năm?", options: ["27/3","01/5","02/9","15/10"], correct: 0 },
-  { text: "SEA Games là đại hội thể thao của khu vực nào?", options: ["Đông Á","Đông Nam Á","Nam Á","Châu Á - Thái Bình Dương"], correct: 1 },
-  { text: "Đại hội Thể thao Đông Nam Á SEA Games 31 được tổ chức tại đâu năm 2022?", options: ["Hà Nội, Việt Nam","Bangkok, Thái Lan","Manila, Philippines","Campuchia"], correct: 0 },
-  { text: "Bộ Quy tắc ứng xử trên mạng xã hội được Bộ Thông tin và Truyền thông ban hành vào năm nào?", options: ["2019","2020","2021","2022"], correct: 1 },
-  { text: "Thanh niên cần tránh những hành vi nào trên không gian mạng?", options: ["Đăng tin giả, bình luận tiêu cực, phát tán nội dung xấu độc","Chia sẻ bài viết của bạn bè","Tham gia diễn đàn thảo luận lành mạnh","Mua sắm trực tuyến ở địa chỉ uy tín"], correct: 0 },
-  { text: "Ngày Nhà giáo Việt Nam là ngày nào?", options: ["20/10","20/11","01/12","15/12"], correct: 1 },
-  { text: "Ngày Thầy thuốc Việt Nam là ngày nào?", options: ["20/2","27/2","08/3","15/3"], correct: 1 },
-  { text: "Ngày Quốc tế Lao động là ngày nào?", options: ["01/4","01/5","01/6","01/7"], correct: 1 },
-  { text: "Vật liệu nào sau đây được xếp vào loại rác thải nguy hại cần xử lý đặc biệt?", options: ["Vỏ lon đồ uống","Pin điện thoại","Giấy báo cũ","Vỏ chai nhựa"], correct: 1 },
-  { text: "Tiêu chí 'Gia đình văn hóa' gồm nội dung cốt lõi nào?", options: ["Gia đình no ấm bình đẳng tiến bộ hạnh phúc","Gia đình gương mẫu chấp hành pháp luật","Gia đình tích cực tham gia phong trào thi đua","Tất cả các đáp án trên"], correct: 3 },
-  { text: "Xây dựng lối sống 'Tự lực tự cường' có nghĩa là gì đối với thanh niên?", options: ["Không cần sự giúp đỡ của ai","Phát huy nội lực không ỷ lại dám nghĩ dám làm","Chỉ dựa vào bản thân mọi tình huống","Tránh xa mọi sự hỗ trợ của xã hội"], correct: 1 },
-  { text: "Phong trào 'Hiến máu tình nguyện' mang ý nghĩa nhân văn gì?", options: ["Cứu sống người bệnh cần máu","Tuyên truyền về sức khỏe cộng đồng","Đoàn kết tương thân tương ái","Tất cả đáp án trên"], correct: 3 },
-  { text: "Ngày Dân số Thế giới là ngày nào?", options: ["07/7","11/7","15/7","21/7"], correct: 1 },
-  { text: "Chính sách dân số của Việt Nam hiện nay hướng đến mục tiêu gì?", options: ["Hạn chế sinh đẻ","Duy trì mức sinh thay thế và nâng cao chất lượng dân số","Khuyến khích sinh nhiều con","Không có chính sách cụ thể"], correct: 1 },
-  { text: "Phong trào 'Mỗi ngày một việc tốt' dành cho ai?", options: ["Đoàn viên thanh niên","Đội viên thiếu niên","Học sinh sinh viên","Tất cả người dân"], correct: 1 },
+  // === CÂU HỎI VỀ CỜ ĐOÀN VÀ ĐẠI HỘI ĐẢNG BỘ QUÂN KHU (49-56) ===
+  {
+    text: "Cờ Đoàn được Điều lệ Đoàn hiện hành quy định:",
+    options: [
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn là 30 cm",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/3 chiều rộng cờ",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/5 chiều rộng cờ",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 1/2 chiều rộng cờ"
+    ],
+    correct: 2
+  },
+  {
+    text: "Phương châm Đại hội đại biểu Đảng bộ Quân khu lần thứ XII là gì?",
+    options: [
+      "\"Đoàn kết - Dân chủ - Kỷ cương - Đổi mới - Phát triển\"",
+      "\"Đoàn kết - Kỷ cương - Dân chủ - Đổi mới - Phát triển\"",
+      "\"Dân chủ - Đoàn kết - Kỷ cương - Đổi mới - Phát triển\"",
+      "Không có đáp án đúng"
+    ],
+    correct: 0
+  },
+  {
+    text: "Chủ đề Đại hội đại biểu Đảng bộ Quân khu lần thứ XII là gì?",
+    options: [
+      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ toàn quân vững chắc, quốc phòng toàn dân vững mạnh.",
+      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu chính quy, hiện đại; phòng thủ Quân khu vững chắc, quốc phòng toàn dân vững mạnh.",
+      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ Quân khu vững chắc, quốc phòng toàn dân vững mạnh, góp phần thực hiện thắng lợi nhiệm vụ xây dựng và bảo vệ vững chắc Tổ quốc Việt Nam xã hội chủ nghĩa.",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Phương châm Đại hội Đảng bộ Quân đội lần thứ XII, nhiệm kỳ 2025-2030",
+    options: [
+      "Dân chủ - Đoàn kết - Kỷ cương - Đột phá - Phát triển",
+      "Đoàn kết - Dân chủ - Kỷ cương - Kiên định - Đột phá - Phát triển",
+      "Dân chủ - Đoàn kết - Kiên định - Kỷ cương - Đột phá - Phát triển",
+      "Không có đáp án đúng"
+    ],
+    correct: 1
+  },
+  {
+    text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định phương hướng như thế nào?",
+    options: [
+      "Quán triệt sâu sắc đường lối, quan điểm của Nhà nước về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới...",
+      "Quán triệt sâu sắc chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng...",
+      "Quán triệt sâu sắc đường lối, quan điểm của Đảng về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới, các quyết sách chiến lược về phát triển đất nước và chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"...",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Một trong các mục tiêu chủ yếu được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII?",
+    options: [
+      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
+      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, từng bước hiện đại.",
+      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2035 thuộc nhóm dẫn đầu quốc gia...",
+      "Không có đáp án đúng"
+    ],
+    correct: 0
+  },
+  {
+    text: "Một trong các đột phá được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII?",
+    options: [
+      "Hoàn thiện đồng bộ thể chế xây dựng Đảng bộ; huy động hiệu quả các nguồn lực xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
+      "Hoàn thiện đồng bộ thể chế quân sự, quốc phòng; huy động hiệu quả các nguồn lực xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại hóa.",
+      "Hoàn thiện đồng bộ thể chế quân sự, quốc phòng; huy động hiệu quả các nguồn lực xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định bao nhiêu giải pháp lãnh đạo thực hiện nhiệm vụ quân sự, quốc phòng?",
+    options: ["10", "11", "12", "9"],
+    correct: 0
+  },
+  {
+    text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định bao nhiêu giải pháp lãnh đạo xây dựng Đảng bộ Quân đội trong sạch vững mạnh mẫu mực, tiêu biểu, có năng lực lãnh đạo, sức chiến đấu cao?",
+    options: ["7", "8", "9", "6"],
+    correct: 0
+  },
 
-  // === AN NINH - QUỐC PHÒNG - ĐỐI NGOẠI (151-175) ===
-  { text: "Thanh niên có nghĩa vụ nào đối với sự nghiệp bảo vệ Tổ quốc?", options: ["Thực hiện nghĩa vụ quân sự","Tham gia xây dựng quốc phòng toàn dân","Học tập quốc phòng an ninh","Tất cả đáp án trên"], correct: 3 },
-  { text: "Giáo dục quốc phòng và an ninh bắt buộc với đối tượng nào?", options: ["Chỉ học sinh THPT","Chỉ sinh viên đại học","Học sinh sinh viên từ THPT trở lên","Tất cả công dân trưởng thành"], correct: 2 },
-  { text: "Lực lượng nào là nòng cốt của quốc phòng toàn dân ở Việt Nam?", options: ["Dân quân tự vệ","Quân đội nhân dân và Công an nhân dân","Công an nhân dân","Bộ đội biên phòng"], correct: 1 },
-  { text: "Đường lối đối ngoại của Việt Nam được xác định là gì?", options: ["Độc lập tự chủ đa phương hóa đa dạng hóa","Chỉ ưu tiên quan hệ với các nước ASEAN","Ưu tiên quan hệ với các nước lớn","Trung lập trong mọi vấn đề quốc tế"], correct: 0 },
-  { text: "Việt Nam đã ký Hiệp định Paris về chấm dứt chiến tranh lập lại hòa bình ở Việt Nam vào năm nào?", options: ["1972","1973","1974","1975"], correct: 1 },
-  { text: "Tuyên bố về ứng xử của các bên ở Biển Đông (DOC) được ký kết năm nào?", options: ["2000","2002","2004","2006"], correct: 1 },
-  { text: "Việt Nam gia nhập Liên Hợp Quốc vào năm nào?", options: ["1974","1975","1976","1977"], correct: 2 },
-  { text: "Quan hệ đối tác chiến lược toàn diện là mức quan hệ cao nhất giữa Việt Nam và các nước. Tính đến 2023 Việt Nam có bao nhiêu đối tác loại này?", options: ["5 đối tác","6 đối tác","7 đối tác","8 đối tác"], correct: 1 },
-  { text: "Việt Nam đảm nhận vai trò Ủy viên không thường trực Hội đồng Bảo an Liên Hợp Quốc nhiệm kỳ gần nhất vào năm nào?", options: ["2008-2009","2014-2015","2020-2021","2022-2023"], correct: 2 },
-  { text: "ASEAN được thành lập năm nào và có bao nhiêu thành viên ban đầu?", options: ["1965, 4 nước","1967, 5 nước","1970, 6 nước","1975, 7 nước"], correct: 1 },
-  { text: "ASEAN hiện có bao nhiêu quốc gia thành viên?", options: ["9 quốc gia","10 quốc gia","11 quốc gia","12 quốc gia"], correct: 1 },
-  { text: "Trụ sở của ASEAN đặt tại thủ đô nào?", options: ["Kuala Lumpur Malaysia","Bangkok Thái Lan","Jakarta Indonesia","Manila Philippines"], correct: 2 },
-  { text: "Việt Nam lần đầu tiên tổ chức APEC vào năm nào?", options: ["2003","2005","2006","2007"], correct: 3 },
-  { text: "Biểu tượng hòa bình nổi tiếng thế giới là hình ảnh gì?", options: ["Bàn tay mở","Chim bồ câu trắng","Cờ trắng","Cành ô liu"], correct: 1 },
-  { text: "Ngày Quốc tế Hòa bình là ngày nào?", options: ["21/9","01/10","10/11","25/12"], correct: 0 },
-  { text: "Tổ chức nào sau đây là cơ quan chuyên trách về hòa bình và an ninh quốc tế?", options: ["WHO","UNESCO","Hội đồng Bảo an Liên Hợp Quốc","IMF"], correct: 2 },
-  { text: "Chiến lược bảo vệ Tổ quốc trong tình hình mới nhấn mạnh kết hợp giữa hai nhiệm vụ nào?", options: ["Xây dựng kinh tế và bảo vệ Tổ quốc","Phát triển văn hóa và bảo vệ môi trường","Đào tạo nhân lực và phát triển công nghệ","Xây dựng Đảng và Nhà nước"], correct: 0 },
-  { text: "Bộ Quốc phòng Việt Nam hiện có nhiệm vụ gì?", options: ["Quản lý quân đội","Bảo vệ an ninh quốc gia","Thực hiện quản lý nhà nước về quốc phòng","Tất cả các đáp án trên"], correct: 2 },
-  { text: "Lực lượng Công an nhân dân Việt Nam trực thuộc cơ quan nào?", options: ["Quân ủy Trung ương","Bộ Quốc phòng","Bộ Công an dưới sự lãnh đạo của Đảng và Nhà nước","Ủy ban Thường vụ Quốc hội"], correct: 2 },
-  { text: "Ngày truyền thống Công an nhân dân Việt Nam là ngày nào?", options: ["19/8","19/10","19/12","19/2"], correct: 1 },
-  { text: "Phong trào 'Toàn dân bảo vệ an ninh Tổ quốc' có ý nghĩa gì?", options: ["Huy động toàn thể nhân dân tham gia đấu tranh phòng chống tội phạm và bảo vệ an ninh","Chỉ dành riêng cho lực lượng vũ trang","Tuyên truyền về pháp luật","Xây dựng hệ thống camera an ninh"], correct: 0 },
-  { text: "Thanh niên tham gia bảo vệ chủ quyền biển đảo có thể thực hiện qua hoạt động nào?", options: ["Chỉ tham gia hải quân","Tuyên truyền nâng cao nhận thức cộng đồng","Tham gia dân quân tự vệ biển","Tất cả đáp án trên"], correct: 3 },
-  { text: "Ngày Biên phòng toàn dân là ngày nào?", options: ["03/3","03/4","03/5","03/6"], correct: 0 },
-  { text: "Bộ Công an Việt Nam thực hiện chiến lược chuyển đổi số theo định hướng nào?", options: ["Xây dựng Công an điện tử","Xây dựng Công an số","Xây dựng cơ sở dữ liệu quốc gia về dân cư","Cả B và C"], correct: 3 },
-  { text: "Nghị quyết Trung ương 8 (khóa XI) về Chiến lược bảo vệ Tổ quốc trong tình hình mới được ban hành năm nào?", options: ["2012","2013","2014","2015"], correct: 1 },
+  // === CÂU HỎI VỀ ĐẠI HỘI XIV CỦA ĐẢNG (58-75) ===
+  {
+    text: "Chủ đề Đại hội đại biểu toàn quốc lần thứ XIV của Đảng là gì?",
+    options: [
+      "Dưới Cờ Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2030; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì độc lập, hoà bình, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
+      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2030; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì hoà bình, độc lập, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
+      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2035; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc...",
+      "Không có đáp án đúng"
+    ],
+    correct: 1
+  },
+  {
+    text: "Đại hội đại biểu toàn quốc lần thứ XIV của Đảng đã bầu bao nhiêu Uỷ viên Ban chấp hành Trung ương?",
+    options: [
+      "200 ủy viên, trong đó có 180 ủy viên chính thức, 20 ủy viên dự khuyết.",
+      "180 ủy viên, trong đó có 160 ủy viên chính thức, 20 ủy viên dự khuyết.",
+      "200 ủy viên, trong đó có 190 ủy viên chính thức, 10 ủy viên dự khuyết.",
+      "190 ủy viên, trong đó có 170 ủy viên chính thức, 20 ủy viên dự khuyết."
+    ],
+    correct: 0
+  },
+  {
+    text: "Đồng chí nào giữ chức vụ Bí thư Quân ủy Trung ương khóa XII?",
+    options: [
+      "Đại tướng Phan Văn Giang",
+      "Đại tướng Nguyễn Trọng Nghĩa",
+      "Tổng bí thư Tô Lâm",
+      "Đại tướng Lương Cường"
+    ],
+    correct: 2
+  },
+  {
+    text: "Một số chỉ tiêu chủ yếu về kinh tế giai đoạn 2026-2030 được xác định trong Nghị quyết Đại hội đại biểu lần thứ XIV của Đảng?",
+    options: [
+      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 8%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 8.000 USD.",
+      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 10%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 8.500 USD.",
+      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 2%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 9.000 USD.",
+      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 7%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 7.500 USD."
+    ],
+    correct: 1
+  },
+  {
+    text: "Bộ Chính trị khóa XIV gồm bao nhiêu đồng chí?",
+    options: [
+      "19 đồng chí, trong đó có 10 đồng chí Ủy viên Bộ Chính trị khoá XIII tái cử và 9 đồng chí lần đầu tham gia.",
+      "18 đồng chí, trong đó có 9 đồng chí Ủy viên Bộ Chính trị khoá XIII tái cử và 9 đồng chí lần đầu tham gia.",
+      "17 đồng chí, trong đó có 8 đồng chí Ủy viên Bộ Chính trị khoá XIII tái cử và 9 đồng chí lần đầu tham gia.",
+      "20 đồng chí, trong đó có 11 đồng chí Ủy viên Bộ Chính trị khoá XIII tái cử."
+    ],
+    correct: 0
+  },
+  {
+    text: "Một trong các quan điểm chỉ đạo được xác định trong Nghị quyết Đại hội đại biểu toàn quốc lần thứ XIV của Đảng?",
+    options: [
+      "Phát huy sức mạnh, bản lĩnh, trí tuệ của con người, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; kiên quyết, kiên trì đấu tranh bảo vệ vững chắc độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia; bảo vệ Tổ quốc từ sớm, từ xa...",
+      "Phát huy sức mạnh, bản lĩnh, trí tuệ của con người Việt Nam, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; kiên quyết, kiên trì đấu tranh bảo vệ vững chắc độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia; bảo vệ Tổ quốc từ sớm, từ xa...",
+      "Huy động sức mạnh, bản lĩnh, trí tuệ của con người Việt Nam, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; kiên quyết, kiên trì đấu tranh bảo vệ vững chắc độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia; bảo vệ Tổ quốc từ sớm, từ xa...",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định xây dựng Quân đội nhân dân, Công an nhân dân như thế nào?",
+    options: [
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Nhà nước...",
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, từng bước hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng...",
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc phòng, an ninh...",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định quyền làm chủ của Nhân dân như thế nào?",
+    options: [
+      "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân, thực hiện pháp luật về dân chủ ở cơ sở và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát\"",
+      "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân, thực hiện pháp luật về dân chủ ở cơ sở và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng\".",
+      "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân, thực hiện pháp luật về dân chủ ở cơ sở và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân thụ hưởng\"",
+      "Không có đáp án đúng"
+    ],
+    correct: 1
+  },
+  {
+    text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định công tác xây dựng Đảng như thế nào?",
+    options: [
+      "Tăng cường xây dựng, chỉnh đốn, tự đổi mới để Nhà nước ta thật sự là đạo đức, là văn minh; nâng tầm và nâng cao hiệu lực, hiệu quả lãnh đạo, cầm quyền và sức chiến đấu của Nhà nước.",
+      "Tăng cường xây dựng, chỉnh đốn, tự đổi mới để Đảng ta thật sự là đạo đức, là văn minh; nâng tầm và nâng cao hiệu lực, hiệu quả lãnh đạo, cầm quyền và sức chiến đấu của Đảng.",
+      "Tăng cường xây dựng, chỉnh đốn, tự đổi mới để Đảng ta thật sự là là văn minh; nâng cao hiệu lực, hiệu quả lãnh đạo, cầm quyền và sức chiến đấu của Đảng.",
+      "Không có đáp án đúng"
+    ],
+    correct: 1
+  },
+  {
+    text: "Nghị quyết Đại hội XIV của Đảng định hướng phát triển khoa học công nghệ, chuyển đổi số trong nhiệm kỳ như thế nào?",
+    options: [
+      "Tập trung triển khai đột phá về khoa học, công nghệ, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo...",
+      "Tập trung triển khai đột phá về công nghệ thông tin, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển cơ sở sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo...",
+      "Tập trung triển khai đột phá về khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao...",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Nghị quyết Đại hội XIV của Đảng xác định bao nhiêu đột phá chiến lược?",
+    options: ["3", "4", "5", "2"],
+    correct: 0
+  },
+  {
+    text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định bao nhiêu bài học kinh nghiệm sau 40 năm đổi mới?",
+    options: ["5", "6", "7", "4"],
+    correct: 0
+  },
+  {
+    text: "Một nội dung quan trọng trong đột phá chiến lược về nguồn nhân lực được xác định trong Nghị quyết Đại hội XIV của Đảng là gì?",
+    options: [
+      "Mở rộng đào tạo nghề",
+      "Phát triển nguồn nhân lực chất lượng cao, thu hút và trọng dụng nhân tài",
+      "Tăng thời gian đào tạo đại học",
+      "Phổ cập giáo dục đại học"
+    ],
+    correct: 1
+  },
+  {
+    text: "Nghị quyết Đại hội XIV của Đảng định hướng phát triển con người và văn hóa trong nhiệm kỳ như thế nào?",
+    options: [
+      "Phát triển nguồn lực sinh viên, phát triển văn hoá thực sự trở thành nền tảng tinh thần, sức mạnh nội sinh, động lực to lớn cho sự phát triển nhanh, bền vững của đất nước",
+      "Phát triển nguồn lực học sinh, phát triển văn hoá thực sự trở thành nền tảng tinh thần, sức mạnh nội sinh, động lực to lớn cho sự phát triển nhanh, bền vững của đất nước",
+      "Phát triển nguồn lực con người, phát triển văn hoá thực sự trở thành nền tảng tinh thần, sức mạnh nội sinh, động lực to lớn cho sự phát triển nhanh, bền vững của đất nước",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "Đại hội XIV, phấn đấu đến năm 2030 Việt Nam đạt mục tiêu nào sau đây?",
+    options: [
+      "Cơ bản không còn hộ nghèo và cơ bản miễn viện phí toàn dân",
+      "Bảo đảm mỗi người dân có bảo hiểm y tế",
+      "Tỉ lệ hộ nghèo còn khoảng 1,1%",
+      "Không có đáp án đúng"
+    ],
+    correct: 0
+  },
+  {
+    text: "\"2 đẩy mạnh\" được xác định trong Nghị quyết Đại hội Đảng bộ đại biểu Đảng bộ Quân đội lần thứ XII, là gì?",
+    options: [
+      "Đẩy mạnh kinh tế quốc phòng và đào tạo cán bộ",
+      "Đẩy mạnh xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại; đẩy mạnh hội nhập quốc tế và đối ngoại quốc phòng",
+      "Đẩy mạnh xây dựng Quân đội nhân dân hiện đại; Công nghiệp quốc phòng lưỡng dụng.",
+      "Không có đáp án đúng"
+    ],
+    correct: 1
+  },
+  {
+    text: "\"2 Ngăn ngừa\" được xác định trong Nghị quyết Đại hội Đảng bộ đại biểu Đảng bộ Quân đội lần thứ XII là gì?",
+    options: [
+      "Ngăn ngừa nguy cơ phi chính trị hóa Quân đội. Ngăn ngừa mọi biểu hiện suy thoái về tư tưởng chính trị, đạo đức, lối sống, \"tự diễn biến\", \"tự chuyển hóa\" trong Đảng bộ Quân đội và toàn quân",
+      "Ngăn ngừa nguy cơ diễn biến hòa bình. Ngăn ngừa mọi biểu hiện suy thoái về tư tưởng chính trị, đạo đức, lối sống, \"tự diễn biến\", \"tự chuyển hóa\" trong Đảng bộ Quân đội và toàn quân",
+      "Ngăn ngừa nguy cơ chiến tranh, xung đột. Ngăn ngừa mọi biểu hiện suy thoái về tư tưởng chính trị, đạo đức, lối sống, \"tự diễn biến\", \"tự chuyển hóa\" trong Đảng bộ Quân đội và toàn quân",
+      "Không có đáp án đúng"
+    ],
+    correct: 2
+  },
+  {
+    text: "\"2 kiên định\" được xác định trong Nghị quyết Đại hội Đảng bộ đại biểu Đảng bộ Quân đội lần thứ XII là gì?",
+    options: [
+      "Kiên định đường lối quân sự, quốc phòng của Đảng; kiên định xây dựng Quân đội vững mạnh về chính trị.",
+      "Xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại; đẩy mạnh hội nhập quốc tế và đối ngoại quốc phòng",
+      "Kiên định đường lối quân sự, quốc phòng của Nhà nước; kiên định xây dựng Quân đội vững mạnh về chính trị.",
+      "Không có đáp án đúng"
+    ],
+    correct: 0
+  },
+  {
+    text: "Chỉ đạo của Tổng Bí thư Tô Lâm về phương châm \"5 vững\" là gì?",
+    options: [
+      "\"Chính trị vững - Kỷ luật vững - Công nghệ vững - Nghệ thuật quân sự vững - Sức khỏe vững\"",
+      "\"Chính trị vững - Kỷ luật vững - Công nghệ vững - Nghệ thuật quân sự vững - Đời sống bộ đội vững\"",
+      "\"Chính trị vững - Kỷ luật vững - Công nghệ vững - Nghệ thuật quân sự vững - Hậu cần, kỹ thuật vững\"",
+      "\"Chính trị vững - Kỷ luật vững - Huấn luyện vững - Nghệ thuật quân sự vững - Đời sống bộ đội vững\""
+    ],
+    correct: 1
+  },
 
-  // === KHOA HỌC - CÔNG NGHỆ - GIÁO DỤC (176-200) ===
-  { text: "Đề án 'Phát triển ứng dụng dữ liệu về dân cư định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia' có tên gọi là gì?", options: ["Đề án 06","Đề án 844","Đề án 1831","Đề án 749"], correct: 0 },
-  { text: "Chương trình 'Nghiên cứu khoa học và công nghệ' của thanh niên được Đoàn phát động nhằm mục đích gì?", options: ["Khuyến khích thanh niên học tập","Thúc đẩy nghiên cứu đổi mới sáng tạo","Xây dựng văn hóa đọc","Phát triển thể lực"], correct: 1 },
-  { text: "Đoàn Thanh niên phát động chương trình 'Thắp sáng ước mơ thanh niên Việt Nam' nhằm mục đích gì?", options: ["Hỗ trợ học bổng cho học sinh","Khơi dậy khát vọng cống hiến và hoài bão của thanh niên","Phát triển kỹ năng mềm","Tạo việc làm cho thanh niên"], correct: 1 },
-  { text: "Giải thưởng 'Khởi nghiệp sáng tạo Việt Nam' dành cho đối tượng nào?", options: ["Chỉ sinh viên đại học","Doanh nghiệp khởi nghiệp của thanh niên","Nhà khoa học trẻ","Tất cả công dân Việt Nam"], correct: 1 },
-  { text: "Cuộc thi 'Trí tuệ Việt Nam' do tổ chức nào phát động?", options: ["Bộ Giáo dục và Đào tạo","Đoàn Thanh niên Cộng sản Hồ Chí Minh","Hội Sinh viên Việt Nam","Ủy ban Quốc gia về Thanh niên"], correct: 1 },
-  { text: "Mục tiêu của chương trình 'Thanh niên khởi nghiệp' giai đoạn 2022-2027 là gì?", options: ["Hỗ trợ 100.000 thanh niên khởi nghiệp","Hỗ trợ ít nhất 40.000 thanh niên khởi nghiệp thành công","Xây dựng 1.000 startup","Phát triển hệ sinh thái khởi nghiệp"], correct: 1 },
-  { text: "Chỉ số đổi mới sáng tạo toàn cầu (GII) đo lường điều gì?", options: ["GDP của các quốc gia","Năng lực đổi mới sáng tạo của các quốc gia","Trình độ giáo dục","Chỉ số hạnh phúc"], correct: 1 },
-  { text: "Nền tảng số nào của Việt Nam được Đoàn Thanh niên giới thiệu để phục vụ học tập của thanh thiếu nhi?", options: ["VNeID","Thanh Nien App","nền tảng học trực tuyến của Bộ GD&ĐT","Tất cả đáp án trên"], correct: 3 },
-  { text: "Phong trào 'Cán bộ Đoàn học tập lý luận chính trị' nhằm mục đích gì?", options: ["Nâng cao trình độ lý luận chính trị cho cán bộ Đoàn","Chuẩn bị nguồn nhân lực cho Đảng","Xây dựng tổ chức Đoàn vững mạnh","Cả A và B"], correct: 3 },
-  { text: "Chương trình 'Đào tạo 1 triệu kỹ năng số cho thanh niên' của Đoàn hướng đến mục tiêu nào?", options: ["Phổ cập kỹ năng số cơ bản cho thanh niên Việt Nam","Đào tạo lập trình viên","Xây dựng nền kinh tế số","Phát triển AI Việt Nam"], correct: 0 },
-  { text: "Ứng dụng VNeID là ứng dụng phục vụ mục đích gì?", options: ["Mua sắm trực tuyến","Định danh điện tử và cung cấp dịch vụ công trực tuyến","Học tập trực tuyến","Kết nối mạng xã hội"], correct: 1 },
-  { text: "Mức tăng trưởng kinh tế của Việt Nam năm 2022 đạt khoảng bao nhiêu?", options: ["5,0%","6,5%","8,02%","9,5%"], correct: 2 },
-  { text: "Việt Nam đặt mục tiêu đạt tỷ lệ người dùng internet đến năm 2025 là bao nhiêu?", options: ["70%","80%","85%","90%"], correct: 2 },
-  { text: "Ngày Khoa học và Công nghệ Việt Nam là ngày nào?", options: ["18/5","19/5","20/5","21/5"], correct: 0 },
-  { text: "Hội thi 'Tin học trẻ' được tổ chức nhằm mục đích gì?", options: ["Phát hiện và bồi dưỡng tài năng tin học trẻ","Phổ cập tin học cho mọi người","Thi lập trình quốc tế","Phát triển game Việt Nam"], correct: 0 },
-  { text: "Chương trình 'Tôi yêu Tổ quốc tôi' của Đoàn Thanh niên nhằm mục tiêu gì?", options: ["Khơi dậy tình yêu nước và niềm tự hào dân tộc trong thanh niên","Phát triển du lịch nội địa","Bảo tồn di sản văn hóa","Tìm hiểu lịch sử"], correct: 0 },
-  { text: "Cuộc thi 'Ý tưởng sáng tạo thanh niên' khuyến khích thanh niên điều gì?", options: ["Đề xuất giải pháp sáng tạo giải quyết vấn đề xã hội và phát triển đất nước","Tham gia nghiên cứu khoa học","Viết báo","Thi thể thao"], correct: 0 },
-  { text: "Phong trào học sinh sinh viên với công nghệ thông tin nhằm mục tiêu gì?", options: ["Nâng cao kỹ năng ứng dụng CNTT","Phổ cập lập trình","Xây dựng ứng dụng cho cộng đồng","Tất cả đáp án trên"], correct: 3 },
-  { text: "Nghị quyết 52-NQ/TW của Bộ Chính trị về chủ động tham gia cuộc Cách mạng công nghiệp lần thứ tư được ban hành năm nào?", options: ["2017","2018","2019","2020"], correct: 2 },
-  { text: "Thanh niên có vai trò gì trong phát triển kinh tế số?", options: ["Lực lượng tiên phong ứng dụng và phát triển kinh tế số","Chỉ là người tiêu dùng số","Lực lượng hỗ trợ người cao tuổi dùng công nghệ","Không có vai trò cụ thể"], correct: 0 },
-  { text: "Mạng 5G được Việt Nam thử nghiệm thương mại từ năm nào?", options: ["2019","2020","2021","2022"], correct: 0 },
-  { text: "Chương trình chuyển đổi số quốc gia đến năm 2025 và định hướng đến năm 2030 được phê duyệt theo Quyết định số mấy của Thủ tướng?", options: ["749/QĐ-TTg","844/QĐ-TTg","1831/QĐ-TTg","06/QĐ-TTg"], correct: 0 },
-  { text: "Việt Nam phấn đấu lọt top bao nhiêu quốc gia dẫn đầu về Chỉ số đổi mới sáng tạo (GII) trong ASEAN vào năm 2030?", options: ["Top 3","Top 4","Top 5","Top 6"], correct: 0 },
-  { text: "Chương trình 'Đại sứ văn hóa đọc' do tổ chức nào phát động?", options: ["Bộ Văn hóa Thể thao và Du lịch","Đoàn TNCS Hồ Chí Minh","Bộ Giáo dục và Đào tạo","Hội Nhà văn Việt Nam"], correct: 1 },
-  { text: "Thanh niên Việt Nam được khuyến khích tham gia vào lĩnh vực nào để phát triển đất nước trong thời đại 4.0?", options: ["Chỉ nông nghiệp truyền thống","Trí tuệ nhân tạo, dữ liệu lớn, điện toán đám mây, IoT","Chỉ sản xuất công nghiệp","Chỉ dịch vụ thương mại"], correct: 1 }
+  // === CÂU HỎI VỀ ĐẠI HỘI ĐẢNG BỘ TRUNG ĐOÀN LẦN XXII (77-86) ===
+  {
+    text: "Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII diễn ra vào thời gian nào?",
+    options: ["08 - 09/3/2025", "09 - 10/3/2025", "10 - 11/3/2025", "11 - 12/3/2025"],
+    correct: 1
+  },
+  {
+    text: "Một trong những mục tiêu chung trong Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII, nhiệm kỳ 2025-2030 là gì?",
+    options: [
+      "Phát triển kinh tế địa phương",
+      "Nâng cao chất lượng huấn luyện và khả năng SSCĐ",
+      "Mở rộng hợp tác quốc tế",
+      "Phát triển du lịch quân sự"
+    ],
+    correct: 1
+  },
+  {
+    text: "Một trong các khâu đột phá được xác định trong Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII là gì?",
+    options: [
+      "Chú trọng huấn luyện điều lệnh, bắn súng, chiến thuật",
+      "Chất lượng huấn luyện, SSCĐ; xây dựng chính quy, quản lý kỷ luật",
+      "Xây dựng doanh trại chính quy, xanh, sạch, đẹp",
+      "Nâng cao chất lượng diễn tập"
+    ],
+    correct: 1
+  },
+  {
+    text: "Một nội dung trong khâu đột phá thứ hai được xác định trong Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII là gì?",
+    options: [
+      "Phát triển khoa học công nghệ",
+      "Nâng cao đời sống bộ đội",
+      "Năng lực lãnh đạo, sức chiến đấu của cấp ủy, chi bộ",
+      "Mở rộng quan hệ đối ngoại"
+    ],
+    correct: 2
+  },
+  {
+    text: "Nội dung nào dưới đây không thuộc các khâu đột phá của Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII?",
+    options: [
+      "Xây dựng đội ngũ cán bộ, đảng viên",
+      "Nâng cao chất lượng huấn luyện, SSCĐ",
+      "Xây dựng doanh trại chính quy",
+      "Xây dựng chính quy, quản lý kỷ luật"
+    ],
+    correct: 2
+  },
+  {
+    text: "Chỉ tiêu vi phạm kỷ luật thông thường trong nhiệm kỳ 2025-2030 do Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định phải dưới mức nào?",
+    options: ["1%", "0,5%", "0,2%", "0,1%"],
+    correct: 2
+  },
+  {
+    text: "Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định tỷ lệ quân số khỏe của bộ đội phấn đấu đạt bao nhiêu trở lên?",
+    options: ["95%", "96%", "97%", "98,5%"],
+    correct: 3
+  },
+  {
+    text: "Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định một trong những yêu cầu trong huấn luyện là gì?",
+    options: [
+      "Lý thuyết là chính",
+      "Huấn luyện theo phong trào",
+      "\"Cơ bản, thiết thực, vững chắc\"",
+      "Đơn giản, dễ thực hiện"
+    ],
+    correct: 2
+  },
+  {
+    text: "Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định tỷ lệ tổ chức đảng hoàn thành tốt và xuất sắc nhiệm vụ hằng năm là bao nhiêu?",
+    options: ["Trên 80%", "Trên 85%", "Trên 90%", "100%"],
+    correct: 2
+  },
+  {
+    text: "Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định một trong những nhiệm vụ về công tác xây dựng Đảng là gì?",
+    options: [
+      "Phát triển đảng viên",
+      "Đẩy mạnh xây dựng, chỉnh đốn Đảng",
+      "Xây dựng đội ngũ đảng viên",
+      "Phát triển kinh tế đơn vị"
+    ],
+    correct: 1
+  }
 ];
