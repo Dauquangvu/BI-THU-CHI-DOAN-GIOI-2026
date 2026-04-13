@@ -70,7 +70,7 @@ const QUESTION_BANK = [
       "Truyền thống trung thành tuyệt đối với sự nghiệp cách mạng của Đảng, của dân tộc, kiên quyết phấn đấu vì độc lập, tự do, vì chủ nghĩa xã hội.",
       "Truyền thống không ngừng rèn luyện trong đấu tranh cách mạng, hoạt động thực tiễn để cống hiến nhiều nhất cho cách mạng.",
       "Truyền thống của đội quân xung kích cách mạng nêu cao chủ nghĩa anh hùng cách mạng, đoàn kết Thanh niên cả nước.",
-      "Cả 3 câu trên đều đúng."
+      "Cả 3 đáp án đều đúng."
     ],
     correct: 3
   },
@@ -165,7 +165,7 @@ const QUESTION_BANK = [
     correct: 1
   },
 
-  // === CÂU HỎI VỀ HUẤN LUYỆN QUÂN SỰ (22-24) ===
+  // === CÂU HỎI VỀ HUẤN LUYỆN QUÂN SỰ (22-24) ===  
   {
     text: "Có bao nhiêu quan điểm trong huấn luyện?",
     options: ["02", "03", "04", "05"],
@@ -450,7 +450,7 @@ const QUESTION_BANK = [
       "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ Quân khu vững chắc, quốc phòng toàn dân vững mạnh, góp phần thực hiện thắng lợi nhiệm vụ xây dựng và bảo vệ vững chắc Tổ quốc Việt Nam xã hội chủ nghĩa.",
       "Không có đáp án đúng"
     ],
-    correct: 2
+    correct: 2  
   },
   {
     text: "Phương châm Đại hội Đảng bộ Quân đội lần thứ XII, nhiệm kỳ 2025-2030",
@@ -465,9 +465,10 @@ const QUESTION_BANK = [
   {
     text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định phương hướng như thế nào?",
     options: [
-      "Quán triệt sâu sắc đường lối, quan điểm của Nhà nước về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới...",
+      "Quán triệt sâu sắc đường lối, quan điểm của Nhà nước về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới, các quyết sách chiến lược về phát triển đất nước và chỉ đạo của đồng chí Tổng Bí thư về “2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa”; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng, sự quản lý, điều hành tập trung thống nhất của Nhà nước đối với Quân đội và sự nghiệp quốc phòng....",
       "Quán triệt sâu sắc chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng...",
-      "Quán triệt sâu sắc đường lối, quan điểm của Đảng về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới, các quyết sách chiến lược về phát triển đất nước và chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"...",
+      "Quán triệt sâu sắc đường lối, quan điểm của Đảng về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới, các quyết sách chiến lược về phát triển đất nước và chỉ đạo của đồng chí Tổng Bí thư về “2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa”; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng, sự quản lý, điều hành tập trung thống nhất của Nhà nước đối với Quân đội và sự nghiệp quốc phòng....
+",
       "Không có đáp án đúng"
     ],
     correct: 2
@@ -477,7 +478,7 @@ const QUESTION_BANK = [
     options: [
       "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
       "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, từng bước hiện đại.",
-      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2035 thuộc nhóm dẫn đầu quốc gia...",
+      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2035 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
       "Không có đáp án đúng"
     ],
     correct: 0
@@ -509,7 +510,7 @@ const QUESTION_BANK = [
     options: [
       "Dưới Cờ Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2030; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì độc lập, hoà bình, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
       "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2030; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì hoà bình, độc lập, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
-      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2035; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc...",
+      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi  các mục tiêu phát triển đất nước đến năm 2035; tự chủ chiến lược, tự cường,  tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì hoà bình, độc lập,  dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
       "Không có đáp án đúng"
     ],
     correct: 1
@@ -567,9 +568,9 @@ const QUESTION_BANK = [
   {
     text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định xây dựng Quân đội nhân dân, Công an nhân dân như thế nào?",
     options: [
-      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Nhà nước...",
-      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, từng bước hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng...",
-      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc phòng, an ninh...",
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy,  tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, Nhà nước và  Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Nhà nước; bảo đảm chất  lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc  phòng, an ninh, xây dựng nền quốc phòng vững mạnh, hiện đại, bảo vệ vững  chắc Tổ quốc trong tình hình mới.",
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy,  tinh nhuệ, từng bước hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và  Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất  lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc  phòng, an ninh, xây dựng nền quốc phòng vững mạnh, hiện đại, bảo vệ vững  chắc Tổ quốc trong tình hình mới.",
+      "XXây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy,  tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và  Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất  lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc  phòng, an ninh, xây dựng nền quốc phòng vững mạnh, hiện đại, bảo vệ vững  chắc Tổ quốc trong tình hình mới.",
       "Không có đáp án đúng"
     ],
     correct: 2
@@ -597,9 +598,9 @@ const QUESTION_BANK = [
   {
     text: "Nghị quyết Đại hội XIV của Đảng định hướng phát triển khoa học công nghệ, chuyển đổi số trong nhiệm kỳ như thế nào?",
     options: [
-      "Tập trung triển khai đột phá về khoa học, công nghệ, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo...",
-      "Tập trung triển khai đột phá về công nghệ thông tin, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển cơ sở sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo...",
-      "Tập trung triển khai đột phá về khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao...",
+      "Tập trung triển khai đột phá về khoa học, công nghệ, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh nguồn nhân lực chất lượng cao, tạo động lực then chốt để nâng cao năng suất, chất lượng, hiệu quả, giá trị gia tăng, năng lực cạnh tranh của sản phẩm, doanh nghiệp và của nền kinh tế",
+      "Tập trung triển khai đột phá về công nghệ thông tin, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển cơ sở sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao, tạo động lực then chốt để nâng cao năng suất, chất lượng, hiệu quả, giá trị gia tăng, năng lực cạnh tranh của sản phẩm, doanh nghiệp và của nền kinh tế.",
+      "Tập trung triển khai đột phá về khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao, tạo động lực then chốt để nâng cao năng suất, chất lượng, hiệu quả, giá trị gia tăng, năng lực cạnh tranh của sản phẩm, doanh nghiệp và của nền kinh tế.",
       "Không có đáp án đúng"
     ],
     correct: 2
