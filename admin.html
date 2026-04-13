@@ -355,6 +355,7 @@ body {
               <th>T/G Hoàn Thành</th>
               <th>Nộp Bài</th>
               <th>Thời Gian</th>
+              <th style="width:60px">Xóa</th>
             </tr>
           </thead>
           <tbody id="lbBody">
@@ -572,8 +573,34 @@ function renderTable() {
       <td style="font-size:13px;color:var(--gray-600)">${timeStr}</td>
       <td>${forcedText}</td>
       <td style="font-size:12px;color:var(--gray-400)">${escHtml(entry.time||'')}</td>
+      <td><button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="deleteEntry('${escHtml(entry.phone||'')}','${escHtml(entry.name||'')}','${escHtml(entry.unit||'')}')">🗑️</button></td>
     </tr>`;
   }).join('');
+}
+
+// Xóa từng thí sinh và reset khóa thi của họ
+function deleteEntry(phone, name, unit) {
+  if (!confirm(`Xóa kết quả của "${name}" và cho phép thi lại?`)) return;
+
+  // 1. Xóa khỏi bảng xếp hạng
+  allData = allData.filter(e => !(e.phone === phone && e.name === name));
+  try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
+
+  // 2. Xóa khỏi danh sách đã thi (doan_attempted) — so sánh normalize
+  try {
+    const normPhone = (phone||'').trim().replace(/[\s\-]/g,'');
+    const normName  = (name||'').trim().toLowerCase().replace(/\s+/g,' ');
+    const normUnit  = (unit||'').trim().toLowerCase().replace(/\s+/g,' ');
+    let attempted = JSON.parse(localStorage.getItem('doan_attempted') || '[]');
+    attempted = attempted.filter(e =>
+      !(e.phone === normPhone || e.name === normName || e.unit === normUnit)
+    );
+    localStorage.setItem('doan_attempted', JSON.stringify(attempted));
+  } catch(e) {}
+
+  updateStats();
+  renderTable();
+  showToast(`✅ Đã xóa "${name}" và reset quyền thi lại.`);
 }
 
 // ============================================================
@@ -582,11 +609,12 @@ function renderTable() {
 function confirmClearLB() { openModal('modalClear'); }
 function doClearLB() {
   try { localStorage.removeItem('doan_lb'); } catch(e) {}
+  try { localStorage.removeItem('doan_attempted'); } catch(e) {}
   allData = [];
   updateStats();
   renderTable();
   closeModal('modalClear');
-  showToast('🗑️ Đã xóa toàn bộ dữ liệu kết quả thành công.');
+  showToast('🗑️ Đã xóa toàn bộ dữ liệu kết quả và reset danh sách đã thi thành công.');
 }
 
 // ============================================================

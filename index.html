@@ -614,7 +614,23 @@ body.violation-flash::after {
 
 
 
-/* Khi in (Ctrl+P), ẩn sạch — không in được gì */
+/* ===== PRTSC BLACKOUT OVERLAY ===== */
+#prtscOverlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: #000;
+  z-index: 999999;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 18px;
+  color: #fff; font-family: inherit;
+  text-align: center;
+}
+#prtscOverlay.active { display: flex; }
+#prtscOverlay .prtsc-icon { font-size: 64px; }
+#prtscOverlay .prtsc-title { font-size: 22px; font-weight: 800; color: #F4C430; }
+#prtscOverlay .prtsc-msg   { font-size: 14px; opacity: 0.8; line-height: 1.7; max-width: 360px; }
+
+/* CSS-level screenshot protection: màn hình in ra trắng/đen hoàn toàn */
 @media print {
   html, body { background: #000 !important; }
   body * { visibility: hidden !important; }
@@ -627,6 +643,8 @@ body.violation-flash::after {
     font-size: 32px; font-weight: 900;
   }
 }
+
+
 
 @media (max-width:600px) {
   .info-cards { grid-template-columns:repeat(3,1fr); gap:8px; }
@@ -738,6 +756,13 @@ body.violation-flash::after {
 <!-- Tab alert -->
 <div class="tab-alert" id="tabAlert">
   ⚠️ CẢNH BÁO: Bạn đã rời khỏi trang thi! Hành vi này đã được ghi nhận.
+</div>
+
+<!-- PRTSC BLACKOUT OVERLAY -->
+<div id="prtscOverlay">
+  <div class="prtsc-icon">🚫</div>
+  <div class="prtsc-title">CHỤP MÀN HÌNH BỊ CẤM</div>
+  <div class="prtsc-msg">Hành vi chụp màn hình đã bị phát hiện và ghi lại.<br>Vi phạm này sẽ được báo cáo lên Ban Tổ Chức.</div>
 </div>
 
 <header class="site-header">
@@ -935,6 +960,18 @@ body.violation-flash::after {
 
 </main>
 
+<!-- MODAL ĐÃ THI RỒI -->
+<div class="modal-overlay" id="modalAlreadyTaken">
+  <div class="modal">
+    <div class="modal-icon">🚫</div>
+    <h3>Thông Tin Đã Thi</h3>
+    <p id="modalAlreadyMsg">Thông tin của bạn đã được ghi nhận trong hệ thống. Mỗi người chỉ được thi <strong>một lần</strong>.<br><br>Nếu có nhầm lẫn, vui lòng liên hệ Ban Tổ Chức để được hỗ trợ.</p>
+    <div class="modal-btns">
+      <button class="btn btn-danger" onclick="closeModal('modalAlreadyTaken')">Đã Hiểu</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL CONFIRM SUBMIT -->
 <div class="modal-overlay" id="modalSubmit">
   <div class="modal">
@@ -1123,8 +1160,49 @@ function startQuiz() {
     return;
   }
 
-  state.candidate = { name, phone, title, unit };
+  // ── KIỂM TRA: MỖI THÔNG TIN (TÊN / ĐƠN VỊ / SĐT) CHỈ ĐƯỢC THI 1 LẦN ──
+  const normalizedPhone = phone.trim().replace(/[\s\-]/g, '');
+  const normalizedName  = name.trim().toLowerCase().replace(/\s+/g, ' ');
+  const normalizedUnit  = unit.trim().toLowerCase().replace(/\s+/g, ' ');
+
+  const dupField = checkDuplicate(normalizedPhone, normalizedName, normalizedUnit);
+  if (dupField) {
+    // Lưu lý do để hiện trong modal
+    window._dupReason = dupField;
+    openModal('modalAlreadyTaken');
+    return;
+  }
+
+  state.candidate = { name, phone: normalizedPhone, title, unit };
   initQuiz();
+}
+
+// ── QUẢN LÝ DANH SÁCH ĐÃ THI (lưu theo object {phone, name, unit}) ──
+function getAttemptedList() {
+  try { return JSON.parse(localStorage.getItem('doan_attempted') || '[]'); }
+  catch(e) { return []; }
+}
+// Trả về field trùng đầu tiên, hoặc null nếu chưa thi
+function checkDuplicate(phone, name, unit) {
+  const list = getAttemptedList();
+  for (const entry of list) {
+    if (entry.phone === phone) return 'Số điện thoại';
+    if (entry.name  === name)  return 'Họ và tên';
+    if (entry.unit  === unit)  return 'Đơn vị';
+  }
+  return null;
+}
+function markAttempted(phone, name, unit) {
+  try {
+    const list = getAttemptedList();
+    const normPhone = phone.trim().replace(/[\s\-]/g,'');
+    const normName  = name.trim().toLowerCase().replace(/\s+/g,' ');
+    const normUnit  = unit.trim().toLowerCase().replace(/\s+/g,' ');
+    // Chỉ ghi nếu chưa có
+    const exists = list.some(e => e.phone === normPhone || e.name === normName || e.unit === normUnit);
+    if (!exists) list.push({ phone: normPhone, name: normName, unit: normUnit });
+    localStorage.setItem('doan_attempted', JSON.stringify(list));
+  } catch(e) {}
 }
 
 // ============================================================
@@ -1327,6 +1405,9 @@ function submitQuiz(forceSubmit = false) {
   try { sessionStorage.removeItem('doan_exam_state'); } catch(e) {}
 
   state.completionTime = Math.round((Date.now() - state.startTime) / 1000);
+
+  // Khoá thông tin đã thi (phone + name + unit) ngay khi nộp bài
+  markAttempted(state.candidate.phone, state.candidate.name, state.candidate.unit);
 
   let correct = 0, wrong = 0, skip = 0;
   state.questions.forEach((q, i) => {
@@ -1543,8 +1624,7 @@ function loadLeaderboard() {
 // ============================================================
 // MODAL / TOAST
 // ============================================================
-function openModal(id)  { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+// openModal và closeModal đã được định nghĩa trong phần ANTI-CHEAT phía trên
 function showToast(msg, duration = 3200) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1585,9 +1665,9 @@ function enableAntiCheat() {
     // PrintScreen
     if (k === 'PrintScreen') {
       e.preventDefault();
+      activatePrtScBlackout();
       flashScreenshotGuard();
-      try { navigator.clipboard.writeText('🚫 Bài thi được bảo vệ'); } catch(e2) {}
-      showToast('❌ Chụp màn hình bị cấm! Vi phạm đã được ghi nhận.'); return;
+      return;
     }
     // Ctrl/Cmd + phím nguy hiểm
     if ((e.ctrlKey || e.metaKey)) {
@@ -1675,18 +1755,48 @@ function handleTabSwitch() {
 // Screenshot flash
 function flashScreenshotGuard() {
   const guard = document.getElementById('screenshotGuard');
-  guard.classList.add('active');
-  setTimeout(() => guard.classList.remove('active'), 2000);
+  if (guard) { guard.classList.add('active'); setTimeout(() => guard.classList.remove('active'), 2000); }
+}
+
+// Blackout toàn màn hình khi detect PrtSc
+function activatePrtScBlackout() {
+  const overlay = document.getElementById('prtscOverlay');
+  overlay.classList.add('active');
+  // Xóa clipboard ngay lập tức
+  try { navigator.clipboard.writeText('🚫 BÀI THI ĐƯỢC BẢO VỆ — VI PHẠM ĐÃ GHI NHẬN'); } catch(e) {}
+  // Ẩn sau 3 giây
+  setTimeout(() => overlay.classList.remove('active'), 3000);
+  showToast('❌ Chụp màn hình bị cấm! Vi phạm đã được ghi nhận.', 4000);
 }
 
 // Block screenshot via CSS (partial protection)
 document.addEventListener('keyup', e => {
   if (e.key === 'PrintScreen') {
+    activatePrtScBlackout();
     flashScreenshotGuard();
-    // Attempt to clear clipboard
     try { navigator.clipboard.writeText(''); } catch(e2) {}
   }
 });
+
+// Chặn Screen Capture API nếu trình duyệt hỗ trợ
+if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+  const _orig = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
+  navigator.mediaDevices.getDisplayMedia = async function(opts) {
+    activatePrtScBlackout();
+    throw new DOMException('Screen capture blocked', 'NotAllowedError');
+  };
+}
+
+// Thêm xử lý dynamic message cho modal đã thi
+function openModal(id) {
+  if (id === 'modalAlreadyTaken') {
+    const reason = window._dupReason || 'Thông tin';
+    document.getElementById('modalAlreadyMsg').innerHTML =
+      `<strong>${escHtml(reason)}</strong> của bạn đã tồn tại trong hệ thống. Mỗi người chỉ được thi <strong>một lần duy nhất</strong>.<br><br>Nếu có nhầm lẫn, vui lòng liên hệ <strong>Ban Tổ Chức</strong> để được xét duyệt lại.`;
+  }
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 // ============================================================
 // HELPER
