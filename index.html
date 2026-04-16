@@ -765,12 +765,12 @@ body.violation-flash::after {
     <div class="info-cards">
       <div class="info-card">
         <div class="info-card-icon">📝</div>
-        <div class="info-card-value">20</div>
+        <div class="info-card-value">25</div>
         <div class="info-card-label">Câu hỏi</div>
       </div>
       <div class="info-card">
         <div class="info-card-icon">⏱️</div>
-        <div class="info-card-value" id="timeDisplayWelcome">25</div>
+        <div class="info-card-value" id="timeDisplayWelcome">30</div>
         <div class="info-card-label">Phút làm bài</div>
       </div>
       <div class="info-card">
@@ -782,7 +782,7 @@ body.violation-flash::after {
     <div class="notes-card">
       <div class="section-title">📋 Lưu Ý Quan Trọng</div>
       <ul class="notes-list">
-        <li><span class="note-icon">•</span> Bài thi gồm <strong>20 câu hỏi</strong> — mỗi câu đúng được <strong>0,5 điểm</strong> — tổng 10 điểm (Hệ số 1)</li>
+        <li><span class="note-icon">•</span> Bài thi gồm <strong>25 câu hỏi</strong> — mỗi câu đúng được <strong>0,4 điểm</strong> — tổng 10 điểm (Hệ số 1)</li>
         <li><span class="note-icon">•</span> Thứ tự đáp án được <strong>xáo trộn ngẫu nhiên</strong> cho mỗi người thi</li>
         <li><span class="note-icon">•</span> Bài thi sẽ <strong>tự động nộp</strong> khi hết thời gian</li>
         <li><span class="note-icon">•</span> Phải trả lời tất cả câu hỏi và <strong>tối thiểu 5 phút mới được nộp bài</strong></li>
@@ -861,7 +861,7 @@ body.violation-flash::after {
       <div class="quiz-progress-wrap">
         <div class="progress-label">
           <span>Tiến độ làm bài</span>
-          <span id="progressText">0 / 20</span>
+          <span id="progressText">0 / 25</span>
         </div>
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
       </div>
@@ -1028,7 +1028,7 @@ const QUESTION_BANK = [
     options: [
       "Truyền thống trung thành tuyệt đối với sự nghiệp cách mạng của Đảng, của dân tộc, kiên quyết phấn đấu vì độc lập, tự do, vì chủ nghĩa xã hội.",
       "Truyền thống không ngừng rèn luyện trong đấu tranh cách mạng, hoạt động thực tiễn để cống hiến nhiều nhất cho cách mạng và trưởng thành mau chóng về mọi mặt.",
-      "Truyền thống của đội quân xung kích cách mạng nêu cao chủ nghĩa anh hùng cách mạng, đoàn kết Thanh niên cả nước vượt qua mọi khó khăn, gian khổ, đón lấy những nhiệm vụ nặng nề, thực hiện đúng lời dạy của Bác Hồ: \"Đâu Đảng cần Thanh niên có, việc gì khó có Thanh niên\".",
+      "Truyền thống của đội quân xung kích cách mạng nêu cao chủ nghĩa anh hùng cách mạng, đoàn kết Thanh niên cả nước vượt qua mọi khó khăn, gian khổ.",
       "Cả 3 câu trên đều đúng."
     ],
     correct: 3
@@ -1037,16 +1037,6 @@ const QUESTION_BANK = [
     text: "Khi được thành lập, Đoàn Thanh niên Cộng sản Hồ Chí Minh có tên là gì?",
     options: ["Đoàn Thanh niên Cộng sản Việt Nam.", "Đoàn Thanh niên Cộng sản Đông Dương.", "Đoàn Thanh niên Phản đế Đông Dương.", "Đoàn Thanh niên Dân chủ Đông Dương."],
     correct: 1
-  },
-  {
-    text: "Những truyền thống của Đoàn Thanh niên Cộng sản Hồ Chí Minh là gì? (câu 9)",
-    options: [
-      "Truyền thống trung thành tuyệt đối với sự nghiệp cách mạng của Đảng, của dân tộc, kiên quyết phấn đấu vì độc lập, tự do, vì chủ nghĩa xã hội.",
-      "Truyền thống không ngừng rèn luyện trong đấu tranh cách mạng, hoạt động thực tiễn để cống hiến nhiều nhất cho cách mạng và trưởng thành mau chóng về mọi mặt.",
-      "Truyền thống của đội quân xung kích cách mạng nêu cao chủ nghĩa anh hùng cách mạng, đoàn kết Thanh niên cả nước vượt qua mọi khó khăn, gian khổ, đón lấy những nhiệm vụ nặng nề, thực hiện đúng lời dạy của Bác Hồ: \"Đâu Đảng cần Thanh niên có, việc gì khó có Thanh niên\".",
-      "Cả 3 đáp án đều đúng."
-    ],
-    correct: 3
   },
   {
     text: "Đoàn Thanh niên Lao động chính thức mang tên Đoàn Thanh niên Cộng sản Hồ Chí Minh tại đâu, thời điểm nào?",
@@ -1074,16 +1064,16 @@ const QUESTION_BANK = [
     correct: 2
   },
   {
-    text: "Câu nói \"Đâu Đảng cần Thanh niên có, việc gì khó Thanh niên làm\" do Chủ tịch Hồ Chí Minh đến dự và phát biểu căn dặn Đoàn viên Thanh niên tại Đại hội Đại biểu toàn quốc lần thứ mấy của Đoàn?",
+    text: "Câu nói \"Đâu Đảng cần Thanh niên có, việc gì khó Thanh niên làm\" do Chủ tịch Hồ Chí Minh phát biểu tại Đại hội Đại biểu toàn quốc lần thứ mấy của Đoàn?",
     options: ["Lần thứ hai.", "Lần thứ ba.", "Lần thứ tư.", "Lần thứ năm."],
     correct: 1
   },
   {
-    text: "Cờ Đoàn được quy định cụ thể tại Điều lệ Đoàn Thanh niên Cộng sản Hồ Chí Minh (sửa đổi và bổ sung năm 2002) như thế nào?",
+    text: "Cờ Đoàn được quy định tại Điều lệ Đoàn TNCS Hồ Chí Minh (sửa đổi và bổ sung năm 2002) như thế nào?",
     options: [
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn là 30 cm.",
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/3 chiều rộng cờ.",
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/5 chiều rộng cờ.",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn là 30 cm.",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn bằng 2/3 chiều rộng cờ.",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn bằng 2/5 chiều rộng cờ.",
       "Tất cả đều sai."
     ],
     correct: 2
@@ -1154,17 +1144,17 @@ const QUESTION_BANK = [
     correct: 2
   },
   {
-    text: "Theo Thông tư 143/TT-BQP ngày 27/12/2023 của Bộ Quốc phòng về xử lý kỷ luật trong Quân đội nhân dân Việt Nam, có mấy hình thức kỷ luật đối với sĩ quan?",
+    text: "Theo Thông tư 143/TT-BQP ngày 27/12/2023 của Bộ Quốc phòng, có mấy hình thức kỷ luật đối với sĩ quan?",
     options: ["6", "8", "10", "12"],
     correct: 1
   },
   {
-    text: "Theo Thông tư 143/TT-BQP ngày 27/12/2023 của Bộ Quốc phòng về xử lý kỷ luật trong Quân đội nhân dân Việt Nam, có mấy hình thức kỷ luật đối với HSQ-CS?",
+    text: "Theo Thông tư 143/TT-BQP ngày 27/12/2023 của Bộ Quốc phòng, có mấy hình thức kỷ luật đối với HSQ-CS?",
     options: ["6", "7", "8", "9"],
     correct: 0
   },
   {
-    text: "Yêu cầu \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\" và phương châm \"5 vững\" được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII theo yêu cầu của đồng chí nào?",
+    text: "Yêu cầu \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\" và phương châm \"5 vững\" trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII theo yêu cầu của đồng chí nào?",
     options: [
       "Đồng chí Tổng Bí thư Tô Lâm",
       "Đồng chí Chủ tịch nước trong các chỉ đạo về quốc phòng",
@@ -1221,8 +1211,8 @@ const QUESTION_BANK = [
   {
     text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, nhiệm vụ thứ tư mà Đại tướng Phan Văn Giang nhắc đến là:",
     options: [
-      "Thanh niên Quân đội là lực lượng cơ bản, chủ yếu, đóng góp to lớn trong thực hiện nhiệm vụ huấn luyện, sẵn sàng chiến đấu, xây dựng nền nếp chính quy, chấp hành kỷ luật.",
-      "Thanh niên Quân đội đã hoàn thành xuất sắc trong thực hiện nhiệm vụ phòng, chống, khắc phục hậu quả thiên tai, dịch bệnh, tìm kiếm cứu nạn, cứu hộ.",
+      "Thanh niên Quân đội là lực lượng cơ bản, chủ yếu, đóng góp to lớn trong thực hiện nhiệm vụ huấn luyện, sẵn sàng chiến đấu.",
+      "Thanh niên Quân đội đã hoàn thành xuất sắc trong thực hiện nhiệm vụ phòng, chống, khắc phục hậu quả thiên tai, dịch bệnh.",
       "Thanh niên Quân đội đóng góp chính trong phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
       "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội."
     ],
@@ -1231,17 +1221,17 @@ const QUESTION_BANK = [
   {
     text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, nhiệm vụ thứ năm mà Đại tướng Phan Văn Giang nhắc đến là:",
     options: [
-      "Thanh niên Quân đội là lực lượng cơ bản, chủ yếu, đóng góp to lớn trong thực hiện nhiệm vụ huấn luyện, sẵn sàng chiến đấu, xây dựng nền nếp chính quy, chấp hành kỷ luật.",
+      "Thanh niên Quân đội là lực lượng cơ bản, chủ yếu, đóng góp to lớn trong thực hiện nhiệm vụ huấn luyện.",
       "Thanh niên Quân đội đã tạo nên những ấn tượng mạnh trong tổ chức kỷ niệm các ngày lễ lớn của đất nước và một số sự kiện quốc tế.",
       "Thanh niên Quân đội tham gia tích cực, sáng tạo trong công tác đối ngoại quốc phòng.",
-      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội."
+      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất."
     ],
     correct: 1
   },
   {
-    text: "Đột phá thứ nhất được Đại hội Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định trong nhiệm kỳ tới là gì?",
+    text: "Đột phá thứ nhất được Đại hội Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định là gì?",
     options: [
-      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội.",
+      "Thanh niên Quân đội đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội.",
       "Đẩy mạnh nghiên cứu, phát triển, ứng dụng khoa học công nghệ, đổi mới sáng tạo và chuyển đổi số.",
       "Xung kích thực hiện hiệu quả nhiệm vụ huấn luyện, đào tạo, sẵn sàng chiến đấu; xây dựng nền nếp chính quy, nâng cao ý thức chấp hành pháp luật, kỷ luật và bảo đảm an toàn.",
       "Tăng cường bồi dưỡng lý tưởng cách mạng, khát vọng cống hiến, nâng cao bản lĩnh chính trị cho cán bộ, ĐVTN góp phần xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại."
@@ -1249,17 +1239,17 @@ const QUESTION_BANK = [
     correct: 3
   },
   {
-    text: "Đột phá thứ hai được Đại hội Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định trong nhiệm kỳ tới là gì?",
+    text: "Đột phá thứ hai được Đại hội Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI xác định là gì?",
     options: [
-      "Thanh niên Quân đội luôn đi đầu, đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội.",
+      "Thanh niên Quân đội đóng góp quan trọng trong lao động sản xuất, tham gia phát triển kinh tế - xã hội.",
       "Đẩy mạnh nghiên cứu, phát triển, ứng dụng khoa học công nghệ, đổi mới sáng tạo và chuyển đổi số.",
       "Xung kích thực hiện hiệu quả nhiệm vụ huấn luyện, đào tạo, sẵn sàng chiến đấu; xây dựng nền nếp chính quy, nâng cao ý thức chấp hành pháp luật, kỷ luật và bảo đảm an toàn.",
-      "Tăng cường bồi dưỡng lý tưởng cách mạng, khát vọng cống hiến, nâng cao bản lĩnh chính trị cho cán bộ, ĐVTN góp phần xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại."
+      "Tăng cường bồi dưỡng lý tưởng cách mạng, khát vọng cống hiến, nâng cao bản lĩnh chính trị cho cán bộ, ĐVTN."
     ],
     correct: 2
   },
   {
-    text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, phong trào nhiệm kỳ 2025-2030 được Đại tướng Phan Văn Giang nhắc đến là gì?",
+    text: "Tại Đại hội đại biểu Đoàn TNCS Hồ Chí Minh Quân đội lần thứ XI, phong trào nhiệm kỳ 2025-2030 là gì?",
     options: ["Thanh niên tiên phong phát triển", "Tuổi trẻ quyết thắng", "\"3 Tiên phong quyết thắng\"", "Thanh niên xung kích đổi mới"],
     correct: 2
   },
@@ -1307,7 +1297,7 @@ const QUESTION_BANK = [
     text: "Chỉ thị số 05-CT/TW ngày 15/5/2016 của Bộ Chính trị xác định: Phải làm cho tư tưởng, đạo đức, phong cách của Hồ Chí Minh thật sự trở thành...?",
     options: [
       "Nền tảng tinh thần vững chắc của đời sống xã hội.",
-      "Công việc thường xuyên của cấp uỷ, tổ chức đảng, chính quyền, mặt trận Tổ quốc Việt Nam và tổ chức chính trị - xã hội các cấp.",
+      "Công việc thường xuyên của cấp uỷ, tổ chức đảng, chính quyền và tổ chức chính trị - xã hội các cấp.",
       "Việc làm tự giác của mỗi cán bộ, đảng viên.",
       "Nền tảng tinh thần vững chắc của Đảng, Quân đội và toàn dân."
     ],
@@ -1329,17 +1319,17 @@ const QUESTION_BANK = [
     correct: 1
   },
   {
-    text: "Theo Chỉ thị số 87-CT/QUTW việc xây dựng, hoàn thiện, ban hành và thực hiện hệ thống tiêu chí học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh ở các cấp trong đảng bộ quân đội và toàn quân theo phương châm nào?",
+    text: "Theo Chỉ thị số 87-CT/QUTW, việc xây dựng hệ thống tiêu chí học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh theo phương châm nào?",
     options: [
       "Ngắn gọn, dễ nhớ, dễ thực hiện và dễ đánh giá kết quả.",
       "Ngắn gọn, dễ nhớ, dễ thực hiện và dễ kiểm tra đánh giá kết quả.",
-      "Ngắn gọn, dễ nhớ, dễ thực hiện phê bình và phê bình, gắn với khắc phục khâu yếu, mặt yếu.",
+      "Ngắn gọn, dễ nhớ, dễ thực hiện, gắn với khắc phục khâu yếu, mặt yếu.",
       "Sát chức năng, nhiệm vụ, ngắn gọn, dễ nhớ, dễ thực hiện và dễ đánh giá kết quả."
     ],
     correct: 3
   },
   {
-    text: "Theo Chỉ thị số 87-CT/QUTW việc lãnh đạo, chỉ đạo việc học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh theo phương châm nào?",
+    text: "Theo Chỉ thị số 87-CT/QUTW, việc lãnh đạo, chỉ đạo học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh theo phương châm nào?",
     options: [
       "Trên trước, dưới sau; ngoài trước, trong sau; học tập đi đôi với làm theo gắn với chức năng, chức trách, nhiệm vụ.",
       "Trên trước, dưới sau; trong trước, ngoài sau; học tập đi đôi với làm theo gắn với chức năng, chức trách, nhiệm vụ.",
@@ -1351,10 +1341,10 @@ const QUESTION_BANK = [
   {
     text: "Cờ Đoàn được Điều lệ Đoàn hiện hành quy định:",
     options: [
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn là 30 cm",
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/3 chiều rộng cờ",
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 2/5 chiều rộng cờ",
-      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, ở chính giữa có hình huy hiệu Đoàn, đường kính huy hiệu Đoàn bằng 1/2 chiều rộng cờ"
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn là 30 cm",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn bằng 2/3 chiều rộng cờ",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn bằng 2/5 chiều rộng cờ",
+      "Nền đỏ, hình chữ nhật, chiều rộng bằng 2/3 chiều dài, đường kính huy hiệu Đoàn bằng 1/2 chiều rộng cờ"
     ],
     correct: 2
   },
@@ -1371,15 +1361,15 @@ const QUESTION_BANK = [
   {
     text: "Chủ đề Đại hội đại biểu Đảng bộ Quân khu lần thứ XII là gì?",
     options: [
-      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ toàn quân vững chắc, quốc phòng toàn dân vững mạnh, góp phần thực hiện thắng lợi nhiệm vụ xây dựng và bảo vệ vững chắc Tổ quốc Việt Nam xã hội chủ nghĩa.",
-      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu chính quy, hiện đại; phòng thủ Quân khu vững chắc, quốc phòng toàn dân vững mạnh, góp phần thực hiện thắng lợi nhiệm vụ xây dựng và bảo vệ vững chắc Tổ quốc Việt Nam xã hội chủ nghĩa.",
+      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ toàn quân vững chắc, quốc phòng toàn dân vững mạnh.",
+      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu chính quy, hiện đại; phòng thủ Quân khu vững chắc.",
       "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ Quân khu vững chắc, quốc phòng toàn dân vững mạnh, góp phần thực hiện thắng lợi nhiệm vụ xây dựng và bảo vệ vững chắc Tổ quốc Việt Nam xã hội chủ nghĩa.",
-      "Phát huy truyền thống Quân khu 4, xây dựng Đảng bộ trong sạch, vững mạnh, LLVT Quân khu tinh, gọn, mạnh; phòng thủ Quân khu vững chắc, bảo vệ Tổ quốc."
+      "Phát huy truyền thống Quân khu 4 anh hùng, xây dựng LLVT Quân khu tinh, gọn, mạnh."
     ],
     correct: 2
   },
   {
-    text: "Phương châm Đại hội Đảng bộ Quân đội lần thứ XII, nhiệm kỳ 2025-2030",
+    text: "Phương châm Đại hội Đảng bộ Quân đội lần thứ XII, nhiệm kỳ 2025-2030 là gì?",
     options: [
       "Dân chủ - Đoàn kết - Kỷ cương - Đột phá - Phát triển",
       "Đoàn kết - Dân chủ - Kỷ cương - Kiên định - Đột phá - Phát triển",
@@ -1391,22 +1381,22 @@ const QUESTION_BANK = [
   {
     text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định phương hướng như thế nào?",
     options: [
-      "Quán triệt sâu sắc đường lối, quan điểm của Nhà nước về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới, các quyết sách chiến lược về phát triển đất nước và chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng, sự quản lý, điều hành tập trung thống nhất của Nhà nước đối với Quân đội và sự nghiệp quốc phòng....",
-      "Quán triệt sâu sắc chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng, sự quản lý, điều hành tập trung thống nhất của Nhà nước đối với Quân đội và sự nghiệp quốc phòng....",
+      "Quán triệt sâu sắc đường lối, quan điểm của Nhà nước về quân sự, quốc phòng và chỉ đạo của Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\".",
+      "Quán triệt sâu sắc chỉ đạo của Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"; giữ vững sự lãnh đạo của Đảng đối với Quân đội.",
       "Quán triệt sâu sắc đường lối, quan điểm của Đảng về quân sự, quốc phòng, bảo vệ Tổ quốc trong tình hình mới, các quyết sách chiến lược về phát triển đất nước và chỉ đạo của đồng chí Tổng Bí thư về \"2 kiên định, 2 đẩy mạnh, 2 ngăn ngừa\"; giữ vững và tăng cường sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng, sự quản lý, điều hành tập trung thống nhất của Nhà nước đối với Quân đội và sự nghiệp quốc phòng....",
-      "Quán triệt sâu sắc đường lối của Đảng về quân sự, quốc phòng; giữ vững sự lãnh đạo tuyệt đối, trực tiếp về mọi mặt của Đảng đối với Quân đội."
+      "Quán triệt đường lối của Đảng; giữ vững sự lãnh đạo tuyệt đối, trực tiếp của Đảng đối với Quân đội."
     ],
     correct: 2
   },
   {
     text: "Một trong các mục tiêu chủ yếu được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII?",
     options: [
+      "Phát triển, ứng dụng khoa học, công nghệ và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
       "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
-      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2030 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, từng bước hiện đại.",
-      "Phát triển, ứng dụng khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số trong Quân đội đến năm 2035 thuộc nhóm dẫn đầu quốc gia, một số lĩnh vực đạt trình độ quốc tế; thu hút, trọng dụng nhân tài đáp ứng yêu cầu xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
-      "Phát triển khoa học, công nghệ trong Quân đội đạt trình độ quốc tế vào năm 2030."
+      "Phát triển, ứng dụng khoa học, công nghệ và chuyển đổi số trong Quân đội đến năm 2035 thuộc nhóm dẫn đầu quốc gia.",
+      "Phát triển khoa học, công nghệ quốc phòng đạt trình độ quốc tế vào năm 2030."
     ],
-    correct: 0
+    correct: 1
   },
   {
     text: "Một trong các đột phá được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII?",
@@ -1414,7 +1404,7 @@ const QUESTION_BANK = [
       "Hoàn thiện đồng bộ thể chế xây dựng Đảng bộ; huy động hiệu quả các nguồn lực xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
       "Hoàn thiện đồng bộ thể chế quân sự, quốc phòng; huy động hiệu quả các nguồn lực xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại hóa.",
       "Hoàn thiện đồng bộ thể chế quân sự, quốc phòng; huy động hiệu quả các nguồn lực xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại.",
-      "Hoàn thiện thể chế quân sự, quốc phòng và xây dựng Quân đội hiện đại vào năm 2030."
+      "Hoàn thiện thể chế quốc phòng và xây dựng Quân đội hiện đại."
     ],
     correct: 2
   },
@@ -1424,7 +1414,7 @@ const QUESTION_BANK = [
     correct: 0
   },
   {
-    text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định bao nhiêu giải pháp lãnh đạo xây dựng Đảng bộ Quân đội trong sạch vững mạnh mẫu mực, tiêu biểu, có năng lực lãnh đạo, sức chiến đấu cao?",
+    text: "Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII xác định bao nhiêu giải pháp lãnh đạo xây dựng Đảng bộ Quân đội trong sạch vững mạnh mẫu mực, tiêu biểu?",
     options: ["7", "8", "9", "10"],
     correct: 0
   },
@@ -1433,8 +1423,8 @@ const QUESTION_BANK = [
     options: [
       "Dưới Cờ Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2030; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì độc lập, hoà bình, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
       "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2030; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì hoà bình, độc lập, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
-      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2035; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì hoà bình, độc lập, dân chủ, giàu mạnh, phồn vinh, văn minh, hạnh phúc, vững bước đi lên chủ nghĩa xã hội.",
-      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng xây dựng đất nước phát triển phồn vinh, văn minh, hạnh phúc vào năm 2045."
+      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng thực hiện thắng lợi các mục tiêu phát triển đất nước đến năm 2035; tự chủ chiến lược, tự cường, tự tin, tiến mạnh trong kỷ nguyên vươn mình của dân tộc vì hoà bình, độc lập, dân chủ, giàu mạnh.",
+      "Dưới lá cờ vẻ vang của Đảng, chung sức, đồng lòng, quyết tâm thực hiện các mục tiêu phát triển đất nước đến năm 2030."
     ],
     correct: 1
   },
@@ -1454,12 +1444,12 @@ const QUESTION_BANK = [
     correct: 2
   },
   {
-    text: "Một số chỉ tiêu chủ yếu về kinh tế giai đoạn 2026-2030 được xác định trong Nghị quyết Đại hội đại biểu lần thứ XIV của Đảng?",
+    text: "Chỉ tiêu kinh tế giai đoạn 2026-2030 được xác định trong Nghị quyết Đại hội XIV của Đảng?",
     options: [
-      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 8%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 8.000 USD.",
-      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 10%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 8.500 USD.",
-      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 2%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 9.000 USD.",
-      "Phấn đấu đạt tốc độ tăng trưởng GDP bình quân giai đoạn 2026-2030 từ 7%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 7.500 USD."
+      "Phấn đấu tăng trưởng GDP bình quân từ 8%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 8.000 USD.",
+      "Phấn đấu tăng trưởng GDP bình quân từ 10%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 8.500 USD.",
+      "Phấn đấu tăng trưởng GDP bình quân từ 2%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 9.000 USD.",
+      "Phấn đấu tăng trưởng GDP bình quân từ 7%/năm trở lên; GDP bình quân đầu người đến năm 2030 đạt khoảng 7.500 USD."
     ],
     correct: 1
   },
@@ -1474,32 +1464,32 @@ const QUESTION_BANK = [
     correct: 0
   },
   {
-    text: "Một trong các quan điểm chỉ đạo được xác định trong Nghị quyết Đại hội đại biểu toàn quốc lần thứ XIV của Đảng?",
+    text: "Một trong các quan điểm chỉ đạo được xác định trong Nghị quyết Đại hội XIV của Đảng?",
     options: [
-      "Phát huy sức mạnh, bản lĩnh, trí tuệ của con người, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; kiên quyết, kiên trì đấu tranh bảo vệ vững chắc độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia; bảo vệ Tổ quốc từ sớm, từ xa...",
-      "Phát huy sức mạnh, bản lĩnh, trí tuệ của con người Việt Nam, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; kiên quyết, kiên trì đấu tranh bảo vệ vững chắc độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia; bảo vệ Tổ quốc từ sớm, từ xa...",
+      "Phát huy sức mạnh, bản lĩnh, trí tuệ của con người, khối đại đoàn kết toàn dân tộc; kết hợp sức mạnh dân tộc với sức mạnh thời đại; bảo vệ Tổ quốc từ sớm, từ xa.",
+      "Phát huy sức mạnh, bản lĩnh, trí tuệ của con người Việt Nam, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; bảo vệ Tổ quốc từ sớm, từ xa.",
       "Huy động sức mạnh, bản lĩnh, trí tuệ của con người Việt Nam, khối đại đoàn kết toàn dân tộc và thế trận lòng dân; kết hợp sức mạnh dân tộc với sức mạnh thời đại; kiên quyết, kiên trì đấu tranh bảo vệ vững chắc độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia; bảo vệ Tổ quốc từ sớm, từ xa...",
-      "Tập hợp sức mạnh toàn dân tộc; kết hợp sức mạnh dân tộc với sức mạnh thời đại; bảo vệ Tổ quốc từ sớm, từ xa."
+      "Huy động toàn dân tộc; kết hợp sức mạnh dân tộc với sức mạnh thời đại; bảo vệ Tổ quốc từ sớm, từ xa."
     ],
     correct: 2
   },
   {
     text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định xây dựng Quân đội nhân dân, Công an nhân dân như thế nào?",
     options: [
-      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Nhà nước; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc phòng, an ninh, xây dựng nền quốc phòng vững mạnh, hiện đại, bảo vệ vững chắc Tổ quốc trong tình hình mới.",
-      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, từng bước hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc phòng, an ninh, xây dựng nền quốc phòng vững mạnh, hiện đại, bảo vệ vững chắc Tổ quốc trong tình hình mới.",
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Nhà nước; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao.",
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, từng bước hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao.",
       "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại, tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và Nhân dân, kiên định với mục tiêu, lý tưởng cách mạng của Đảng; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao, làm nòng cốt trong sự nghiệp quốc phòng, an ninh, xây dựng nền quốc phòng vững mạnh, hiện đại, bảo vệ vững chắc Tổ quốc trong tình hình mới.",
-      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao, bảo vệ vững chắc Tổ quốc."
+      "Xây dựng Quân đội nhân dân, Công an nhân dân cách mạng, chính quy, tinh nhuệ, hiện đại; bảo đảm chất lượng tổng hợp và sức mạnh chiến đấu cao."
     ],
     correct: 2
   },
   {
     text: "Báo cáo chính trị tại Đại hội XIV của Đảng xác định quyền làm chủ của Nhân dân như thế nào?",
     options: [
-      "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân, thực hiện pháp luật về dân chủ ở cơ sở và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát\"",
+      "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát\"",
       "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân, thực hiện pháp luật về dân chủ ở cơ sở và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng\".",
-      "Xây dựng, hoàn thiện cơ chế, chính sách để thực hiện có hiệu quả quyền làm chủ của Nhân dân, thực hiện pháp luật về dân chủ ở cơ sở và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân thụ hưởng\"",
-      "Xây dựng cơ chế để Nhân dân thực hiện quyền làm chủ thực sự, thực chất."
+      "Xây dựng, hoàn thiện cơ chế, chính sách và phương châm \"Dân biết, dân bàn, dân làm, dân kiểm tra, dân thụ hưởng\"",
+      "Thực hiện quyền làm chủ của Nhân dân thông qua dân chủ trực tiếp và dân chủ đại diện."
     ],
     correct: 1
   },
@@ -1516,8 +1506,8 @@ const QUESTION_BANK = [
   {
     text: "Nghị quyết Đại hội XIV của Đảng định hướng phát triển khoa học công nghệ, chuyển đổi số trong nhiệm kỳ như thế nào?",
     options: [
-      "Tập trung triển khai đột phá về khoa học, công nghệ, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh nguồn nhân lực chất lượng cao, tạo động lực then chốt để nâng cao năng suất, chất lượng, hiệu quả, giá trị gia tăng, năng lực cạnh tranh của sản phẩm, doanh nghiệp và của nền kinh tế.",
-      "Tập trung triển khai đột phá về công nghệ thông tin, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển cơ sở sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao, tạo động lực then chốt để nâng cao năng suất, chất lượng, hiệu quả, giá trị gia tăng, năng lực cạnh tranh của sản phẩm, doanh nghiệp và của nền kinh tế.",
+      "Tập trung triển khai đột phá về khoa học, công nghệ, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh nguồn nhân lực chất lượng cao.",
+      "Tập trung triển khai đột phá về công nghệ thông tin, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển cơ sở sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao.",
       "Tập trung triển khai đột phá về khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số, tạo nền tảng cho phát triển lực lượng sản xuất mới, hiện đại, ưu tiên phát triển một số ngành công nghiệp, công nghệ chiến lược, trọng tâm là chip bán dẫn, trí tuệ nhân tạo; đẩy mạnh đào tạo, sử dụng nguồn nhân lực chất lượng cao, tạo động lực then chốt để nâng cao năng suất, chất lượng, hiệu quả, giá trị gia tăng, năng lực cạnh tranh của sản phẩm, doanh nghiệp và của nền kinh tế.",
       "Tập trung phát triển chip bán dẫn và trí tuệ nhân tạo làm nền tảng cho công nghiệp hóa, hiện đại hóa đất nước."
     ],
@@ -1535,12 +1525,7 @@ const QUESTION_BANK = [
   },
   {
     text: "Một nội dung quan trọng trong đột phá chiến lược về nguồn nhân lực được xác định trong Nghị quyết Đại hội XIV của Đảng là gì?",
-    options: [
-      "Mở rộng đào tạo nghề",
-      "Phát triển nguồn nhân lực chất lượng cao, thu hút và trọng dụng nhân tài",
-      "Tăng thời gian đào tạo đại học",
-      "Phổ cập giáo dục đại học"
-    ],
+    options: ["Mở rộng đào tạo nghề", "Phát triển nguồn nhân lực chất lượng cao, thu hút và trọng dụng nhân tài", "Tăng thời gian đào tạo đại học", "Phổ cập giáo dục đại học"],
     correct: 1
   },
   {
@@ -1564,7 +1549,7 @@ const QUESTION_BANK = [
     correct: 0
   },
   {
-    text: "\"2 đẩy mạnh\" được xác định trong Nghị quyết Đại hội Đảng bộ đại biểu Đảng bộ Quân đội lần thứ XII, là gì?",
+    text: "\"2 đẩy mạnh\" được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII là gì?",
     options: [
       "Đẩy mạnh kinh tế quốc phòng và đào tạo cán bộ",
       "Đẩy mạnh xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại; đẩy mạnh hội nhập quốc tế và đối ngoại quốc phòng",
@@ -1574,7 +1559,7 @@ const QUESTION_BANK = [
     correct: 1
   },
   {
-    text: "\"2 Ngăn ngừa\" được xác định trong Nghị quyết Đại hội Đảng bộ đại biểu Đảng bộ Quân đội lần thứ XII là gì?",
+    text: "\"2 Ngăn ngừa\" được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII là gì?",
     options: [
       "Ngăn ngừa nguy cơ phi chính trị hóa Quân đội. Ngăn ngừa mọi biểu hiện suy thoái về tư tưởng chính trị, đạo đức, lối sống, \"tự diễn biến\", \"tự chuyển hóa\" trong Đảng bộ Quân đội và toàn quân",
       "Ngăn ngừa nguy cơ diễn biến hòa bình. Ngăn ngừa mọi biểu hiện suy thoái về tư tưởng chính trị, đạo đức, lối sống, \"tự diễn biến\", \"tự chuyển hóa\" trong Đảng bộ Quân đội và toàn quân",
@@ -1584,7 +1569,7 @@ const QUESTION_BANK = [
     correct: 2
   },
   {
-    text: "\"2 kiên định\" được xác định trong Nghị quyết Đại hội Đảng bộ đại biểu Đảng bộ Quân đội lần thứ XII là gì?",
+    text: "\"2 kiên định\" được xác định trong Nghị quyết Đại hội Đảng bộ Quân đội lần thứ XII là gì?",
     options: [
       "Kiên định đường lối quân sự, quốc phòng của Đảng; kiên định xây dựng Quân đội vững mạnh về chính trị.",
       "Xây dựng Quân đội cách mạng, chính quy, tinh nhuệ, hiện đại; đẩy mạnh hội nhập quốc tế và đối ngoại quốc phòng",
@@ -1625,22 +1610,12 @@ const QUESTION_BANK = [
   },
   {
     text: "Một nội dung trong khâu đột phá thứ hai được xác định trong Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII là gì?",
-    options: [
-      "Phát triển khoa học công nghệ",
-      "Nâng cao đời sống bộ đội",
-      "Năng lực lãnh đạo, sức chiến đấu của cấp ủy, chi bộ",
-      "Mở rộng quan hệ đối ngoại"
-    ],
+    options: ["Phát triển khoa học công nghệ", "Nâng cao đời sống bộ đội", "Năng lực lãnh đạo, sức chiến đấu của cấp ủy, chi bộ", "Mở rộng quan hệ đối ngoại"],
     correct: 2
   },
   {
     text: "Nội dung nào dưới đây không thuộc các khâu đột phá của Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII?",
-    options: [
-      "Xây dựng đội ngũ cán bộ, đảng viên",
-      "Nâng cao chất lượng huấn luyện, SSCĐ",
-      "Xây dựng doanh trại chính quy",
-      "Xây dựng chính quy, quản lý kỷ luật"
-    ],
+    options: ["Xây dựng đội ngũ cán bộ, đảng viên", "Nâng cao chất lượng huấn luyện, SSCĐ", "Xây dựng doanh trại chính quy", "Xây dựng chính quy, quản lý kỷ luật"],
     correct: 2
   },
   {
@@ -1655,12 +1630,7 @@ const QUESTION_BANK = [
   },
   {
     text: "Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định một trong những yêu cầu trong huấn luyện là gì?",
-    options: [
-      "Lý thuyết là chính",
-      "Huấn luyện theo phong trào",
-      "\"Cơ bản, thiết thực, vững chắc\"",
-      "Đơn giản, dễ thực hiện"
-    ],
+    options: ["Lý thuyết là chính", "Huấn luyện theo phong trào", "\"Cơ bản, thiết thực, vững chắc\"", "Đơn giản, dễ thực hiện"],
     correct: 2
   },
   {
@@ -1670,11 +1640,71 @@ const QUESTION_BANK = [
   },
   {
     text: "Nghị quyết Đại hội Đại biểu Đảng bộ Trung đoàn lần thứ XXII xác định một trong những nhiệm vụ về công tác xây dựng Đảng là gì?",
+    options: ["Phát triển đảng viên", "Đẩy mạnh xây dựng, chỉnh đốn Đảng", "Xây dựng đội ngũ đảng viên", "Phát triển kinh tế đơn vị"],
+    correct: 1
+  },
+  {
+    text: "Cơ quan/Đại hội nào có quyền sửa đổi, bổ sung và thông qua Điều lệ Đoàn?",
     options: [
-      "Phát triển đảng viên",
-      "Đẩy mạnh xây dựng, chỉnh đốn Đảng",
-      "Xây dựng đội ngũ đảng viên",
-      "Phát triển kinh tế đơn vị"
+      "Chỉ Đại hội hoặc hội nghị đại biểu toàn quốc của Đoàn",
+      "Ban Chấp hành Trung ương Đoàn",
+      "Ban Thường vụ Trung ương Đoàn",
+      "Ban Bí thư Trung ương Đoàn"
+    ],
+    correct: 0
+  },
+  {
+    text: "Đối với cán bộ Đoàn vi phạm kỷ luật, có thể áp dụng những hình thức kỷ luật nào?",
+    options: [
+      "Khiển trách, cảnh cáo, giải tán",
+      "Khiển trách, cảnh cáo, cách chức, khai trừ (nếu còn là đoàn viên)",
+      "Khiển trách, cách chức, giải tán",
+      "Khiển trách, đình chỉ công tác"
+    ],
+    correct: 1
+  },
+  {
+    text: "Tổ chức \"Hội Việt Nam cách mạng thanh niên\" với nòng cốt là Cộng sản Đoàn đã chính thức tuyên bố thành lập vào thời gian nào?",
+    options: [
+      "Hội chính thức tuyên bố thành lập vào khoảng tháng 12 năm 1925 tại Quảng Châu.",
+      "Hội chính thức tuyên bố thành lập vào khoảng tháng 02 năm 1925 tại Quảng Châu.",
+      "Hội chính thức tuyên bố thành lập vào khoảng tháng 12 năm 1924 tại Quảng Châu.",
+      "Hội chính thức tuyên bố thành lập vào khoảng tháng 06 năm 1925 tại Quảng Châu."
+    ],
+    correct: 3
+  },
+  {
+    text: "Đoàn viên không tham gia sinh hoạt Đoàn hoặc không đóng đoàn phí bao lâu (không có lý do chính đáng) thì sẽ bị xem xét xóa tên?",
+    options: ["1 tháng trong một năm", "6 tháng trong một năm", "3 tháng trong một năm", "2 tháng trong một năm"],
+    correct: 2
+  },
+  {
+    text: "Đoàn TNCS Hồ Chí Minh là đội dự bị tin cậy của tổ chức nào?",
+    options: ["Đội Thiếu niên Tiền phong Hồ Chí Minh", "Hội Sinh viên Việt Nam", "Hội Liên hiệp Thanh niên Việt Nam", "Đảng Cộng sản Việt Nam"],
+    correct: 3
+  },
+  {
+    text: "Chi đoàn có dưới bao nhiêu đoàn viên thì chỉ bầu Bí thư và Phó Bí thư (không bầu Ban Chấp hành)?",
+    options: ["Dưới 9 đoàn viên", "Dưới 11 đoàn viên", "Dưới 5 đoàn viên", "Dưới 7 đoàn viên"],
+    correct: 0
+  },
+  {
+    text: "Lời dạy của Bác Hồ: \"Đâu cần thanh niên có, việc gì khó có thanh niên\" thể hiện rõ nhất truyền thống vẻ vang nào của Đoàn?",
+    options: [
+      "Thể hiện truyền thống của đội quân xung kích cách mạng, dám đón lấy nhiệm vụ nặng nề.",
+      "Thể hiện truyền thống yêu nước nồng nàn, trung thành tuyệt đối với Đảng và Nhân dân ta.",
+      "Thể hiện truyền thống hiếu học, ham hiểu biết để tự mình nâng cao trình độ mọi mặt.",
+      "Thể hiện truyền thống gắn bó đoàn kết trong lớp người cùng lứa tuổi."
+    ],
+    correct: 0
+  },
+  {
+    text: "Câu nói bất hủ \"Con đường của thanh niên chỉ là con đường cách mạng, không thể có con đường nào khác\" trước tòa án kẻ thù là của ai?",
+    options: [
+      "Câu nói này là của người đoàn viên thanh niên cộng sản trẻ tuổi Trần Văn Ơn.",
+      "Câu nói này là của người đoàn viên thanh niên cộng sản trẻ tuổi Lý Tự Trọng.",
+      "Câu nói này là của người đoàn viên thanh niên cộng sản trẻ tuổi Bế Văn Đàn.",
+      "Câu nói này là của người đoàn viên thanh niên cộng sản trẻ tuổi Nguyễn Văn Trỗi."
     ],
     correct: 1
   }
@@ -1685,8 +1715,8 @@ const QUESTION_BANK = [
 // CONFIG
 // ============================================================
 const CONFIG = {
-  NUM_QUESTIONS:   20,
-  TIME_MINUTES:    25,
+  NUM_QUESTIONS:   25,
+  TIME_MINUTES:    30,
   PASS_SCORE:      10,   // điểm đạt (thực ra không hiển thị đạt/chưa đạt)
   ALLOW_CHANGE:    true,
   MIN_SUBMIT_MINS: 5,    // phải qua ít nhất 5 phút mới được nộp
@@ -2089,7 +2119,7 @@ function submitQuiz(forceSubmit = false) {
   });
 
   // Mỗi câu đúng = 0.5 điểm, tổng 10 điểm
-  const scoreDecimal = correct * 0.5;
+  const scoreDecimal = correct * 0.4;
 
   const result = {
     ...state.candidate,
@@ -2132,7 +2162,7 @@ function submitQuiz(forceSubmit = false) {
         else wrong++;
       });
       state.completionTime = Math.round((Date.now() - state.startTime) / 1000);
-      const scoreDecimal = correct * 0.5;
+      const scoreDecimal = correct * 0.4;
       const result = {
         ...s.candidate,
         score: scoreDecimal, correctCount: correct,
