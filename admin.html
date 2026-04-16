@@ -288,7 +288,6 @@ body {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới</button>
-        <button class="btn btn-blue" onclick="importFromClipboard()">📋 Dán Dữ Liệu</button>
         <button class="btn btn-gray" style="background:var(--gray-100);color:var(--gray-600);border:1.5px solid var(--gray-200)" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
         <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
       </div>
@@ -297,15 +296,7 @@ body {
     <!-- Stats -->
     <div class="section-title">📊 Thống Kê Tổng Quan</div>
 
-    <!-- NOTICE: Data sync -->
-    <div id="syncNotice" style="background:#FFF8E8;border:1.5px solid #F5A623;border-radius:12px;padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;font-size:13px;color:#7A4A00">
-      <span style="font-size:22px">ℹ️</span>
-      <div>
-        <strong>Cách lấy dữ liệu kết quả từ máy thí sinh:</strong><br>
-        Ở trang thi, bấm <strong>"Xuất JSON dự phòng"</strong> → lưu file → quay lại đây bấm <strong>"Nhập JSON"</strong> hoặc <strong>"Dán Dữ Liệu"</strong> để nhập vào bảng xếp hạng. Hoặc nếu đã cấu hình Google Sheets thì dữ liệu tự đồng bộ lên Sheets.
-      </div>
-      <button onclick="document.getElementById('syncNotice').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:#7A4A00;flex-shrink:0">✕</button>
-    </div>
+
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-card-icon">👥</div>
@@ -337,8 +328,6 @@ body {
           <p>Bao gồm số lần vi phạm, alt-tab, thời gian hoàn thành</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-blue" onclick="document.getElementById('importJsonInput').click()">📥 Nhập JSON</button>
-          <input type="file" id="importJsonInput" accept=".json" style="display:none" onchange="importJSON(this)">
           <button class="btn btn-green" onclick="exportCSV()">⬇️ Xuất CSV</button>
         </div>
       </div>
