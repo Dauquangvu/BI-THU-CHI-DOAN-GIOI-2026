@@ -911,6 +911,7 @@ body.violation-flash::after {
         </div>
         <div class="sending-status" id="sendingStatus" style="display:none"></div>
         <button class="btn btn-primary" style="width:100%" onclick="showScreen('screenLeaderboard')">🏆 Xem Bảng Xếp Hạng</button>
+        <button class="btn btn-outline" id="btnExportResult" style="width:100%;margin-top:12px;display:none" onclick="exportResultForAdmin()">💾 Xuất Kết Quả Cho Admin</button>
       </div>
     </div>
   </div>
@@ -2302,6 +2303,27 @@ function saveToLocalLeaderboard(result) {
     lb.sort((a,b) => b.score - a.score);
     localStorage.setItem('doan_lb', JSON.stringify(lb.slice(0, 200)));
   } catch(e) {}
+
+  // Hiện nút xuất cho admin sau khi lưu xong
+  const btnExport = document.getElementById('btnExportResult');
+  if (btnExport) btnExport.style.display = 'flex';
+}
+
+// Xuất toàn bộ localStorage doan_lb thành file JSON để admin nhập vào
+function exportResultForAdmin() {
+  try {
+    const lb = JSON.parse(localStorage.getItem('doan_lb') || '[]');
+    if (!lb.length) { alert('Chưa có dữ liệu để xuất.'); return; }
+    const blob = new Blob([JSON.stringify(lb, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    const d    = new Date();
+    const stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+    a.href = url; a.download = `KetQua_ChoAdmin_${stamp}.json`;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch(e) { alert('Lỗi xuất file: ' + e.message); }
 }
 function loadLeaderboard() {
   try {

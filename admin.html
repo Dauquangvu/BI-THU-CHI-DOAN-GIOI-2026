@@ -288,13 +288,24 @@ body {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới</button>
-        <button class="btn btn-blue" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
+        <button class="btn btn-blue" onclick="importFromClipboard()">📋 Dán Dữ Liệu</button>
+        <button class="btn btn-gray" style="background:var(--gray-100);color:var(--gray-600);border:1.5px solid var(--gray-200)" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
         <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
       </div>
     </div>
 
     <!-- Stats -->
     <div class="section-title">📊 Thống Kê Tổng Quan</div>
+
+    <!-- NOTICE: Data sync -->
+    <div id="syncNotice" style="background:#FFF8E8;border:1.5px solid #F5A623;border-radius:12px;padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;font-size:13px;color:#7A4A00">
+      <span style="font-size:22px">ℹ️</span>
+      <div>
+        <strong>Cách lấy dữ liệu kết quả từ máy thí sinh:</strong><br>
+        Ở trang thi, bấm <strong>"Xuất JSON dự phòng"</strong> → lưu file → quay lại đây bấm <strong>"Nhập JSON"</strong> hoặc <strong>"Dán Dữ Liệu"</strong> để nhập vào bảng xếp hạng. Hoặc nếu đã cấu hình Google Sheets thì dữ liệu tự đồng bộ lên Sheets.
+      </div>
+      <button onclick="document.getElementById('syncNotice').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:#7A4A00;flex-shrink:0">✕</button>
+    </div>
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-card-icon">👥</div>
@@ -326,6 +337,8 @@ body {
           <p>Bao gồm số lần vi phạm, alt-tab, thời gian hoàn thành</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-blue" onclick="document.getElementById('importJsonInput').click()">📥 Nhập JSON</button>
+          <input type="file" id="importJsonInput" accept=".json" style="display:none" onchange="importJSON(this)">
           <button class="btn btn-green" onclick="exportCSV()">⬇️ Xuất CSV</button>
         </div>
       </div>
@@ -655,6 +668,60 @@ function exportJSON() {
   if (!allData.length) { showToast('⚠️ Không có dữ liệu để xuất.'); return; }
   downloadFile(JSON.stringify(allData, null, 2), `DuPhong_KetQua_${dateStamp()}.json`, 'application/json');
   showToast('✅ Đã xuất file JSON dự phòng!');
+}
+
+// ============================================================
+// IMPORT JSON (từ file hoặc clipboard)
+// ============================================================
+function importJSON(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) { showToast('❌ File JSON không hợp lệ (phải là mảng dữ liệu).'); return; }
+      mergeImportedData(imported);
+    } catch(err) {
+      showToast('❌ Lỗi đọc file JSON: ' + err.message);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+async function importFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (!text) { showToast('⚠️ Clipboard trống.'); return; }
+    const imported = JSON.parse(text.trim());
+    if (!Array.isArray(imported)) { showToast('❌ Dữ liệu clipboard không hợp lệ (phải là mảng JSON).'); return; }
+    mergeImportedData(imported);
+  } catch(err) {
+    showToast('❌ Không đọc được clipboard. Hãy dùng nút "Nhập JSON" thay thế.');
+  }
+}
+
+function mergeImportedData(imported) {
+  if (!imported.length) { showToast('⚠️ Không có dữ liệu trong file.'); return; }
+
+  // Merge: tránh trùng (phone + name + time)
+  const existing = new Set(allData.map(e => `${e.phone}|${e.name}|${e.time}`));
+  let added = 0;
+  imported.forEach(entry => {
+    const key = `${entry.phone}|${entry.name}|${entry.time}`;
+    if (!existing.has(key)) {
+      allData.push(entry);
+      existing.add(key);
+      added++;
+    }
+  });
+
+  // Lưu lại
+  try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
+  updateStats();
+  renderTable();
+  showToast(`✅ Nhập thành công! Đã thêm ${added} kết quả mới (bỏ qua ${imported.length - added} trùng lặp).`);
 }
 
 function downloadFile(content, filename, mime) {
