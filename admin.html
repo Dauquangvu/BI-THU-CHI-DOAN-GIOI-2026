@@ -288,7 +288,6 @@ body {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới</button>
-        <span id="lastUpdated" style="font-size:12px;color:var(--gray-400);align-self:center"></span>
         <button class="btn btn-gray" style="background:var(--gray-100);color:var(--gray-600);border:1.5px solid var(--gray-200)" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
         <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
       </div>
@@ -495,7 +494,6 @@ function enterAdmin() {
   panel.classList.add('active');
   document.getElementById('loginTimeLabel').textContent = 'Đăng nhập lúc ' + new Date().toLocaleTimeString('vi-VN');
   loadData();
-  _startAutoRefresh();
 }
 
 function doLogout() {
@@ -514,7 +512,8 @@ function loadData() {
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     const tbody = document.getElementById('lbBody');
     if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải dữ liệu từ Google Sheets...</td></tr>`;
-    jsonpFetch(SHEET_URL, {action:'leaderboard'})
+    fetch(`${SHEET_URL}?action=leaderboard`, { method: 'GET' })
+      .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
           allData = data;
@@ -525,11 +524,24 @@ function loadData() {
         showToast(`✅ Đã tải ${allData.length} kết quả từ Google Sheets`);
       })
       .catch(() => {
-        try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); }
-        catch(e) { allData = []; }
-        updateStats();
-        renderTable();
-        showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
+        // Thử JSONP nếu fetch bị chặn
+        jsonpFetch(SHEET_URL, {action:'leaderboard'})
+          .then(data => {
+            if (Array.isArray(data)) {
+              allData = data;
+              allData.sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
+            }
+            updateStats();
+            renderTable();
+            showToast(`✅ Đã tải ${allData.length} kết quả từ Google Sheets`);
+          })
+          .catch(() => {
+            try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); }
+            catch(e) { allData = []; }
+            updateStats();
+            renderTable();
+            showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
+          });
       });
     return;
   }
@@ -537,23 +549,6 @@ function loadData() {
   catch(e) { allData = []; }
   updateStats();
   renderTable();
-  _setLastUpdated();
-}
-
-function _setLastUpdated() {
-  const el = document.getElementById('lastUpdated');
-  if (el) el.textContent = 'Cập nhật: ' + new Date().toLocaleTimeString('vi-VN');
-}
-
-// Tự động làm mới mỗi 30 giây khi admin đang xem
-let _autoRefreshTimer = null;
-function _startAutoRefresh() {
-  if (_autoRefreshTimer) clearInterval(_autoRefreshTimer);
-  _autoRefreshTimer = setInterval(() => {
-    if (document.getElementById('adminPanel').classList.contains('active')) {
-      loadData();
-    }
-  }, 30000);
 }
 
 function updateStats() {
@@ -601,20 +596,8 @@ function renderTable() {
       ? '<span class="force-chip">🚨 Bị buộc nộp</span>'
       : '<span class="normal-chip">✅ Tự nộp</span>';
 
-    // Thời gian hoàn thành — hỗ trợ 2 định dạng:
-    // (1) Số giây từ localStorage: completionTime = 930
-    // (2) Chuỗi từ Google Sheet: completionTime = "15p30s"
-    let ct = 0;
-    if (entry.completionTime) {
-      const ctStr = String(entry.completionTime);
-      if (/^\d+$/.test(ctStr)) {
-        ct = parseInt(ctStr) || 0;
-      } else {
-        const mMatch = ctStr.match(/(\d+)p/);
-        const sMatch = ctStr.match(/(\d+)s/);
-        ct = (mMatch ? parseInt(mMatch[1]) : 0) * 60 + (sMatch ? parseInt(sMatch[1]) : 0);
-      }
-    }
+    // Thời gian hoàn thành
+    const ct = parseInt(entry.completionTime) || 0;
     const mins = Math.floor(ct / 60);
     const secs = ct % 60;
     const timeStr = ct ? `${mins}p ${secs}s` : '—';
@@ -664,9 +647,10 @@ function deleteEntry(phone, name, unit) {
   allData = allData.filter(e => !(e.phone === phone && e.name === name));
   try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
 
-  // 2. Xóa trên Google Sheets — dùng JSONP để đảm bảo thực thi
+  // 2. Xóa trên Google Sheets (fire-and-forget no-cors)
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
-    jsonpFetch(SHEET_URL, {action:'delete', phone: phone, name: name}).catch(() => {});
+    fetch(`${SHEET_URL}?action=delete&phone=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}`, {mode:'no-cors'})
+      .catch(() => {});
   }
 
   // 3. Xóa khỏi danh sách đã thi (doan_attempted) — so sánh normalize
@@ -707,15 +691,7 @@ function exportCSV() {
   const header = ['Hạng','Họ Tên','Đơn Vị','Chức Vụ','Điểm (10)','Đúng','Sai','Bỏ','Alt-Tab','T/G Hoàn Thành','Nộp Bài','Thời Gian Nộp'];
   const sorted = [...allData].sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
   const rows = sorted.map((e, i) => {
-    let ct = 0;
-    if (e.completionTime) {
-      const ctStr = String(e.completionTime);
-      if (/^\d+$/.test(ctStr)) { ct = parseInt(ctStr)||0; }
-      else {
-        const mM = ctStr.match(/(\d+)p/); const sM = ctStr.match(/(\d+)s/);
-        ct = (mM ? parseInt(mM[1]) : 0)*60 + (sM ? parseInt(sM[1]) : 0);
-      }
-    }
+    const ct = parseInt(e.completionTime)||0;
     const timeStr = ct ? `${Math.floor(ct/60)}p${ct%60}s` : '';
     const correct = e.correctCount !== undefined ? e.correctCount : (e.correct||0);
     const total = e.total || Math.round((parseFloat(e.score)||0) / 0.5) || 20;

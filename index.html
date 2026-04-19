@@ -919,12 +919,9 @@ body.violation-flash::after {
   <!-- SCREEN 5: LEADERBOARD -->
   <div class="screen" id="screenLeaderboard">
     <div class="leaderboard-card">
-      <div class="lb-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-        <div>
-          <h3>🏆 Bảng Xếp Hạng</h3>
-          <p>Top thí sinh có điểm cao nhất trong kỳ thi</p>
-        </div>
-        <button onclick="loadLeaderboard()" style="background:rgba(0,0,0,0.15);border:1px solid rgba(0,0,0,0.2);color:var(--gray-800);padding:8px 16px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🔄 Làm mới</button>
+      <div class="lb-header">
+        <h3>🏆 Bảng Xếp Hạng</h3>
+        <p>Top thí sinh có điểm cao nhất trong kỳ thi</p>
       </div>
       <div class="lb-list" id="lbList">
         <div class="lb-empty">
@@ -1765,10 +1762,7 @@ function showScreen(id) {
 const _base = showScreen;
 window.showScreen = function(id) {
   _base(id);
-  if (id === 'screenLeaderboard') {
-    loadLeaderboard();
-    _startLbRefresh();
-  }
+  if (id === 'screenLeaderboard') loadLeaderboard();
 };
 
 function goToForm() {
@@ -2276,7 +2270,7 @@ function spawnConfetti() {
 }
 
 // ============================================================
-// GOOGLE SHEETS — gửi kết quả (thử nhiều phương thức)
+// GOOGLE SHEETS — dùng no-cors image trick để bypass CORS
 // ============================================================
 function sendToGoogleSheets(result) {
   if (!CONFIG.SEND_TO_SHEET || CONFIG.SHEET_URL === 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
@@ -2286,7 +2280,7 @@ function sendToGoogleSheets(result) {
 
   const mins = Math.floor(result.completionTime / 60);
   const secs = result.completionTime % 60;
-  const params = {
+  const params = new URLSearchParams({
     action: 'submit',
     name: result.name, title: result.title, unit: result.unit, phone: result.phone,
     score: result.score, total: result.total, correct: result.correct,
@@ -2295,48 +2289,22 @@ function sendToGoogleSheets(result) {
     tabWarnings: result.tabWarnings,
     completionTime: `${mins}p${secs}s`,
     forceSubmitted: result.forceSubmitted ? 'Có (vi phạm)' : 'Không',
-  };
-  const urlParams = new URLSearchParams(params);
-  const fullUrl = `${CONFIG.SHEET_URL}?${urlParams}`;
+  });
 
-  // Phương thức 1: fetch no-cors (Google nhận được, ghi vào sheet)
-  fetch(fullUrl, { method: 'GET', mode: 'no-cors' })
+  const url = `${CONFIG.SHEET_URL}?${params}`;
+
+  // Dùng no-cors fetch — Google Apps Script nhận và ghi được, ta không cần đọc response
+  fetch(url, { method: 'GET', mode: 'no-cors' })
     .then(() => {
-      // no-cors không đọc được response, nhưng Google đã nhận
-      // Xác nhận bằng cách check leaderboard sau 3 giây
-      setTimeout(() => {
-        jsonpFetch(CONFIG.SHEET_URL, {action:'leaderboard'})
-          .then(data => {
-            if (Array.isArray(data) && data.some(r => r.phone === result.phone)) {
-              updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
-            } else {
-              // Thử phương thức 2: JSONP
-              _sendViaJSONP(params, fullUrl);
-            }
-          })
-          .catch(() => updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent'));
-      }, 3000);
-    })
-    .catch(() => _sendViaJSONP(params, fullUrl));
-}
-
-function _sendViaJSONP(params, fullUrl) {
-  jsonpFetch(CONFIG.SHEET_URL, params)
-    .then(res => {
-      if (res && res.ok) {
-        updateSendingStatus('✅ Đã gửi kết quả thành công!', 'sent');
-      } else if (res && res.duplicate) {
-        updateSendingStatus('⚠️ Thông tin đã tồn tại trong hệ thống.', 'sent');
-      } else {
-        updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent');
-      }
+      updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
     })
     .catch(() => {
-      // Phương thức 3: Image tag
+      // Thử lần 2 bằng Image tag (fallback tuyệt đối)
       const img = new Image();
-      img.src = fullUrl;
-      img.onload = img.onerror = () =>
+      img.src = url;
+      img.onload = img.onerror = () => {
         updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent');
+      };
     });
 }
 function updateSendingStatus(msg, type) {
@@ -2417,40 +2385,16 @@ function _renderLB(data, container) {
     container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
     return;
   }
-  const sorted = [...data].sort((a, b) => {
-    const sd = (parseFloat(b.score)||0) - (parseFloat(a.score)||0);
-    if (sd !== 0) return sd;
-    // Cùng điểm: thời gian hoàn thành ít hơn lên trước
-    function parseCT(v) {
-      if (!v) return 99999;
-      const s = String(v);
-      if (/^\d+$/.test(s)) return parseInt(s)||99999;
-      const m = (s.match(/(\d+)p/)||[0,0])[1];
-      const sec = (s.match(/(\d+)s/)||[0,0])[1];
-      return parseInt(m)*60+parseInt(sec);
-    }
-    return parseCT(a.completionTime) - parseCT(b.completionTime);
-  });
-  container.innerHTML = sorted.map((entry, i) => {
-    let ctStr = '';
-    if (entry.completionTime) {
-      const s = String(entry.completionTime);
-      let ct = /^\d+$/.test(s) ? parseInt(s) : (() => {
-        const m=(s.match(/(\d+)p/)||[0,0])[1]; const sec=(s.match(/(\d+)s/)||[0,0])[1];
-        return parseInt(m)*60+parseInt(sec);
-      })();
-      ctStr = ct ? ` · ${Math.floor(ct/60)}p${ct%60}s` : '';
-    }
-    return `
+  const sorted = [...data].sort((a, b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
+  container.innerHTML = sorted.map((entry, i) => `
     <div class="lb-row">
       <div class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rN'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
       <div class="lb-info">
         <div class="lb-name">${escHtml(entry.name)}</div>
-        <div class="lb-meta">${escHtml(entry.unit)}${ctStr}</div>
+        <div class="lb-meta">${escHtml(entry.unit)} • ${escHtml(entry.time)}</div>
       </div>
       <div class="lb-score">${(parseFloat(entry.score)||0).toFixed(1)}<span>/10</span></div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
 function loadLeaderboard() {
@@ -2458,29 +2402,28 @@ function loadLeaderboard() {
 
   if (CONFIG.SEND_TO_SHEET && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">⏳</div><div>Đang tải bảng xếp hạng...</div></div>';
-    jsonpFetch(CONFIG.SHEET_URL, {action:'leaderboard'})
-      .then(data => { _renderLB(data, container); })
+
+    // Dùng fetch thông thường để đọc leaderboard từ Sheet
+    fetch(`${CONFIG.SHEET_URL}?action=leaderboard`, { method: 'GET' })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          _renderLB(data, container);
+        } else {
+          _loadLeaderboardLocal(container);
+        }
+      })
       .catch(() => {
-        // Fallback về localStorage nếu mạng lỗi
-        _loadLeaderboardLocal(container);
+        // Fallback: thử JSONP nếu fetch bị chặn
+        jsonpFetch(CONFIG.SHEET_URL, {action:'leaderboard'})
+          .then(data => { _renderLB(data, container); })
+          .catch(() => { _loadLeaderboardLocal(container); });
       });
     return;
   }
 
   // Fallback: localStorage (chỉ thiết bị hiện tại)
   _loadLeaderboardLocal(container);
-}
-
-// Auto-refresh leaderboard mỗi 60s khi đang xem BXH
-let _lbRefreshTimer = null;
-function _startLbRefresh() {
-  if (_lbRefreshTimer) clearInterval(_lbRefreshTimer);
-  _lbRefreshTimer = setInterval(() => {
-    const lb = document.getElementById('screenLeaderboard');
-    if (lb && lb.classList.contains('active') && !state.submitted === false) {
-      loadLeaderboard();
-    }
-  }, 60000);
 }
 
 function _loadLeaderboardLocal(container) {
