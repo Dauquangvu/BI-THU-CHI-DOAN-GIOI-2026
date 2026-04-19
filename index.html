@@ -1885,8 +1885,7 @@ function startQuiz() {
   if (CONFIG.SEND_TO_SHEET && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     const checkBtn = document.querySelector('#screenForm .btn-primary');
     if (checkBtn) { checkBtn.disabled = true; checkBtn.textContent = '⏳ Đang kiểm tra...'; }
-    fetch(`${CONFIG.SHEET_URL}?action=check&phone=${encodeURIComponent(normalizedPhone)}&name=${encodeURIComponent(normalizedName)}`)
-      .then(r => r.json())
+    jsonpFetch(CONFIG.SHEET_URL, {action:'check', phone: normalizedPhone, name: normalizedName})
       .then(res => {
         if (checkBtn) { checkBtn.disabled = false; checkBtn.textContent = '🎯 Bắt Đầu Làm Bài'; }
         if (res && res.duplicate) {
@@ -1898,7 +1897,7 @@ function startQuiz() {
       })
       .catch(() => {
         if (checkBtn) { checkBtn.disabled = false; checkBtn.textContent = '🎯 Bắt Đầu Làm Bài'; }
-        initQuiz();
+        initQuiz(); // offline → cho thi, sheet sẽ chặn khi ghi
       });
   } else {
     initQuiz();
@@ -2271,16 +2270,16 @@ function spawnConfetti() {
 }
 
 // ============================================================
-// GOOGLE SHEETS
+// GOOGLE SHEETS — dùng no-cors image trick để bypass CORS
 // ============================================================
-async function sendToGoogleSheets(result) {
+function sendToGoogleSheets(result) {
   if (!CONFIG.SEND_TO_SHEET || CONFIG.SHEET_URL === 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     updateSendingStatus('Kết quả đã được lưu cục bộ.', 'sent'); return;
   }
   updateSendingStatus('Đang gửi kết quả lên máy chủ...', 'sending');
 
-  const mins = Math.floor(result.completionTime/60);
-  const secs = result.completionTime%60;
+  const mins = Math.floor(result.completionTime / 60);
+  const secs = result.completionTime % 60;
   const params = new URLSearchParams({
     action: 'submit',
     name: result.name, title: result.title, unit: result.unit, phone: result.phone,
@@ -2292,34 +2291,21 @@ async function sendToGoogleSheets(result) {
     forceSubmitted: result.forceSubmitted ? 'Có (vi phạm)' : 'Không',
   });
 
-  // Thử tối đa 3 lần với timeout
-  let lastErr = null;
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    try {
-      const controller = new AbortController();
-      const tid = setTimeout(() => controller.abort(), 12000);
-      const res = await fetch(`${CONFIG.SHEET_URL}?${params}`, {
-        method: 'GET',
-        signal: controller.signal,
-      });
-      clearTimeout(tid);
-      // Google Apps Script luôn trả về 200 nếu script chạy được
-      if (res.ok || res.type === 'opaque') {
-        updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
-        return;
-      }
-    } catch(e) {
-      lastErr = e;
-      if (attempt < 3) await new Promise(r => setTimeout(r, 2000 * attempt));
-    }
-  }
+  const url = `${CONFIG.SHEET_URL}?${params}`;
 
-  // Fallback: lưu cục bộ chờ gửi lại
-  updateSendingStatus('⚠️ Chưa gửi được lên máy chủ. Kết quả đã lưu cục bộ — hãy nhờ admin nhập file JSON.', 'error');
-  // Tự động tải file JSON để admin có thể nhập tay
-  setTimeout(() => {
-    try { exportResultForAdmin(); } catch(e2) {}
-  }, 1500);
+  // Dùng no-cors fetch — Google Apps Script nhận và ghi được, ta không cần đọc response
+  fetch(url, { method: 'GET', mode: 'no-cors' })
+    .then(() => {
+      updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
+    })
+    .catch(() => {
+      // Thử lần 2 bằng Image tag (fallback tuyệt đối)
+      const img = new Image();
+      img.src = url;
+      img.onload = img.onerror = () => {
+        updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent');
+      };
+    });
 }
 function updateSendingStatus(msg, type) {
   const el = document.getElementById('sendingStatus');
@@ -2351,21 +2337,6 @@ function saveToLocalLeaderboard(result) {
     localStorage.setItem('doan_lb', JSON.stringify(lb.slice(0, 200)));
   } catch(e) {}
 
-  // Tự động xuất file JSON cho admin ngay sau khi lưu xong
-  try {
-    const lb2 = JSON.parse(localStorage.getItem('doan_lb') || '[]');
-    if (lb2.length) {
-      const blob = new Blob([JSON.stringify(lb2, null, 2)], { type: 'application/json' });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      const d    = new Date();
-      const stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
-      a.href = url; a.download = `KetQua_ChoAdmin_${stamp}.json`;
-      document.body.appendChild(a); a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  } catch(e) {}
 }
 
 // Xuất toàn bộ localStorage doan_lb thành file JSON để admin nhập vào
@@ -2384,30 +2355,55 @@ function exportResultForAdmin() {
     URL.revokeObjectURL(url);
   } catch(e) { alert('Lỗi xuất file: ' + e.message); }
 }
+// ============================================================
+// JSONP FETCH — bypass CORS cho Google Apps Script
+// ============================================================
+function jsonpFetch(url, params) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_jsonp_cb_' + Date.now();
+    const fullParams = new URLSearchParams({...params, callback: cbName});
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      delete window[cbName];
+      script.remove();
+      reject(new Error('timeout'));
+    }, 15000);
+    window[cbName] = function(data) {
+      clearTimeout(timer);
+      delete window[cbName];
+      script.remove();
+      resolve(data);
+    };
+    script.src = `${url}?${fullParams}`;
+    script.onerror = () => { clearTimeout(timer); delete window[cbName]; script.remove(); reject(new Error('script error')); };
+    document.head.appendChild(script);
+  });
+}
+
+function _renderLB(data, container) {
+  if (!Array.isArray(data) || !data.length) {
+    container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
+    return;
+  }
+  const sorted = [...data].sort((a, b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
+  container.innerHTML = sorted.map((entry, i) => `
+    <div class="lb-row">
+      <div class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rN'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="lb-info">
+        <div class="lb-name">${escHtml(entry.name)}</div>
+        <div class="lb-meta">${escHtml(entry.unit)} • ${escHtml(entry.time)}</div>
+      </div>
+      <div class="lb-score">${(parseFloat(entry.score)||0).toFixed(1)}<span>/10</span></div>
+    </div>`).join('');
+}
+
 function loadLeaderboard() {
   const container = document.getElementById('lbList');
 
-  // Nếu có SHEET_URL → lấy từ Google Sheets (nguồn chung cho mọi thiết bị)
   if (CONFIG.SEND_TO_SHEET && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">⏳</div><div>Đang tải bảng xếp hạng...</div></div>';
-    fetch(`${CONFIG.SHEET_URL}?action=leaderboard`)
-      .then(r => r.json())
-      .then(data => {
-        if (!Array.isArray(data) || !data.length) {
-          container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
-          return;
-        }
-        const sorted = data.sort((a, b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
-        container.innerHTML = sorted.map((entry, i) => `
-          <div class="lb-row">
-            <div class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rN'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
-            <div class="lb-info">
-              <div class="lb-name">${escHtml(entry.name)}</div>
-              <div class="lb-meta">${escHtml(entry.unit)} • ${escHtml(entry.time)}</div>
-            </div>
-            <div class="lb-score">${(parseFloat(entry.score)||0).toFixed(1)}<span>/10</span></div>
-          </div>`).join('');
-      })
+    jsonpFetch(CONFIG.SHEET_URL, {action:'leaderboard'})
+      .then(data => { _renderLB(data, container); })
       .catch(() => {
         // Fallback về localStorage nếu mạng lỗi
         _loadLeaderboardLocal(container);

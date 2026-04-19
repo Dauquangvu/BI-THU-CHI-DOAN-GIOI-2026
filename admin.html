@@ -429,6 +429,26 @@ const POINTS_PER_Q   = 0.5;  // 0.5 điểm/câu, tổng 10
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxD5s_Fnhx3bee2eogudd4d8V1GJG9wfk3NA8PMnFH8a4EDCe9bUXocSBdaUizB7zZj/exec';
 
 // ============================================================
+// JSONP FETCH — bypass CORS cho Google Apps Script
+// ============================================================
+function jsonpFetch(url, params) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_jsonp_cb_' + Date.now();
+    const fullParams = new URLSearchParams({...params, callback: cbName});
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      delete window[cbName]; script.remove(); reject(new Error('timeout'));
+    }, 15000);
+    window[cbName] = function(data) {
+      clearTimeout(timer); delete window[cbName]; script.remove(); resolve(data);
+    };
+    script.src = `${url}?${fullParams}`;
+    script.onerror = () => { clearTimeout(timer); delete window[cbName]; script.remove(); reject(new Error('error')); };
+    document.head.appendChild(script);
+  });
+}
+
+// ============================================================
 // BRUTE-FORCE PROTECTION
 // ============================================================
 function getLockState() {
@@ -489,34 +509,20 @@ function doLogout() {
 let allData = [];
 
 function loadData() {
-  // Ưu tiên lấy từ Google Sheets (nguồn chung cho mọi thiết bị)
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     const tbody = document.getElementById('lbBody');
     if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải dữ liệu từ Google Sheets...</td></tr>`;
-    fetch(`${SHEET_URL}?action=leaderboard`)
-      .then(r => r.json())
+    jsonpFetch(SHEET_URL, {action:'leaderboard'})
       .then(data => {
         if (Array.isArray(data)) {
           allData = data;
-          // Merge với localStorage (dữ liệu offline)
-          try {
-            const local = JSON.parse(localStorage.getItem('doan_lb') || '[]');
-            const existing = new Set(allData.map(e => `${e.phone}|${e.name}|${e.time}`));
-            local.forEach(e => {
-              const key = `${e.phone}|${e.name}|${e.time}`;
-              if (!existing.has(key)) { allData.push(e); existing.add(key); }
-            });
-          } catch(ex) {}
           allData.sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
-        } else {
-          throw new Error('Invalid response');
         }
         updateStats();
         renderTable();
         showToast(`✅ Đã tải ${allData.length} kết quả từ Google Sheets`);
       })
       .catch(() => {
-        // Fallback: dùng localStorage
         try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); }
         catch(e) { allData = []; }
         updateStats();
@@ -525,7 +531,6 @@ function loadData() {
       });
     return;
   }
-  // Không có SHEET_URL → localStorage
   try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); }
   catch(e) { allData = []; }
   updateStats();
@@ -628,9 +633,9 @@ function deleteEntry(phone, name, unit) {
   allData = allData.filter(e => !(e.phone === phone && e.name === name));
   try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
 
-  // 2. Xóa trên Google Sheets
+  // 2. Xóa trên Google Sheets (fire-and-forget no-cors)
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
-    fetch(`${SHEET_URL}?action=delete&phone=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}`)
+    fetch(`${SHEET_URL}?action=delete&phone=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}`, {mode:'no-cors'})
       .catch(() => {});
   }
 
