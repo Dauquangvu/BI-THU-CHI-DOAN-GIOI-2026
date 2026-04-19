@@ -919,9 +919,12 @@ body.violation-flash::after {
   <!-- SCREEN 5: LEADERBOARD -->
   <div class="screen" id="screenLeaderboard">
     <div class="leaderboard-card">
-      <div class="lb-header">
-        <h3>🏆 Bảng Xếp Hạng</h3>
-        <p>Top thí sinh có điểm cao nhất trong kỳ thi</p>
+      <div class="lb-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h3>🏆 Bảng Xếp Hạng</h3>
+          <p>Top thí sinh có điểm cao nhất trong kỳ thi</p>
+        </div>
+        <button onclick="loadLeaderboard()" style="background:rgba(0,0,0,0.15);border:1px solid rgba(0,0,0,0.2);color:var(--gray-800);padding:8px 16px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🔄 Làm mới</button>
       </div>
       <div class="lb-list" id="lbList">
         <div class="lb-empty">
@@ -1762,7 +1765,10 @@ function showScreen(id) {
 const _base = showScreen;
 window.showScreen = function(id) {
   _base(id);
-  if (id === 'screenLeaderboard') loadLeaderboard();
+  if (id === 'screenLeaderboard') {
+    loadLeaderboard();
+    _startLbRefresh();
+  }
 };
 
 function goToForm() {
@@ -2270,7 +2276,7 @@ function spawnConfetti() {
 }
 
 // ============================================================
-// GOOGLE SHEETS — dùng no-cors image trick để bypass CORS
+// GOOGLE SHEETS — dùng JSONP để bypass CORS (giống leaderboard)
 // ============================================================
 function sendToGoogleSheets(result) {
   if (!CONFIG.SEND_TO_SHEET || CONFIG.SHEET_URL === 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
@@ -2280,7 +2286,7 @@ function sendToGoogleSheets(result) {
 
   const mins = Math.floor(result.completionTime / 60);
   const secs = result.completionTime % 60;
-  const params = new URLSearchParams({
+  const params = {
     action: 'submit',
     name: result.name, title: result.title, unit: result.unit, phone: result.phone,
     score: result.score, total: result.total, correct: result.correct,
@@ -2289,21 +2295,26 @@ function sendToGoogleSheets(result) {
     tabWarnings: result.tabWarnings,
     completionTime: `${mins}p${secs}s`,
     forceSubmitted: result.forceSubmitted ? 'Có (vi phạm)' : 'Không',
-  });
+  };
 
-  const url = `${CONFIG.SHEET_URL}?${params}`;
-
-  // Dùng no-cors fetch — Google Apps Script nhận và ghi được, ta không cần đọc response
-  fetch(url, { method: 'GET', mode: 'no-cors' })
-    .then(() => {
-      updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
+  // Dùng JSONP — cách duy nhất hoạt động với Google Apps Script từ trình duyệt
+  jsonpFetch(CONFIG.SHEET_URL, params)
+    .then(res => {
+      if (res && res.ok) {
+        updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
+      } else if (res && res.duplicate) {
+        updateSendingStatus('⚠️ Kết quả đã tồn tại trên hệ thống.', 'sent');
+      } else {
+        updateSendingStatus('⚠️ Máy chủ phản hồi nhưng có lỗi. Kết quả cục bộ đã được lưu.', 'error');
+      }
     })
     .catch(() => {
-      // Thử lần 2 bằng Image tag (fallback tuyệt đối)
+      // Fallback: Image tag nếu JSONP cũng thất bại (hiếm)
+      const fallbackParams = new URLSearchParams(params);
       const img = new Image();
-      img.src = url;
+      img.src = `${CONFIG.SHEET_URL}?${fallbackParams}`;
       img.onload = img.onerror = () => {
-        updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent');
+        updateSendingStatus('⚠️ Đã thử gửi (không xác nhận được). Kết quả cục bộ đã lưu.', 'error');
       };
     });
 }
@@ -2385,16 +2396,40 @@ function _renderLB(data, container) {
     container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
     return;
   }
-  const sorted = [...data].sort((a, b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
-  container.innerHTML = sorted.map((entry, i) => `
+  const sorted = [...data].sort((a, b) => {
+    const sd = (parseFloat(b.score)||0) - (parseFloat(a.score)||0);
+    if (sd !== 0) return sd;
+    // Cùng điểm: thời gian hoàn thành ít hơn lên trước
+    function parseCT(v) {
+      if (!v) return 99999;
+      const s = String(v);
+      if (/^\d+$/.test(s)) return parseInt(s)||99999;
+      const m = (s.match(/(\d+)p/)||[0,0])[1];
+      const sec = (s.match(/(\d+)s/)||[0,0])[1];
+      return parseInt(m)*60+parseInt(sec);
+    }
+    return parseCT(a.completionTime) - parseCT(b.completionTime);
+  });
+  container.innerHTML = sorted.map((entry, i) => {
+    let ctStr = '';
+    if (entry.completionTime) {
+      const s = String(entry.completionTime);
+      let ct = /^\d+$/.test(s) ? parseInt(s) : (() => {
+        const m=(s.match(/(\d+)p/)||[0,0])[1]; const sec=(s.match(/(\d+)s/)||[0,0])[1];
+        return parseInt(m)*60+parseInt(sec);
+      })();
+      ctStr = ct ? ` · ${Math.floor(ct/60)}p${ct%60}s` : '';
+    }
+    return `
     <div class="lb-row">
       <div class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rN'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
       <div class="lb-info">
         <div class="lb-name">${escHtml(entry.name)}</div>
-        <div class="lb-meta">${escHtml(entry.unit)} • ${escHtml(entry.time)}</div>
+        <div class="lb-meta">${escHtml(entry.unit)}${ctStr}</div>
       </div>
       <div class="lb-score">${(parseFloat(entry.score)||0).toFixed(1)}<span>/10</span></div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function loadLeaderboard() {
@@ -2413,6 +2448,18 @@ function loadLeaderboard() {
 
   // Fallback: localStorage (chỉ thiết bị hiện tại)
   _loadLeaderboardLocal(container);
+}
+
+// Auto-refresh leaderboard mỗi 60s khi đang xem BXH
+let _lbRefreshTimer = null;
+function _startLbRefresh() {
+  if (_lbRefreshTimer) clearInterval(_lbRefreshTimer);
+  _lbRefreshTimer = setInterval(() => {
+    const lb = document.getElementById('screenLeaderboard');
+    if (lb && lb.classList.contains('active') && !state.submitted === false) {
+      loadLeaderboard();
+    }
+  }, 60000);
 }
 
 function _loadLeaderboardLocal(container) {
