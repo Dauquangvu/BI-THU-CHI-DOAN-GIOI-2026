@@ -1872,15 +1872,37 @@ function startQuiz() {
   const normalizedName  = name.trim().toLowerCase().replace(/\s+/g, ' ');
   const normalizedUnit  = unit.trim().toLowerCase().replace(/\s+/g, ' ');
 
-  const dupField = checkDuplicate(normalizedPhone, normalizedName);
-  if (dupField) {
-    window._dupReason = dupField;
+  const dupLocal = checkDuplicate(normalizedPhone, normalizedName);
+  if (dupLocal) {
+    window._dupReason = dupLocal;
     openModal('modalAlreadyTaken');
     return;
   }
 
   state.candidate = { name, phone: normalizedPhone, title, unit };
-  initQuiz();
+
+  // Kiểm tra trên Google Sheets (thiết bị khác đã thi)
+  if (CONFIG.SEND_TO_SHEET && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
+    const checkBtn = document.querySelector('#screenForm .btn-primary');
+    if (checkBtn) { checkBtn.disabled = true; checkBtn.textContent = '⏳ Đang kiểm tra...'; }
+    fetch(`${CONFIG.SHEET_URL}?action=check&phone=${encodeURIComponent(normalizedPhone)}&name=${encodeURIComponent(normalizedName)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (checkBtn) { checkBtn.disabled = false; checkBtn.textContent = '🎯 Bắt Đầu Làm Bài'; }
+        if (res && res.duplicate) {
+          window._dupReason = res.field || 'Thông tin';
+          openModal('modalAlreadyTaken');
+        } else {
+          initQuiz();
+        }
+      })
+      .catch(() => {
+        if (checkBtn) { checkBtn.disabled = false; checkBtn.textContent = '🎯 Bắt Đầu Làm Bài'; }
+        initQuiz();
+      });
+  } else {
+    initQuiz();
+  }
 }
 
 // ── QUẢN LÝ DANH SÁCH ĐÃ THI (lưu theo object {phone, name}) ──
@@ -2256,23 +2278,48 @@ async function sendToGoogleSheets(result) {
     updateSendingStatus('Kết quả đã được lưu cục bộ.', 'sent'); return;
   }
   updateSendingStatus('Đang gửi kết quả lên máy chủ...', 'sending');
-  try {
-    const mins = Math.floor(result.completionTime/60);
-    const secs = result.completionTime%60;
-    const params = new URLSearchParams({
-      name: result.name, title: result.title, unit: result.unit, phone: result.phone,
-      score: result.score, total: result.total, correct: result.correct,
-      wrong: result.wrong, skip: result.skip,
-      time: result.time,
-      tabWarnings: result.tabWarnings,
-      completionTime: `${mins}p${secs}s`,
-      forceSubmitted: result.forceSubmitted ? 'Có (vi phạm)' : 'Không',
-    });
-    await fetch(`${CONFIG.SHEET_URL}?${params}`, { method:'GET', mode:'no-cors' });
-    updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
-  } catch(e) {
-    updateSendingStatus('⚠️ Lưu cục bộ. Kết nối máy chủ không khả dụng.', 'error');
+
+  const mins = Math.floor(result.completionTime/60);
+  const secs = result.completionTime%60;
+  const params = new URLSearchParams({
+    action: 'submit',
+    name: result.name, title: result.title, unit: result.unit, phone: result.phone,
+    score: result.score, total: result.total, correct: result.correct,
+    wrong: result.wrong, skip: result.skip,
+    time: result.time,
+    tabWarnings: result.tabWarnings,
+    completionTime: `${mins}p${secs}s`,
+    forceSubmitted: result.forceSubmitted ? 'Có (vi phạm)' : 'Không',
+  });
+
+  // Thử tối đa 3 lần với timeout
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const controller = new AbortController();
+      const tid = setTimeout(() => controller.abort(), 12000);
+      const res = await fetch(`${CONFIG.SHEET_URL}?${params}`, {
+        method: 'GET',
+        signal: controller.signal,
+      });
+      clearTimeout(tid);
+      // Google Apps Script luôn trả về 200 nếu script chạy được
+      if (res.ok || res.type === 'opaque') {
+        updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
+        return;
+      }
+    } catch(e) {
+      lastErr = e;
+      if (attempt < 3) await new Promise(r => setTimeout(r, 2000 * attempt));
+    }
   }
+
+  // Fallback: lưu cục bộ chờ gửi lại
+  updateSendingStatus('⚠️ Chưa gửi được lên máy chủ. Kết quả đã lưu cục bộ — hãy nhờ admin nhập file JSON.', 'error');
+  // Tự động tải file JSON để admin có thể nhập tay
+  setTimeout(() => {
+    try { exportResultForAdmin(); } catch(e2) {}
+  }, 1500);
 }
 function updateSendingStatus(msg, type) {
   const el = document.getElementById('sendingStatus');
@@ -2338,9 +2385,43 @@ function exportResultForAdmin() {
   } catch(e) { alert('Lỗi xuất file: ' + e.message); }
 }
 function loadLeaderboard() {
+  const container = document.getElementById('lbList');
+
+  // Nếu có SHEET_URL → lấy từ Google Sheets (nguồn chung cho mọi thiết bị)
+  if (CONFIG.SEND_TO_SHEET && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
+    container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">⏳</div><div>Đang tải bảng xếp hạng...</div></div>';
+    fetch(`${CONFIG.SHEET_URL}?action=leaderboard`)
+      .then(r => r.json())
+      .then(data => {
+        if (!Array.isArray(data) || !data.length) {
+          container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
+          return;
+        }
+        const sorted = data.sort((a, b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
+        container.innerHTML = sorted.map((entry, i) => `
+          <div class="lb-row">
+            <div class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rN'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+            <div class="lb-info">
+              <div class="lb-name">${escHtml(entry.name)}</div>
+              <div class="lb-meta">${escHtml(entry.unit)} • ${escHtml(entry.time)}</div>
+            </div>
+            <div class="lb-score">${(parseFloat(entry.score)||0).toFixed(1)}<span>/10</span></div>
+          </div>`).join('');
+      })
+      .catch(() => {
+        // Fallback về localStorage nếu mạng lỗi
+        _loadLeaderboardLocal(container);
+      });
+    return;
+  }
+
+  // Fallback: localStorage (chỉ thiết bị hiện tại)
+  _loadLeaderboardLocal(container);
+}
+
+function _loadLeaderboardLocal(container) {
   try {
     const lb = JSON.parse(localStorage.getItem('doan_lb') || '[]');
-    const container = document.getElementById('lbList');
     if (!lb.length) {
       container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
       return;
