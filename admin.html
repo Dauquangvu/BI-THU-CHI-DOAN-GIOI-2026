@@ -664,10 +664,9 @@ function deleteEntry(phone, name, unit) {
   allData = allData.filter(e => !(e.phone === phone && e.name === name));
   try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
 
-  // 2. Xóa trên Google Sheets (fire-and-forget no-cors)
+  // 2. Xóa trên Google Sheets — dùng JSONP để đảm bảo thực thi
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
-    fetch(`${SHEET_URL}?action=delete&phone=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}`, {mode:'no-cors'})
-      .catch(() => {});
+    jsonpFetch(SHEET_URL, {action:'delete', phone: phone, name: name}).catch(() => {});
   }
 
   // 3. Xóa khỏi danh sách đã thi (doan_attempted) — so sánh normalize
