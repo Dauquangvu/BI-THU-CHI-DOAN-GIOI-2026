@@ -2270,7 +2270,7 @@ function spawnConfetti() {
 }
 
 // ============================================================
-// GOOGLE SHEETS — dùng no-cors image trick để bypass CORS
+// GOOGLE SHEETS — dùng JSONP để bypass CORS (cách duy nhất hoạt động với Apps Script)
 // ============================================================
 function sendToGoogleSheets(result) {
   if (!CONFIG.SEND_TO_SHEET || CONFIG.SHEET_URL === 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
@@ -2280,7 +2280,9 @@ function sendToGoogleSheets(result) {
 
   const mins = Math.floor(result.completionTime / 60);
   const secs = result.completionTime % 60;
-  const params = new URLSearchParams({
+
+  // Dùng JSONP — cách duy nhất bypass CORS của Google Apps Script
+  jsonpFetch(CONFIG.SHEET_URL, {
     action: 'submit',
     name: result.name, title: result.title, unit: result.unit, phone: result.phone,
     score: result.score, total: result.total, correct: result.correct,
@@ -2289,23 +2291,19 @@ function sendToGoogleSheets(result) {
     tabWarnings: result.tabWarnings,
     completionTime: `${mins}p${secs}s`,
     forceSubmitted: result.forceSubmitted ? 'Có (vi phạm)' : 'Không',
-  });
-
-  const url = `${CONFIG.SHEET_URL}?${params}`;
-
-  // Dùng no-cors fetch — Google Apps Script nhận và ghi được, ta không cần đọc response
-  fetch(url, { method: 'GET', mode: 'no-cors' })
-    .then(() => {
+  })
+  .then(res => {
+    if (res && res.ok) {
       updateSendingStatus('✅ Đã gửi kết quả thành công lên Google Sheets!', 'sent');
-    })
-    .catch(() => {
-      // Thử lần 2 bằng Image tag (fallback tuyệt đối)
-      const img = new Image();
-      img.src = url;
-      img.onload = img.onerror = () => {
-        updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent');
-      };
-    });
+    } else if (res && res.duplicate) {
+      updateSendingStatus('⚠️ Kết quả đã tồn tại trên hệ thống (trùng lặp).', 'sent');
+    } else {
+      updateSendingStatus('✅ Kết quả đã được ghi nhận!', 'sent');
+    }
+  })
+  .catch(() => {
+    updateSendingStatus('⚠️ Không gửi được lên máy chủ. Vui lòng báo admin.', 'error');
+  });
 }
 function updateSendingStatus(msg, type) {
   const el = document.getElementById('sendingStatus');
@@ -2402,27 +2400,19 @@ function loadLeaderboard() {
 
   if (CONFIG.SEND_TO_SHEET && CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">⏳</div><div>Đang tải bảng xếp hạng...</div></div>';
-
-    // Dùng fetch thông thường để đọc leaderboard từ Sheet
-    fetch(`${CONFIG.SHEET_URL}?action=leaderboard`, { method: 'GET' })
-      .then(res => res.json())
+    // Chỉ dùng JSONP — fetch thường bị CORS block bởi Google Apps Script
+    jsonpFetch(CONFIG.SHEET_URL, {action:'leaderboard'})
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           _renderLB(data, container);
         } else {
-          _loadLeaderboardLocal(container);
+          container.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có kết quả nào.<br>Hãy là người đầu tiên!</div></div>';
         }
       })
-      .catch(() => {
-        // Fallback: thử JSONP nếu fetch bị chặn
-        jsonpFetch(CONFIG.SHEET_URL, {action:'leaderboard'})
-          .then(data => { _renderLB(data, container); })
-          .catch(() => { _loadLeaderboardLocal(container); });
-      });
+      .catch(() => { _loadLeaderboardLocal(container); });
     return;
   }
 
-  // Fallback: localStorage (chỉ thiết bị hiện tại)
   _loadLeaderboardLocal(container);
 }
 

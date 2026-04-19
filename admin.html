@@ -511,9 +511,8 @@ let allData = [];
 function loadData() {
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     const tbody = document.getElementById('lbBody');
-    if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải dữ liệu từ Google Sheets...</td></tr>`;
-    fetch(`${SHEET_URL}?action=leaderboard`, { method: 'GET' })
-      .then(res => res.json())
+    if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
+    jsonpFetch(SHEET_URL, {action:'leaderboard'})
       .then(data => {
         if (Array.isArray(data)) {
           allData = data;
@@ -521,32 +520,17 @@ function loadData() {
         }
         updateStats();
         renderTable();
-        showToast(`✅ Đã tải ${allData.length} kết quả từ Google Sheets`);
+        showToast('✅ Đã tải ' + allData.length + ' kết quả từ Google Sheets');
       })
       .catch(() => {
-        // Thử JSONP nếu fetch bị chặn
-        jsonpFetch(SHEET_URL, {action:'leaderboard'})
-          .then(data => {
-            if (Array.isArray(data)) {
-              allData = data;
-              allData.sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
-            }
-            updateStats();
-            renderTable();
-            showToast(`✅ Đã tải ${allData.length} kết quả từ Google Sheets`);
-          })
-          .catch(() => {
-            try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); }
-            catch(e) { allData = []; }
-            updateStats();
-            renderTable();
-            showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
-          });
+        try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
+        updateStats();
+        renderTable();
+        showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
       });
     return;
   }
-  try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); }
-  catch(e) { allData = []; }
+  try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
   updateStats();
   renderTable();
 }
