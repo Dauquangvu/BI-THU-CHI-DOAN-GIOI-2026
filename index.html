@@ -829,7 +829,7 @@ body.violation-flash::after {
             <label class="form-label">Số Điện Thoại <span>*</span></label>
             <input type="tel" class="form-input" id="fPhone" placeholder="0987654321" maxlength="11" oninput="validatePhone()">
             <div class="error-msg" id="errPhone"></div>
-            <div class="hint-msg">Số điện thoại 10 số bắt đầu bằng 0 (03x, 07x, 08x, 09x...)</div>
+            <div class="hint-msg">Số điện thoại thực 10 số bắt đầu bằng 0</div>
           </div>
         </div>
         <div class="form-row">
@@ -1724,11 +1724,16 @@ const CONFIG = {
   MAX_TAB_WARNINGS: 3,   // số lần rời trang trước khi tự nộp (cảnh báo 1, 2, lần 3 tự nộp)
   EXAM_START_TIME: '2026-04-08 14:00',
   USE_COUNTDOWN:   false,
-  SHEET_URL: 'https://script.google.com/macros/s/AKfycbyL9SCh5SY9zB40pwvW_Ila0iwOZcxqGMgrMw88eh8yUELx4uKZS2YLd_QxuaX0MG4kFg/exec',
+  SHEET_URL: 'https://script.google.com/macros/s/AKfycbxD5s_Fnhx3bee2eogudd4d8V1GJG9wfk3NA8PMnFH8a4EDCe9bUXocSBdaUizB7zZj/exec',
   SEND_TO_SHEET: true,
 };
 
-// Đầu số không còn bị giới hạn — chấp nhận mọi đầu số hợp lệ
+const VALID_PREFIXES = [
+  '032','033','034','035','036','037','038','039','086','096','097','098',
+  '070','076','077','078','079','089','090','093',
+  '081','082','083','084','085','088','091','094',
+  '052','056','058','059','099','055',
+];
 
 // ============================================================
 // STATE
@@ -1823,7 +1828,9 @@ function validatePhone() {
   const err = document.getElementById('errPhone');
   if (!raw) { setFieldError(el, err, 'Vui lòng nhập số điện thoại'); return false; }
   if (!/^0[0-9]{9}$/.test(raw)) { setFieldError(el, err, 'Số điện thoại phải đủ 10 chữ số và bắt đầu bằng 0'); return false; }
-  if (/^(.)\1{9}$/.test(raw)) { setFieldError(el, err, 'Số điện thoại không hợp lệ (không được dùng số lặp)'); return false; }
+  const isValid = VALID_PREFIXES.some(p => raw.startsWith(p));
+  if (!isValid) { setFieldError(el, err, 'Đầu số không hợp lệ. Vui lòng dùng số thực'); return false; }
+  if (/^(.)\1{9}$/.test(raw)) { setFieldError(el, err, 'Số điện thoại không hợp lệ'); return false; }
   setFieldOk(el, err); return true;
 }
 

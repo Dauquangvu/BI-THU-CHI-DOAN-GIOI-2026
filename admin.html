@@ -284,21 +284,10 @@ body {
         <div>
           <div class="admin-name">Quản Trị Viên</div>
           <div class="admin-role" id="loginTimeLabel">Đăng nhập lúc --</div>
-          <div style="font-size:11px;color:var(--gray-400);margin-top:2px" id="lastUpdateLabel">Chưa tải dữ liệu</div>
         </div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <div style="display:flex;align-items:center;gap:8px;background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);padding:8px 14px;">
-          <span style="font-size:13px;font-weight:600;color:var(--gray-600)">🔁 Tự động làm mới</span>
-          <label style="position:relative;display:inline-block;width:38px;height:22px;cursor:pointer">
-            <input type="checkbox" id="autoRefreshToggle" onchange="toggleAutoRefresh()" style="opacity:0;width:0;height:0">
-            <span id="toggleSlider" style="position:absolute;inset:0;background:#ccc;border-radius:22px;transition:.3s">
-              <span style="position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s;display:block" id="toggleKnob"></span>
-            </span>
-          </label>
-          <span style="font-size:12px;color:var(--gray-400)" id="autoRefreshLabel">Tắt</span>
-        </div>
-        <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới Ngay</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới</button>
         <button class="btn btn-gray" style="background:var(--gray-100);color:var(--gray-600);border:1.5px solid var(--gray-200)" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
         <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
       </div>
@@ -437,7 +426,7 @@ const NUM_QUESTIONS  = 20;
 const POINTS_PER_Q   = 0.5;  // 0.5 điểm/câu, tổng 10
 
 // ĐẶT CÙNG URL với index.html để lấy dữ liệu từ Google Sheets
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzpZT8oV6KOsW_t7q-buCn-VmmE6Ggkm1CXWjvnG3qXY-FB08uLO1g5W2qkDv139KfWxw/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxD5s_Fnhx3bee2eogudd4d8V1GJG9wfk3NA8PMnFH8a4EDCe9bUXocSBdaUizB7zZj/exec';
 
 // ============================================================
 // JSONP FETCH — bypass CORS cho Google Apps Script
@@ -508,9 +497,6 @@ function enterAdmin() {
 }
 
 function doLogout() {
-  if (autoRefreshInterval) { clearInterval(autoRefreshInterval); autoRefreshInterval = null; }
-  document.getElementById('autoRefreshToggle').checked = false;
-  toggleAutoRefresh();
   document.getElementById('loginWrap').style.display = 'flex';
   document.getElementById('adminPanel').classList.remove('active');
   document.getElementById('pwdInput').value = '';
@@ -522,70 +508,31 @@ function doLogout() {
 // ============================================================
 let allData = [];
 
-function loadData(silent = false) {
+function loadData() {
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     const tbody = document.getElementById('lbBody');
-    if (!silent && tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
+    if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
     jsonpFetch(SHEET_URL, {action:'leaderboard'})
       .then(data => {
-        // Hỗ trợ cả 2 format: array thẳng [] hoặc {ok:true, data:[]}
-        const rows = Array.isArray(data) ? data : (data && Array.isArray(data.data) ? data.data : []);
-        if (rows.length > 0) {
-          allData = rows;
+        if (Array.isArray(data)) {
+          allData = data;
           allData.sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
         }
         updateStats();
         renderTable();
-        updateLastUpdateLabel();
-        if (!silent) showToast('✅ Đã tải ' + allData.length + ' kết quả từ Google Sheets');
+        showToast('✅ Đã tải ' + allData.length + ' kết quả từ Google Sheets');
       })
       .catch(() => {
         try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
         updateStats();
         renderTable();
-        updateLastUpdateLabel();
-        if (!silent) showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
+        showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
       });
     return;
   }
   try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
   updateStats();
   renderTable();
-  updateLastUpdateLabel();
-}
-
-// ============================================================
-// AUTO REFRESH
-// ============================================================
-let autoRefreshInterval = null;
-const AUTO_REFRESH_SECONDS = 15;
-
-function toggleAutoRefresh() {
-  const on = document.getElementById('autoRefreshToggle').checked;
-  const slider = document.getElementById('toggleSlider');
-  const knob   = document.getElementById('toggleKnob');
-  const label  = document.getElementById('autoRefreshLabel');
-  if (on) {
-    slider.style.background = 'var(--green)';
-    knob.style.transform = 'translateX(16px)';
-    label.textContent = `${AUTO_REFRESH_SECONDS}s`;
-    label.style.color = 'var(--green)';
-    autoRefreshInterval = setInterval(() => loadData(true), AUTO_REFRESH_SECONDS * 1000);
-    showToast(`🔁 Tự động tải lại mỗi ${AUTO_REFRESH_SECONDS} giây`);
-  } else {
-    slider.style.background = '#ccc';
-    knob.style.transform = 'translateX(0)';
-    label.textContent = 'Tắt';
-    label.style.color = 'var(--gray-400)';
-    clearInterval(autoRefreshInterval);
-    autoRefreshInterval = null;
-    showToast('⏹️ Đã tắt tự động làm mới');
-  }
-}
-
-function updateLastUpdateLabel() {
-  const now = new Date().toLocaleTimeString('vi-VN');
-  document.getElementById('lastUpdateLabel').textContent = `Cập nhật lần cuối: ${now}`;
 }
 
 function updateStats() {
@@ -629,32 +576,31 @@ function renderTable() {
     const warnings  = parseInt(entry.tabWarnings) || 0;
     const warnClass = warnings === 0 ? 'warn-chip-0' : warnings === 1 ? 'warn-chip-1' : 'warn-chip-2';
     const warnText  = warnings === 0 ? '✅ Không' : `⚠️ ${warnings} lần`;
-    const forcedText = entry.forceSubmitted
+    // forceSubmitted từ sheet là string 'Có (vi phạm)' hoặc boolean
+    const isForced = entry.forceSubmitted === true || entry.forceSubmitted === 'Có (vi phạm)';
+    const forcedText = isForced
       ? '<span class="force-chip">🚨 Bị buộc nộp</span>'
       : '<span class="normal-chip">✅ Tự nộp</span>';
 
-    // Thời gian hoàn thành
-    const ct = parseInt(entry.completionTime) || 0;
-    const mins = Math.floor(ct / 60);
-    const secs = ct % 60;
-    const timeStr = ct ? `${mins}p ${secs}s` : '—';
-
-    const correct = entry.correctCount !== undefined ? entry.correctCount : (entry.correct || 0);
-    // Fallback cho dữ liệu cũ chưa lưu wrong/skip:
-    // tổng câu = total (nếu có) hoặc đoán từ score (mỗi câu = 0.5 điểm) hoặc 20.
-    const total = entry.total || Math.round((parseFloat(entry.score)||0) / 0.5) || 20;
-    let wrong = (entry.wrong !== undefined && entry.wrong !== null) ? entry.wrong : null;
-    let skip  = (entry.skip  !== undefined && entry.skip  !== null) ? entry.skip  : null;
-    if (wrong === null || skip === null) {
-      // Không có dữ liệu chi tiết → giả định: sai = total - đúng, bỏ = 0
-      // (chính xác hơn không có cách nào suy từ chỉ score + correct)
-      const remaining = Math.max(0, total - correct);
-      if (wrong === null) wrong = remaining;
-      if (skip  === null) skip  = 0;
+    // completionTime từ sheet là string "10p5s", từ localStorage là số giây
+    let timeStr = '—';
+    if (entry.completionTime) {
+      if (typeof entry.completionTime === 'number') {
+        const mins = Math.floor(entry.completionTime / 60);
+        const secs = entry.completionTime % 60;
+        timeStr = `${mins}p ${secs}s`;
+      } else {
+        // string dạng "10p5s" — dùng trực tiếp
+        timeStr = entry.completionTime.toString().replace('p', 'p ');
+      }
     }
+
+    const correct = parseInt(entry.correct) || parseInt(entry.correctCount) || 0;
+    const wrong   = parseInt(entry.wrong)   || 0;
+    const skip    = parseInt(entry.skip)    || 0;
     const score   = parseFloat(entry.score) || 0;
 
-    const isViolation = entry.forceSubmitted || warnings >= 2;
+    const isViolation = isForced || warnings >= 2;
 
     return `<tr ${isViolation ? 'class="violation-row"' : ''}>
       <td><div class="rank-badge ${rankClass}">${rankLabel}</div></td>
@@ -670,7 +616,7 @@ function renderTable() {
       <td><span class="${warnClass}">${warnText}</span></td>
       <td style="font-size:13px;color:var(--gray-600)">${timeStr}</td>
       <td>${forcedText}</td>
-      <td style="font-size:12px;color:var(--gray-400)">${escHtml(entry.time||'')}</td>
+      <td style="font-size:12px;color:var(--gray-400)">${escHtml(entry.time||entry.completionTime||'')}</td>
       <td><button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="deleteEntry('${escHtml(entry.phone||'')}','${escHtml(entry.name||'')}','${escHtml(entry.unit||'')}')">🗑️</button></td>
     </tr>`;
   }).join('');
@@ -800,7 +746,7 @@ function mergeImportedData(imported) {
   const existing = new Set(allData.map(e => `${e.phone}|${e.name}|${e.time}`));
   let added = 0;
   imported.forEach(entry => {
-    const key = `${entry.phone}|${entry.name}|${entry.time}`;
+    const key = `${entry.phone}|${entry.name}`;
     if (!existing.has(key)) {
       allData.push(entry);
       existing.add(key);
