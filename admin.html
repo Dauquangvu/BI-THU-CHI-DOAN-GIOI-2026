@@ -284,10 +284,21 @@ body {
         <div>
           <div class="admin-name">Quản Trị Viên</div>
           <div class="admin-role" id="loginTimeLabel">Đăng nhập lúc --</div>
+          <div style="font-size:11px;color:var(--gray-400);margin-top:2px" id="lastUpdateLabel">Chưa tải dữ liệu</div>
         </div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px;background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);padding:8px 14px;">
+          <span style="font-size:13px;font-weight:600;color:var(--gray-600)">🔁 Tự động làm mới</span>
+          <label style="position:relative;display:inline-block;width:38px;height:22px;cursor:pointer">
+            <input type="checkbox" id="autoRefreshToggle" onchange="toggleAutoRefresh()" style="opacity:0;width:0;height:0">
+            <span id="toggleSlider" style="position:absolute;inset:0;background:#ccc;border-radius:22px;transition:.3s">
+              <span style="position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s;display:block" id="toggleKnob"></span>
+            </span>
+          </label>
+          <span style="font-size:12px;color:var(--gray-400)" id="autoRefreshLabel">Tắt</span>
+        </div>
+        <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới Ngay</button>
         <button class="btn btn-gray" style="background:var(--gray-100);color:var(--gray-600);border:1.5px solid var(--gray-200)" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
         <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
       </div>
@@ -497,6 +508,9 @@ function enterAdmin() {
 }
 
 function doLogout() {
+  if (autoRefreshInterval) { clearInterval(autoRefreshInterval); autoRefreshInterval = null; }
+  document.getElementById('autoRefreshToggle').checked = false;
+  toggleAutoRefresh();
   document.getElementById('loginWrap').style.display = 'flex';
   document.getElementById('adminPanel').classList.remove('active');
   document.getElementById('pwdInput').value = '';
@@ -508,10 +522,10 @@ function doLogout() {
 // ============================================================
 let allData = [];
 
-function loadData() {
+function loadData(silent = false) {
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
     const tbody = document.getElementById('lbBody');
-    if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
+    if (!silent && tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
     jsonpFetch(SHEET_URL, {action:'leaderboard'})
       .then(data => {
         if (Array.isArray(data)) {
@@ -520,19 +534,56 @@ function loadData() {
         }
         updateStats();
         renderTable();
-        showToast('✅ Đã tải ' + allData.length + ' kết quả từ Google Sheets');
+        updateLastUpdateLabel();
+        if (!silent) showToast('✅ Đã tải ' + allData.length + ' kết quả từ Google Sheets');
       })
       .catch(() => {
         try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
         updateStats();
         renderTable();
-        showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
+        updateLastUpdateLabel();
+        if (!silent) showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 5000);
       });
     return;
   }
   try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
   updateStats();
   renderTable();
+  updateLastUpdateLabel();
+}
+
+// ============================================================
+// AUTO REFRESH
+// ============================================================
+let autoRefreshInterval = null;
+const AUTO_REFRESH_SECONDS = 15;
+
+function toggleAutoRefresh() {
+  const on = document.getElementById('autoRefreshToggle').checked;
+  const slider = document.getElementById('toggleSlider');
+  const knob   = document.getElementById('toggleKnob');
+  const label  = document.getElementById('autoRefreshLabel');
+  if (on) {
+    slider.style.background = 'var(--green)';
+    knob.style.transform = 'translateX(16px)';
+    label.textContent = `${AUTO_REFRESH_SECONDS}s`;
+    label.style.color = 'var(--green)';
+    autoRefreshInterval = setInterval(() => loadData(true), AUTO_REFRESH_SECONDS * 1000);
+    showToast(`🔁 Tự động tải lại mỗi ${AUTO_REFRESH_SECONDS} giây`);
+  } else {
+    slider.style.background = '#ccc';
+    knob.style.transform = 'translateX(0)';
+    label.textContent = 'Tắt';
+    label.style.color = 'var(--gray-400)';
+    clearInterval(autoRefreshInterval);
+    autoRefreshInterval = null;
+    showToast('⏹️ Đã tắt tự động làm mới');
+  }
+}
+
+function updateLastUpdateLabel() {
+  const now = new Date().toLocaleTimeString('vi-VN');
+  document.getElementById('lastUpdateLabel').textContent = `Cập nhật lần cuối: ${now}`;
 }
 
 function updateStats() {
