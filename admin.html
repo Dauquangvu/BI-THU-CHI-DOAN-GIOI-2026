@@ -30,35 +30,27 @@
   --radius-sm: 12px;
   --transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
 }
-/* ===== PREMIUM ANIMATIONS ===== */
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(0,48,135,0.3); }
-  50% { box-shadow: 0 0 40px rgba(0,48,135,0.6); }
+  0%, 100% { box-shadow: 0 0 20px rgba(0,48,135,0.25); }
+  50%       { box-shadow: 0 0 40px rgba(0,48,135,0.55); }
 }
-
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,48,135,0), var(--shadow-md); border-color: var(--gray-200); }
+  50%       { box-shadow: 0 0 0 3px rgba(0,74,173,0.22), 0 0 24px rgba(0,74,173,0.15), var(--shadow-md); border-color: var(--blue-mid); }
 }
-
-@keyframes counterUp {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes titleShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
@@ -161,7 +153,7 @@ body {
 /* STATS CARDS */
 .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
 .stat-card {
-  background:white; border-radius:var(--radius-sm); padding:18px 14px;
+  background:white; border-radius:var(--radius-sm); padding:20px 16px;
   text-align:center; border:1.5px solid var(--gray-200); box-shadow:var(--shadow-sm);
   transition:var(--transition); position:relative; overflow:hidden;
   animation: fadeInUp 0.5s ease both;
@@ -175,11 +167,7 @@ body {
   background:linear-gradient(90deg, var(--red), var(--gold));
   transform:scaleX(0); transition:transform 0.3s ease; transform-origin:left;
 }
-.stat-card:hover { 
-  transform:translateY(-6px); 
-  box-shadow:var(--shadow-md);
-  animation: glowPulse 2s ease infinite;
-}
+.stat-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); }
 .stat-card:hover::before { transform:scaleX(1); }
 .stat-card-icon { font-size:30px; margin-bottom:10px; }
 .stat-card-num  { font-size:30px; font-weight:800; color:var(--blue); }
@@ -191,15 +179,13 @@ body {
   overflow:hidden; border:1.5px solid var(--gray-200); margin-bottom:26px;
   animation: fadeInUp 0.6s ease;
 }
+.admin-card.glow-card { animation: borderGlow 2.5s ease infinite; }
 .admin-card-header {
   padding:16px 22px; border-bottom:1px solid var(--gray-200);
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:13px;
   background: linear-gradient(90deg, transparent, rgba(0,48,135,0.02), transparent);
 }
-.admin-card-header h3 { 
-  font-size:17px; font-weight:800; color:var(--gray-800);
-  animation: slideInLeft 0.5s ease 0.2s both;
-}
+.admin-card-header h3 { font-size:17px; font-weight:800; color:var(--gray-800); }
 .glow-card .admin-card-header h3 {
   background: linear-gradient(90deg, var(--blue), #0077ee, #00aaff, var(--blue-mid), var(--blue));
   background-size: 300% 100%;
@@ -208,39 +194,18 @@ body {
   background-clip: text;
   animation: titleShimmer 3s ease infinite;
 }
-@keyframes titleShimmer {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.admin-card-header p  { 
-  font-size:12px; color:var(--gray-400); margin-top:3px;
-  animation: slideInLeft 0.5s ease 0.3s both;
-}
+.admin-card-header p { font-size:12px; color:var(--gray-400); margin-top:3px; }
 
 /* DANGER ZONE */
-.danger-zone { 
-  background:white; 
-  border-radius:var(--radius); 
-  border:2px solid #FEE2E2; 
-  overflow:hidden; 
-  margin-bottom:26px;
-  animation: fadeInUp 0.7s ease;
+.danger-zone {
+  background:white; border-radius:var(--radius); border:2px solid #FEE2E2;
+  overflow:hidden; margin-bottom:26px; animation: fadeInUp 0.7s ease;
 }
-.danger-header { 
-  background:#FFF5F5; 
-  padding:18px 26px; 
-  border-bottom:1px solid #FEE2E2; 
-  display:flex; 
-  align-items:center; 
-  gap:12px;
-  animation: slideInLeft 0.5s ease 0.1s both;
+.danger-header {
+  background:#FFF5F5; padding:18px 26px; border-bottom:1px solid #FEE2E2;
+  display:flex; align-items:center; gap:12px;
 }
-.danger-header h3 { 
-  font-size:16px; 
-  font-weight:800; 
-  color:var(--red);
-}
+.danger-header h3 { font-size:16px; font-weight:800; color:var(--red); }
 .danger-body { padding:26px; }
 .danger-item { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; flex-wrap:wrap; }
 .danger-item-info h4 { font-size:15px; font-weight:700; color:var(--gray-800); margin-bottom:5px; }
@@ -252,118 +217,91 @@ body {
   padding:12px 22px; border-radius:var(--radius-sm);
   font-family:inherit; font-size:14px; font-weight:700;
   cursor:pointer; border:none; transition:var(--transition); white-space:nowrap;
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
 }
 .btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
+  content:''; position:absolute; inset:0;
   background: linear-gradient(rgba(255,255,255,0.2), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
+  opacity:0; transition:opacity 0.3s;
 }
-.btn:hover::after { opacity: 1; }
-.btn-red { 
-  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%); 
-  color:white; 
-  box-shadow:0 4px 14px rgba(200,16,46,.3); 
-}
-.btn-red:hover { 
-  transform:translateY(-2px); 
-  box-shadow:0 8px 24px rgba(200,16,46,.5);
-}
-.btn-red:active { transform:translateY(0); }
-.btn-green { 
-  background:linear-gradient(135deg,var(--green) 0%,#0A6032 100%); 
-  color:white; 
-  box-shadow:0 4px 14px rgba(10,124,66,.3); 
-}
+.btn:hover::after { opacity:1; }
+.btn-red   { background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%); color:white; box-shadow:0 4px 14px rgba(200,16,46,.3); }
+.btn-red:hover   { transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,16,46,.5); }
+.btn-green { background:linear-gradient(135deg,var(--green) 0%,#0A6032 100%); color:white; box-shadow:0 4px 14px rgba(10,124,66,.3); }
 .btn-green:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(10,124,66,.4); }
-.btn-gray { 
-  background:var(--gray-100); 
-  color:var(--gray-600); 
-  border:1.5px solid var(--gray-200);
-  transition: all 0.25s ease;
-}
-.btn-gray:hover { 
-  background:var(--gray-200);
-  transform: translateY(-1px);
-}
-.btn-blue { 
-  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%); 
-  color:white; 
-  box-shadow:0 4px 14px rgba(0,48,135,.3); 
-}
-.btn-blue:hover { 
-  transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(0,48,135,.5);
-}
+.btn-gray  { background:var(--gray-100); color:var(--gray-600); border:1.5px solid var(--gray-200); }
+.btn-gray:hover  { background:var(--gray-200); transform:translateY(-1px); }
+.btn-blue  { background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%); color:white; box-shadow:0 4px 14px rgba(0,48,135,.3); }
+.btn-blue:hover  { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,48,135,.5); }
 .btn-logout { padding:9px 20px; background:var(--gray-100); border:1.5px solid var(--gray-200); border-radius:var(--radius-sm); font-family:inherit; font-size:13px; font-weight:700; color:var(--gray-600); cursor:pointer; transition:var(--transition); }
 .btn-logout:hover { background:#FFF5F5; color:var(--red); border-color:var(--red); }
 
-/* TABLE */
-.lb-table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; }
-.lb-table th { background:var(--gray-50); padding:9px 10px; font-size:10.5px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:.6px; text-align:left; border-bottom:1.5px solid var(--gray-200); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.lb-table tr:hover td { background:var(--blue-pale); }
-.lb-table td { 
-  padding:9px 10px; 
-  border-bottom:1px solid var(--gray-100); 
-  vertical-align:middle;
-  transition: background-color 0.2s ease;
+/* TABLE — cân đối lại cột, bỏ cột Thời Gian Nộp */
+.lb-table { width:100%; border-collapse:collapse; font-size:13px; table-layout:fixed; }
+.lb-table th {
+  background:var(--gray-50); padding:10px 10px; font-size:10.5px; font-weight:700;
+  color:var(--gray-600); text-transform:uppercase; letter-spacing:.6px;
+  text-align:left; border-bottom:1.5px solid var(--gray-200);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  max-width:0;
+  position:sticky; top:0; z-index:10;
 }
-.rank-badge { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:50%; font-weight:800; font-size:12px; }
+.lb-table td {
+  padding:10px 10px; border-bottom:1px solid var(--gray-100);
+  vertical-align:middle; transition: background-color 0.2s ease;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:0;
+}
+.lb-table tr:hover td { background:var(--blue-pale); }
+
+/* Widths — 11 cột sau khi bỏ Thời Gian Nộp */
+.col-rank   { width: 48px; }
+.col-name   { width: 170px; }
+.col-unit   { width: 170px; }
+.col-title  { width: 140px; }
+.col-score  { width: 76px; }
+.col-stats  { width: 100px; }
+.col-phone  { width: 110px; }
+.col-tab    { width: 90px; }
+.col-time   { width: 82px; }
+.col-submit { width: 100px; }
+.col-delete { width: 52px; }
+
+.rank-badge { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; font-weight:800; font-size:12px; }
 .rank-1 { background:var(--gold); color:#7A5200; box-shadow:0 2px 8px rgba(244,196,48,0.5); }
 .rank-2 { background:#C0C0C0; color:#4A4A4A; }
 .rank-3 { background:#CD7F32; color:white; }
 .rank-n { background:var(--gray-200); color:var(--gray-600); }
-.score-chip { background:var(--blue-light); color:var(--blue); font-weight:800; padding:3px 10px; border-radius:22px; font-size:12px; white-space:nowrap; }
-.warn-chip-0 { background:#F0FBF4; color:var(--green); font-weight:700; padding:2px 8px; border-radius:18px; font-size:11px; }
-.warn-chip-1 { background:#FFF8E8; color:#B35C00; font-weight:700; padding:2px 8px; border-radius:18px; font-size:11px; }
-.warn-chip-2 { background:#FFF5F5; color:var(--red); font-weight:700; padding:2px 8px; border-radius:18px; font-size:11px; }
-.force-chip { background:#FFF5F5; color:var(--red); font-weight:700; padding:2px 8px; border-radius:18px; font-size:10px; border:1px solid #FEE2E2; }
-.normal-chip { background:#F0FBF4; color:var(--green); font-weight:700; padding:2px 8px; border-radius:18px; font-size:10px; border:1px solid #C6EDD4; }
 
-/* TOP 1-2-3 Row Colors */
-.row-top1 td { background: linear-gradient(90deg, rgba(244,196,48,0.18) 0%, rgba(244,196,48,0.06) 100%) !important; border-left: 3px solid var(--gold); }
-.row-top1:hover td { background: linear-gradient(90deg, rgba(244,196,48,0.28) 0%, rgba(244,196,48,0.12) 100%) !important; }
-.row-top2 td { background: linear-gradient(90deg, rgba(192,192,192,0.22) 0%, rgba(192,192,192,0.07) 100%) !important; border-left: 3px solid #C0C0C0; }
-.row-top2:hover td { background: linear-gradient(90deg, rgba(192,192,192,0.32) 0%, rgba(192,192,192,0.12) 100%) !important; }
-.row-top3 td { background: linear-gradient(90deg, rgba(205,127,50,0.18) 0%, rgba(205,127,50,0.06) 100%) !important; border-left: 3px solid #CD7F32; }
-.row-top3:hover td { background: linear-gradient(90deg, rgba(205,127,50,0.28) 0%, rgba(205,127,50,0.12) 100%) !important; }
+.score-chip { background:var(--blue-light); color:var(--blue); font-weight:800; padding:4px 10px; border-radius:22px; font-size:12px; white-space:nowrap; }
+.warn-chip-0 { background:#F0FBF4; color:var(--green); font-weight:700; padding:3px 8px; border-radius:18px; font-size:11px; }
+.warn-chip-1 { background:#FFF8E8; color:#B35C00; font-weight:700; padding:3px 8px; border-radius:18px; font-size:11px; }
+.warn-chip-2 { background:#FFF5F5; color:var(--red); font-weight:700; padding:3px 8px; border-radius:18px; font-size:11px; }
+.force-chip  { background:#FFF5F5; color:var(--red); font-weight:700; padding:3px 8px; border-radius:18px; font-size:11px; border:1px solid #FEE2E2; }
+.normal-chip { background:#F0FBF4; color:var(--green); font-weight:700; padding:3px 8px; border-radius:18px; font-size:11px; border:1px solid #C6EDD4; }
+
+.row-top1 td { background: linear-gradient(90deg, rgba(244,196,48,0.18) 0%, rgba(244,196,48,0.04) 100%) !important; border-left: 3px solid var(--gold); }
+.row-top1:hover td { background: linear-gradient(90deg, rgba(244,196,48,0.28) 0%, rgba(244,196,48,0.10) 100%) !important; }
+.row-top2 td { background: linear-gradient(90deg, rgba(192,192,192,0.20) 0%, rgba(192,192,192,0.05) 100%) !important; border-left: 3px solid #C0C0C0; }
+.row-top2:hover td { background: linear-gradient(90deg, rgba(192,192,192,0.30) 0%, rgba(192,192,192,0.10) 100%) !important; }
+.row-top3 td { background: linear-gradient(90deg, rgba(205,127,50,0.16) 0%, rgba(205,127,50,0.04) 100%) !important; border-left: 3px solid #CD7F32; }
+.row-top3:hover td { background: linear-gradient(90deg, rgba(205,127,50,0.26) 0%, rgba(205,127,50,0.09) 100%) !important; }
+.violation-row td { background:#FFF8F8 !important; }
+.violation-row:hover td { background:#FFF0F0 !important; }
 
 .lb-empty { text-align:center; padding:52px; color:var(--gray-400); }
 .lb-empty-icon { font-size:52px; margin-bottom:14px; }
 
-/* Glowing border for Detail Card */
-@keyframes borderGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0,48,135,0), var(--shadow-md); border-color: var(--gray-200); }
-  50%       { box-shadow: 0 0 0 3px rgba(0,74,173,0.25), 0 0 24px rgba(0,74,173,0.18), var(--shadow-md); border-color: var(--blue-mid); }
-}
-.admin-card.glow-card {
-  animation: borderGlow 2.5s ease infinite;
-}
-
 /* MODAL */
-.modal-overlay { 
-  position:fixed; inset:0; 
-  background:rgba(0,0,0,.65); 
-  backdrop-filter:blur(12px);
-  display:flex; align-items:center; justify-content:center; 
-  z-index:9999; opacity:0; pointer-events:none; 
-  transition:opacity .3s ease; 
-  padding:20px; 
+.modal-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.65); backdrop-filter:blur(12px);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999; opacity:0; pointer-events:none;
+  transition:opacity .3s ease; padding:20px;
 }
 .modal-overlay.show { opacity:1; pointer-events:all; }
-.modal { 
-  background:white; 
-  border-radius:var(--radius); 
-  padding:40px 34px;
-  max-width:460px; 
-  width:100%; 
-  text-align:center;
+.modal {
+  background:white; border-radius:var(--radius); padding:40px 34px;
+  max-width:460px; width:100%; text-align:center;
   box-shadow:0 50px 100px rgba(0,0,0,.35);
   transform:scale(.85) translateY(40px);
   transition:transform .4s cubic-bezier(0.34,1.56,0.64,1);
@@ -375,40 +313,24 @@ body {
 .modal-btns { display:flex; gap:13px; justify-content:center; }
 
 /* TOAST */
-.toast { 
+.toast {
   position:fixed; bottom:30px; right:30px;
-  background:var(--gray-800); 
-  color:white;
-  padding:15px 24px; 
-  border-radius:var(--radius-sm);
-  font-size:14px; 
-  font-weight:600;
-  box-shadow:var(--shadow-lg); 
-  z-index:9999;
-  transform:translateY(110px) translateX(0); 
-  opacity:0;
-  transition:all .35s cubic-bezier(0.34,1.56,0.64,1); 
-  max-width:380px;
+  background:var(--gray-800); color:white;
+  padding:15px 24px; border-radius:var(--radius-sm);
+  font-size:14px; font-weight:600;
+  box-shadow:var(--shadow-lg); z-index:9999;
+  transform:translateY(110px); opacity:0;
+  transition:all .35s cubic-bezier(0.34,1.56,0.64,1); max-width:380px;
 }
-.toast.show { 
-  transform:translateY(0) translateX(0); 
-  opacity:1;
-  animation: slideInUp 0.35s ease;
-}
+.toast.show { transform:translateY(0); opacity:1; }
 
-/* SECTION TITLE */
 .section-title { font-size:12px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:1.2px; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
 .section-title::after { content:''; flex:1; height:1px; background:var(--gray-200); }
 .divider { height:1px; background:var(--gray-200); margin:22px 0; }
 
-/* FILTER */
 .filter-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
 .filter-input { padding:10px 16px; border:1.5px solid var(--gray-200); border-radius:var(--radius-sm); font-family:inherit; font-size:14px; color:var(--gray-800); background:white; outline:none; flex:1; min-width:180px; transition:var(--transition); }
 .filter-input:focus { border-color:var(--blue); box-shadow:0 0 0 4px rgba(0,48,135,.07); }
-
-/* VIOLATION BADGE */
-.violation-row td { background:#FFF8F8 !important; }
-.violation-row:hover td { background:#FFF0F0 !important; }
 
 @media (max-width:900px) {
   .stats-grid { grid-template-columns:1fr 1fr; }
@@ -466,15 +388,13 @@ body {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-green" onclick="loadData()">🔄 Làm Mới</button>
-        <button class="btn btn-gray" style="background:var(--gray-100);color:var(--gray-600);border:1.5px solid var(--gray-200)" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
+        <button class="btn btn-gray" onclick="window.open('index.html','_blank')">🌐 Xem Trang Thi</button>
         <button class="btn-logout" onclick="doLogout()">🚪 Đăng Xuất</button>
       </div>
     </div>
 
     <!-- Stats -->
     <div class="section-title">📊 Thống Kê Tổng Quan</div>
-
-
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-card-icon">👥</div>
@@ -503,7 +423,7 @@ body {
       <div class="admin-card-header">
         <div>
           <h3>📋 Kết Quả Chi Tiết Thí Sinh</h3>
-          <p>Bao gồm số lần vi phạm, alt-tab, thời gian hoàn thành</p>
+          <p>Sắp xếp: Điểm cao nhất → Thời gian làm ngắn nhất (nếu bằng điểm)</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn btn-green" onclick="exportCSV()">⬇️ Xuất CSV</button>
@@ -511,7 +431,7 @@ body {
       </div>
       <div style="padding:16px 22px 8px">
         <div class="filter-row">
-          <input type="text" class="filter-input" id="searchInput" placeholder="🔍 Tìm tên, đơn vị..."
+          <input type="text" class="filter-input" id="searchInput" placeholder="🔍 Tìm tên, đơn vị, chức vụ..."
             oninput="renderTable()">
           <select class="filter-input" id="filterViolation" onchange="renderTable()" style="flex:0;min-width:180px">
             <option value="">Tất cả thí sinh</option>
@@ -522,25 +442,25 @@ body {
         </div>
       </div>
       <div style="overflow-x:auto">
+        <!-- 11 cột: bỏ cột Thời Gian Nộp -->
         <table class="lb-table" id="lbTable">
           <thead>
             <tr>
-              <th style="width:46px">Hạng</th>
-              <th style="width:160px">Họ và Tên</th>
-              <th style="width:180px">Đơn Vị</th>
-              <th style="width:130px">Chức Vụ</th>
-              <th style="width:72px">Điểm</th>
-              <th style="width:90px">Đúng/Sai/Bỏ</th>
-              <th style="width:80px">SĐT</th>
-              <th style="width:72px">Alt-Tab</th>
-              <th style="width:80px">T/G HT</th>
-              <th style="width:90px">Nộp Bài</th>
-              <th style="width:130px">Thời Gian Nộp</th>
-              <th style="width:52px">Xóa</th>
+              <th class="col-rank">Hạng</th>
+              <th class="col-name">Họ và Tên</th>
+              <th class="col-unit">Đơn Vị</th>
+              <th class="col-title">Chức Vụ</th>
+              <th class="col-score">Điểm</th>
+              <th class="col-stats">Đ/S/Bỏ</th>
+              <th class="col-phone">SĐT</th>
+              <th class="col-tab">Alt-Tab</th>
+              <th class="col-time">T/G Làm</th>
+              <th class="col-submit">Nộp Bài</th>
+              <th class="col-delete">Xóa</th>
             </tr>
           </thead>
           <tbody id="lbBody">
-            <tr><td colspan="12"><div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có dữ liệu</div></div></td></tr>
+            <tr><td colspan="11"><div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Chưa có dữ liệu</div></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -575,7 +495,20 @@ body {
   </div>
 </main>
 
-<!-- MODAL XÁC NHẬN XÓA -->
+<!-- MODAL XÁC NHẬN XÓA 1 NGƯỜI -->
+<div class="modal-overlay" id="modalDeleteOne">
+  <div class="modal">
+    <div class="modal-icon">🗑️</div>
+    <h3>Xác Nhận Xóa Thí Sinh</h3>
+    <p id="modalDeleteMsg">Bạn có chắc muốn xóa kết quả và cho phép thi lại?</p>
+    <div class="modal-btns">
+      <button class="btn btn-gray" onclick="closeModal('modalDeleteOne')">Hủy</button>
+      <button class="btn btn-red" id="modalDeleteConfirmBtn">🗑️ Xóa Ngay</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL XÁC NHẬN XÓA TẤT CẢ -->
 <div class="modal-overlay" id="modalClear">
   <div class="modal">
     <div class="modal-icon">🗑️</div>
@@ -596,54 +529,30 @@ body {
 
 <script>
 // ============================================================
-// CONFIG ADMIN — ĐỔI MẬT KHẨU TẠI ĐÂY
+// CONFIG
 // ============================================================
 const ADMIN_PASSWORD = '12121212';
 const MAX_ATTEMPTS   = 5;
 const LOCK_MINUTES   = 10;
-const NUM_QUESTIONS  = 20;
-const POINTS_PER_Q   = 0.5;  // 0.5 điểm/câu, tổng 10
-
-// ĐẶT CÙNG URL với index.html để lấy dữ liệu từ Google Sheets
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbze3G4cbOezDXpM7t02WAHekS1u0sBnBa_5VVahvScgp2ccSWy5yiPr5GPBhms-6cdKbg/exec';
+const SHEET_URL      = 'https://script.google.com/macros/s/AKfycbze3G4cbOezDXpM7t02WAHekS1u0sBnBa_5VVahvScgp2ccSWy5yiPr5GPBhms-6cdKbg/exec';
 
 // ============================================================
-// JSONP FETCH — bypass CORS cho Google Apps Script
+// JSONP — bypass CORS Google Apps Script
 // ============================================================
-let autoRefreshInterval = null;
 function jsonpFetch(url, params) {
   return new Promise((resolve, reject) => {
     let resolved = false;
-    const cbName = '_jsonp_cb_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-    const fullParams = new URLSearchParams({...params, callback: cbName});
+    const cbName = '_jsonp_' + Date.now() + '_' + Math.random().toString(36).substr(2,8);
+    const qs = new URLSearchParams({...params, callback: cbName});
     const script = document.createElement('script');
     const timer = setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        delete window[cbName]; 
-        if (script && script.parentNode) script.remove(); 
-        reject(new Error('timeout'));
-      }
+      if (!resolved) { resolved = true; delete window[cbName]; script.remove(); reject(new Error('timeout')); }
     }, 15000);
-    window[cbName] = function(data) {
-      if (!resolved) {
-        resolved = true;
-        clearTimeout(timer); 
-        delete window[cbName]; 
-        if (script && script.parentNode) script.remove(); 
-        resolve(data);
-      }
+    window[cbName] = (data) => {
+      if (!resolved) { resolved = true; clearTimeout(timer); delete window[cbName]; script.remove(); resolve(data); }
     };
-    script.src = `${url}?${fullParams}`;
-    script.onerror = () => { 
-      if (!resolved) {
-        resolved = true;
-        clearTimeout(timer); 
-        delete window[cbName]; 
-        script.remove(); 
-        reject(new Error('error')); 
-      }
-    };
+    script.src = `${url}?${qs}`;
+    script.onerror = () => { if (!resolved) { resolved = true; clearTimeout(timer); delete window[cbName]; script.remove(); reject(new Error('error')); } };
     document.head.appendChild(script);
   });
 }
@@ -652,7 +561,7 @@ function jsonpFetch(url, params) {
 // BRUTE-FORCE PROTECTION
 // ============================================================
 function getLockState() {
-  try { const raw = sessionStorage.getItem('admin_lock'); return raw ? JSON.parse(raw) : { attempts:0, lockedUntil:0 }; }
+  try { return JSON.parse(sessionStorage.getItem('admin_lock') || '{"attempts":0,"lockedUntil":0}'); }
   catch(e) { return { attempts:0, lockedUntil:0 }; }
 }
 function saveLockState(s) { try { sessionStorage.setItem('admin_lock', JSON.stringify(s)); } catch(e) {} }
@@ -688,20 +597,17 @@ function doLogin() {
   }
 }
 
+let autoRefreshInterval = null;
+
 function enterAdmin() {
   document.getElementById('loginWrap').style.display = 'none';
-  const panel = document.getElementById('adminPanel');
-  panel.classList.add('active');
+  document.getElementById('adminPanel').classList.add('active');
   document.getElementById('loginTimeLabel').textContent = 'Đăng nhập lúc ' + new Date().toLocaleTimeString('vi-VN');
   loadData();
-  
-  // Auto-refresh từ Google Sheets mỗi 3 giây
   if (autoRefreshInterval) clearInterval(autoRefreshInterval);
   autoRefreshInterval = setInterval(() => {
-    if (document.getElementById('adminPanel').classList.contains('active')) {
-      loadData(true); // silent=true để không hiện toast liên tục
-    }
-  }, 3000);
+    if (document.getElementById('adminPanel').classList.contains('active')) loadData(true);
+  }, 5000);
 }
 
 function doLogout() {
@@ -713,29 +619,56 @@ function doLogout() {
 }
 
 // ============================================================
-// DATA
+// DATA — sắp xếp: điểm cao → T/G làm ngắn
 // ============================================================
 let allData = [];
 
+/**
+ * Chuyển completionTime (số giây hoặc chuỗi "10p5s") sang số giây
+ */
+function toSeconds(ct) {
+  if (!ct) return Infinity;
+  if (typeof ct === 'number') return ct;
+  const s = ct.toString();
+  const m = s.match(/(\d+)p\s*(\d+)s?/);
+  if (m) return parseInt(m[1]) * 60 + parseInt(m[2]);
+  const n = parseInt(s);
+  return isNaN(n) ? Infinity : n;
+}
+
+/**
+ * So sánh: điểm cao hơn trước; nếu bằng điểm → thời gian làm ngắn hơn trước
+ */
+function sortData(arr) {
+  return [...arr].sort((a, b) => {
+    const sa = parseFloat(a.score) || 0;
+    const sb = parseFloat(b.score) || 0;
+    if (sb !== sa) return sb - sa;              // điểm cao hơn lên trước
+    return toSeconds(a.completionTime) - toSeconds(b.completionTime); // thời gian ngắn hơn lên trước
+  });
+}
+
 function loadData(silent = false) {
-  if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
-    const tbody = document.getElementById('lbBody');
-    if (!silent && tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
-    jsonpFetch(SHEET_URL, {action:'leaderboard'})
+  if (SHEET_URL) {
+    if (!silent) {
+      document.getElementById('lbBody').innerHTML =
+        `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--gray-400)">⏳ Đang tải từ Google Sheets...</td></tr>`;
+    }
+    jsonpFetch(SHEET_URL, { action: 'leaderboard' })
       .then(data => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           allData = data;
-          allData.sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
         }
         updateStats();
         renderTable();
         if (!silent) showToast('✅ Đã tải ' + allData.length + ' kết quả từ Google Sheets', 2500);
       })
       .catch(() => {
+        // Fallback về localStorage
         try { allData = JSON.parse(localStorage.getItem('doan_lb') || '[]'); } catch(e) { allData = []; }
         updateStats();
         renderTable();
-        if (!silent) showToast('⚠️ Không kết nối được Google Sheets. Hiển thị dữ liệu cục bộ.', 4000);
+        if (!silent) showToast('⚠️ Không kết nối được Sheets. Dùng dữ liệu cục bộ.', 4000);
       });
     return;
   }
@@ -745,108 +678,129 @@ function loadData(silent = false) {
 }
 
 function updateStats() {
-  document.getElementById('statTotal').textContent  = allData.length;
+  document.getElementById('statTotal').textContent = allData.length;
   const avg = allData.length
-    ? (allData.reduce((s,e) => s + (parseFloat(e.score)||0), 0) / allData.length).toFixed(2)
+    ? (allData.reduce((s, e) => s + (parseFloat(e.score) || 0), 0) / allData.length).toFixed(2)
     : '0';
   document.getElementById('statAvg').textContent = avg;
-  const totalViolations = allData.reduce((s,e) => s + (parseInt(e.tabWarnings)||0), 0);
-  document.getElementById('statViolations').textContent = totalViolations;
-  const forced = allData.filter(e => e.forceSubmitted).length;
-  document.getElementById('statForced').textContent = forced;
+  document.getElementById('statViolations').textContent = allData.reduce((s, e) => s + (parseInt(e.tabWarnings) || 0), 0);
+  document.getElementById('statForced').textContent = allData.filter(e => e.forceSubmitted === true || e.forceSubmitted === 'Có (vi phạm)').length;
 }
 
 function renderTable() {
-  const search  = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-  const filter  = document.getElementById('filterViolation').value;
+  const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const filter = document.getElementById('filterViolation').value;
 
-  let data = [...allData].sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
+  let data = sortData(allData);
 
   if (search) {
     data = data.filter(e =>
-      (e.name||'').toLowerCase().includes(search) ||
-      (e.unit||'').toLowerCase().includes(search) ||
-      (e.title||'').toLowerCase().includes(search)
+      (e.name  || '').toLowerCase().includes(search) ||
+      (e.unit  || '').toLowerCase().includes(search) ||
+      (e.title || '').toLowerCase().includes(search)
     );
   }
-  if (filter === 'clean')  data = data.filter(e => !(parseInt(e.tabWarnings)||0));
-  if (filter === 'warn1')  data = data.filter(e => (parseInt(e.tabWarnings)||0) === 1);
-  if (filter === 'forced') data = data.filter(e => e.forceSubmitted);
+  if (filter === 'clean')  data = data.filter(e => !(parseInt(e.tabWarnings) || 0));
+  if (filter === 'warn1')  data = data.filter(e => (parseInt(e.tabWarnings) || 0) === 1);
+  if (filter === 'forced') data = data.filter(e => e.forceSubmitted === true || e.forceSubmitted === 'Có (vi phạm)');
 
   const tbody = document.getElementById('lbBody');
   if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="10"><div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Không có dữ liệu phù hợp</div></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11"><div class="lb-empty"><div class="lb-empty-icon">📊</div><div>Không có dữ liệu phù hợp</div></div></td></tr>`;
     return;
   }
 
   tbody.innerHTML = data.map((entry, i) => {
-    const rankClass = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
-    const rankLabel = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
-    const rowClass  = i===0?'row-top1':i===1?'row-top2':i===2?'row-top3': (isForced||warnings>=2?'violation-row':'');
+    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n';
+    const rankLabel = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1;
     const warnings  = parseInt(entry.tabWarnings) || 0;
     const warnClass = warnings === 0 ? 'warn-chip-0' : warnings === 1 ? 'warn-chip-1' : 'warn-chip-2';
     const warnText  = warnings === 0 ? '✅ Không' : `⚠️ ${warnings} lần`;
-    // forceSubmitted từ sheet là string 'Có (vi phạm)' hoặc boolean
-    const isForced = entry.forceSubmitted === true || entry.forceSubmitted === 'Có (vi phạm)';
-    const forcedText = isForced
+    const isForced  = entry.forceSubmitted === true || entry.forceSubmitted === 'Có (vi phạm)';
+    const forcedHtml = isForced
       ? '<span class="force-chip">🚨 Bắt buộc</span>'
       : '<span class="normal-chip">✅ Tự nộp</span>';
 
-    // completionTime từ sheet là string "10p5s", từ localStorage là số giây
+    const rowClass = i === 0 ? 'row-top1' : i === 1 ? 'row-top2' : i === 2 ? 'row-top3'
+                   : (isForced || warnings >= 2 ? 'violation-row' : '');
+
+    // Thời gian hoàn thành
+    const secs = toSeconds(entry.completionTime);
     let timeStr = '—';
-    if (entry.completionTime) {
-      if (typeof entry.completionTime === 'number') {
-        const mins = Math.floor(entry.completionTime / 60);
-        const secs = entry.completionTime % 60;
-        timeStr = `${mins}p ${secs}s`;
-      } else {
-        timeStr = entry.completionTime.toString().replace('p', 'p ');
-      }
+    if (secs !== Infinity && secs > 0) {
+      const m = Math.floor(secs / 60), s = secs % 60;
+      timeStr = `${m}p ${s}s`;
     }
 
     const correct = parseInt(entry.correct) || parseInt(entry.correctCount) || 0;
     const wrong   = parseInt(entry.wrong)   || 0;
     const skip    = parseInt(entry.skip)    || 0;
     const score   = parseFloat(entry.score) || 0;
-    const rowClassFinal = i===0?'row-top1':i===1?'row-top2':i===2?'row-top3':((isForced||warnings>=2)?'violation-row':'');
 
-    return `<tr class="${rowClassFinal}">
-      <td><div class="rank-badge ${rankClass}">${rankLabel}</div></td>
-      <td><strong title="${escHtml(entry.name||'')}">${escHtml(entry.name||'')}</strong></td>
-      <td style="font-size:12px" title="${escHtml(entry.unit||'')}">${escHtml(entry.unit||'')}</td>
-      <td style="font-size:12px" title="${escHtml(entry.title||'—')}">${escHtml(entry.title||'—')}</td>
-      <td><span class="score-chip">${score.toFixed(1)}</span></td>
-      <td style="font-size:12px;color:var(--gray-600)">
+    // Encode để dùng trong onclick
+    const safePhone = escAttr(entry.phone || '');
+    const safeName  = escAttr(entry.name  || '');
+
+    return `<tr class="${rowClass}">
+      <td class="col-rank"><div class="rank-badge ${rankClass}">${rankLabel}</div></td>
+      <td class="col-name" title="${escHtml(entry.name||'')}"><strong>${escHtml(entry.name||'')}</strong></td>
+      <td class="col-unit" title="${escHtml(entry.unit||'')}" style="font-size:12px">${escHtml(entry.unit||'')}</td>
+      <td class="col-title" title="${escHtml(entry.title||'—')}" style="font-size:12px">${escHtml(entry.title||'—')}</td>
+      <td class="col-score"><span class="score-chip">${score.toFixed(1)}</span></td>
+      <td class="col-stats" style="font-size:12px">
         <span style="color:var(--green);font-weight:700">${correct}</span>/<span style="color:var(--red);font-weight:700">${wrong}</span>/<span style="color:var(--gray-400)">${skip}</span>
       </td>
-      <td style="font-size:11px;color:var(--gray-500)">${escHtml(entry.phone||'')}</td>
-      <td><span class="${warnClass}">${warnText}</span></td>
-      <td style="font-size:12px;color:var(--gray-600)">${timeStr}</td>
-      <td>${forcedText}</td>
-      <td style="font-size:11px;color:var(--gray-400)">${escHtml(entry.time||'')}</td>
-      <td><button class="btn btn-red" style="padding:4px 8px;font-size:11px" onclick="deleteEntry('${escHtml(entry.phone||'')}','${escHtml(entry.name||'')}','${escHtml(entry.unit||'')}')">🗑️</button></td>
+      <td class="col-phone" style="font-size:12px;color:var(--gray-500)">${escHtml(entry.phone||'')}</td>
+      <td class="col-tab"><span class="${warnClass}">${warnText}</span></td>
+      <td class="col-time" style="font-size:12px;color:var(--gray-600)">${timeStr}</td>
+      <td class="col-submit">${forcedHtml}</td>
+      <td class="col-delete">
+        <button class="btn btn-red" style="padding:5px 9px;font-size:11px;min-width:0"
+          onclick="promptDeleteEntry('${safePhone}','${safeName}')">🗑️</button>
+      </td>
     </tr>`;
   }).join('');
 }
 
-// Xóa từng thí sinh và reset khóa thi của họ
-function deleteEntry(phone, name, unit) {
-  if (!confirm(`Xóa kết quả của "${name}" và cho phép thi lại?`)) return;
+// ============================================================
+// XÓA TỪNG THÍ SINH — fix: đồng bộ cả localStorage + Sheets
+// ============================================================
+let _pendingDelete = null;
 
-  // 1. Xóa khỏi bảng xếp hạng local
-  allData = allData.filter(e => !(e.phone === phone && e.name === name));
-  try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
+function promptDeleteEntry(phone, name) {
+  _pendingDelete = { phone, name };
+  document.getElementById('modalDeleteMsg').innerHTML =
+    `Bạn có chắc muốn xóa kết quả của <strong>${escHtml(name)}</strong> và cho phép thi lại?`;
+  document.getElementById('modalDeleteConfirmBtn').onclick = doDeleteEntry;
+  openModal('modalDeleteOne');
+}
 
-  // 2. Xóa trên Google Sheets (fire-and-forget no-cors)
-  if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEETS_WEBAPP_URL_HERE') {
-    fetch(`${SHEET_URL}?action=delete&phone=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}`, {mode:'no-cors'})
-      .catch(() => {});
-  }
+function doDeleteEntry() {
+  if (!_pendingDelete) return;
+  const { phone, name } = _pendingDelete;
+  _pendingDelete = null;
+  closeModal('modalDeleteOne');
 
-  // 3. Xóa khỏi danh sách đã thi (doan_attempted) — so sánh normalize
+  // 1. Xóa khỏi allData (memory)
+  allData = allData.filter(e => !(
+    (e.phone || '').trim() === phone.trim() &&
+    (e.name  || '').trim() === name.trim()
+  ));
+
+  // 2. Xóa khỏi localStorage doan_lb
   try {
-    const normPhone = (phone||'').trim().replace(/[\s\-]/g,'');
-    const normName  = (name||'').trim().toLowerCase().replace(/\s+/g,' ');
+    let lb = JSON.parse(localStorage.getItem('doan_lb') || '[]');
+    lb = lb.filter(e => !(
+      (e.phone || '').trim() === phone.trim() &&
+      (e.name  || '').trim() === name.trim()
+    ));
+    localStorage.setItem('doan_lb', JSON.stringify(lb));
+  } catch(e) {}
+
+  // 3. Xóa khỏi doan_attempted (reset quyền thi lại trên cùng trình duyệt)
+  try {
+    const normPhone = phone.trim().replace(/[\s\-]/g, '');
+    const normName  = name.trim().toLowerCase().replace(/\s+/g, ' ');
     let attempted = JSON.parse(localStorage.getItem('doan_attempted') || '[]');
     attempted = attempted.filter(e =>
       !(e.phone === normPhone || e.name === normName)
@@ -854,118 +808,75 @@ function deleteEntry(phone, name, unit) {
     localStorage.setItem('doan_attempted', JSON.stringify(attempted));
   } catch(e) {}
 
+  // 4. Gọi Google Sheets để xóa (JSONP để không bị CORS block)
+  if (SHEET_URL) {
+    jsonpFetch(SHEET_URL, { action: 'delete', phone: phone.trim(), name: name.trim() })
+      .then(() => showToast(`✅ Đã xóa "${name}" khỏi Google Sheets và reset quyền thi.`))
+      .catch(() => showToast(`⚠️ Xóa cục bộ thành công. Sheets chưa xóa được — reload để kiểm tra.`, 5000));
+  } else {
+    showToast(`✅ Đã xóa "${name}" và reset quyền thi lại.`);
+  }
+
   updateStats();
   renderTable();
-  showToast(`✅ Đã xóa "${name}" và reset quyền thi lại.`);
 }
 
 // ============================================================
-// CLEAR
+// XÓA TẤT CẢ
 // ============================================================
 function confirmClearLB() { openModal('modalClear'); }
+
 function doClearLB() {
-  try { localStorage.removeItem('doan_lb'); } catch(e) {}
+  // Xóa localStorage
+  try { localStorage.removeItem('doan_lb'); }       catch(e) {}
   try { localStorage.removeItem('doan_attempted'); } catch(e) {}
   allData = [];
+
+  // Gọi Sheets xóa tất cả (fire-and-forget)
+  if (SHEET_URL) {
+    jsonpFetch(SHEET_URL, { action: 'deleteAll' }).catch(() => {});
+  }
+
   updateStats();
   renderTable();
   closeModal('modalClear');
-  showToast('🗑️ Đã xóa toàn bộ dữ liệu kết quả và reset danh sách đã thi thành công.');
+  showToast('🗑️ Đã xóa toàn bộ dữ liệu, reset danh sách đã thi.');
 }
 
 // ============================================================
-// EXPORT
+// EXPORT CSV
 // ============================================================
 function exportCSV() {
   if (!allData.length) { showToast('⚠️ Không có dữ liệu để xuất.'); return; }
-  const header = ['Hạng','Họ Tên','Đơn Vị','Chức Vụ','Điểm (10)','Đúng','Sai','Bỏ','Alt-Tab','T/G Hoàn Thành','Nộp Bài','Thời Gian Nộp'];
-  const sorted = [...allData].sort((a,b) => (parseFloat(b.score)||0) - (parseFloat(a.score)||0));
+  const header = ['Hạng','Họ Tên','Đơn Vị','Chức Vụ','Điểm (10)','Đúng','Sai','Bỏ','Alt-Tab','T/G Làm','Nộp Bài'];
+  const sorted = sortData(allData);
   const rows = sorted.map((e, i) => {
-    const ct = parseInt(e.completionTime)||0;
-    const timeStr = ct ? `${Math.floor(ct/60)}p${ct%60}s` : '';
-    const correct = e.correctCount !== undefined ? e.correctCount : (e.correct||0);
-    const total = e.total || Math.round((parseFloat(e.score)||0) / 0.5) || 20;
-    let wrong = (e.wrong !== undefined && e.wrong !== null) ? e.wrong : null;
-    let skip  = (e.skip  !== undefined && e.skip  !== null) ? e.skip  : null;
-    if (wrong === null || skip === null) {
-      const remaining = Math.max(0, total - correct);
-      if (wrong === null) wrong = remaining;
-      if (skip  === null) skip  = 0;
-    }
+    const secs = toSeconds(e.completionTime);
+    const timeStr = (secs !== Infinity && secs > 0) ? `${Math.floor(secs/60)}p${secs%60}s` : '';
+    const correct = parseInt(e.correct) || parseInt(e.correctCount) || 0;
+    const wrong   = parseInt(e.wrong)  || 0;
+    const skip    = parseInt(e.skip)   || 0;
+    const isForced = e.forceSubmitted === true || e.forceSubmitted === 'Có (vi phạm)';
     return [
-      i+1,
-      e.name||'', e.unit||'', e.title||'',
+      i + 1, e.name||'', e.unit||'', e.title||'',
       (parseFloat(e.score)||0).toFixed(1),
       correct, wrong, skip,
       parseInt(e.tabWarnings)||0,
       timeStr,
-      e.forceSubmitted ? 'Bị buộc nộp' : 'Tự nộp',
-      e.time||'',
+      isForced ? 'Bị buộc nộp' : 'Tự nộp',
     ];
   });
-  const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const csv = [header, ...rows]
+    .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(','))
+    .join('\n');
   downloadFile('\uFEFF' + csv, `KetQua_Thi_${dateStamp()}.csv`, 'text/csv;charset=utf-8');
-  showToast('✅ Đã xuất file CSV thành công!');
+  showToast('✅ Đã xuất file CSV!');
 }
 
 function exportJSON() {
-  if (!allData.length) { showToast('⚠️ Không có dữ liệu để xuất.'); return; }
+  if (!allData.length) { showToast('⚠️ Không có dữ liệu.'); return; }
   downloadFile(JSON.stringify(allData, null, 2), `DuPhong_KetQua_${dateStamp()}.json`, 'application/json');
   showToast('✅ Đã xuất file JSON dự phòng!');
-}
-
-// ============================================================
-// IMPORT JSON (từ file hoặc clipboard)
-// ============================================================
-function importJSON(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) { showToast('❌ File JSON không hợp lệ (phải là mảng dữ liệu).'); return; }
-      mergeImportedData(imported);
-    } catch(err) {
-      showToast('❌ Lỗi đọc file JSON: ' + err.message);
-    }
-    input.value = '';
-  };
-  reader.readAsText(file);
-}
-
-async function importFromClipboard() {
-  try {
-    const text = await navigator.clipboard.readText();
-    if (!text) { showToast('⚠️ Clipboard trống.'); return; }
-    const imported = JSON.parse(text.trim());
-    if (!Array.isArray(imported)) { showToast('❌ Dữ liệu clipboard không hợp lệ (phải là mảng JSON).'); return; }
-    mergeImportedData(imported);
-  } catch(err) {
-    showToast('❌ Không đọc được clipboard. Hãy dùng nút "Nhập JSON" thay thế.');
-  }
-}
-
-function mergeImportedData(imported) {
-  if (!imported.length) { showToast('⚠️ Không có dữ liệu trong file.'); return; }
-
-  // Merge: tránh trùng (phone + name + time)
-  const existing = new Set(allData.map(e => `${e.phone}|${e.name}|${e.time}`));
-  let added = 0;
-  imported.forEach(entry => {
-    const key = `${entry.phone}|${entry.name}`;
-    if (!existing.has(key)) {
-      allData.push(entry);
-      existing.add(key);
-      added++;
-    }
-  });
-
-  // Lưu lại
-  try { localStorage.setItem('doan_lb', JSON.stringify(allData)); } catch(e) {}
-  updateStats();
-  renderTable();
-  showToast(`✅ Nhập thành công! Đã thêm ${added} kết quả mới (bỏ qua ${imported.length - added} trùng lặp).`);
 }
 
 function downloadFile(content, filename, mime) {
@@ -973,8 +884,7 @@ function downloadFile(content, filename, mime) {
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href = url; a.download = filename;
-  document.body.appendChild(a);
-  a.click();
+  document.body.appendChild(a); a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
@@ -989,14 +899,23 @@ function dateStamp() {
 // ============================================================
 function openModal(id)  { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
 function showToast(msg, duration = 3200) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), duration);
 }
+
 function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Escape cho dùng trong attribute onclick (tránh dấu ' phá vỡ string)
+function escAttr(s) {
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 }
 
 document.addEventListener('keydown', e => {
