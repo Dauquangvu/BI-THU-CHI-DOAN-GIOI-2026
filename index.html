@@ -31,8 +31,8 @@
   --shadow-md: 0 8px 36px rgba(0,48,135,0.13);
   --shadow-lg: 0 24px 64px rgba(0,48,135,0.18);
   --shadow-xl: 0 40px 80px rgba(0,48,135,0.22);
-  --radius:    20px;
-  --radius-sm: 12px;
+  --radius:    40px;
+  --radius-sm: 24px;
   --transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
 }
 
@@ -117,7 +117,7 @@ body {
 @keyframes rotateStar { 100% { transform: rotate(360deg); } }
 
 /* ===== LAYOUT ===== */
-.main { max-width: 860px; margin: 0 auto; padding: 36px 20px 80px; }
+.main { max-width: 980px; margin: 0 auto; padding: 36px 20px 80px; }
 .screen { display: none; animation: fadeSlideUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
 .screen.active { display: block; }
 @keyframes fadeSlideUp {
@@ -305,34 +305,48 @@ body {
 .error-msg { color: var(--red); font-size: 12px; margin-top: 5px; font-weight: 600; min-height: 18px; }
 .hint-msg { color: var(--gray-400); font-size: 11px; margin-top: 4px; font-style: italic; }
 
-/* ===== QUIZ TOPBAR ===== */
-.quiz-topbar {
+/* ===== QUIZ 2-COLUMN LAYOUT ===== */
+.quiz-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* ===== QUIZ MAIN (left) ===== */
+.quiz-main {
+  min-width: 0;
+}
+
+/* ===== QUIZ SIDEBAR (right) ===== */
+.quiz-sidebar {
+  position: sticky;
+  top: 12px;
   background: white;
   border-radius: var(--radius);
-  padding: 10px 14px;
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-md);
   border: 1.5px solid var(--gray-200);
-  flex-wrap: nowrap;
-  position: sticky; top: 8px; z-index: 100;
-  backdrop-filter: blur(12px);
+  z-index: 100;
 }
+
 .timer-box {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
   background: linear-gradient(135deg, var(--red-dark), var(--red));
   color: white;
   border-radius: var(--radius-sm);
-  padding: 7px 12px;
-  font-size: 16px; font-weight: 800;
+  padding: 14px 10px;
+  font-size: 34px; font-weight: 800;
   font-variant-numeric: tabular-nums;
-  box-shadow: 0 3px 12px var(--red-glow);
-  min-width: 86px;
+  box-shadow: 0 3px 14px var(--red-glow);
+  width: 100%;
   transition: all 0.4s ease;
-  letter-spacing: 1px;
-  flex-shrink: 0;
+  letter-spacing: 2px;
 }
-.timer-box .timer-icon { font-size: 13px; }
+.timer-box .timer-icon { font-size: 20px; }
 .timer-box.warning { 
   background: linear-gradient(135deg, #B34F00, #E06000); 
   box-shadow: 0 4px 20px rgba(224,96,0,0.45); 
@@ -344,23 +358,22 @@ body {
 }
 @keyframes timerPulse { 
   0%,100%{transform:scale(1)} 
-  50%{transform:scale(1.06)} 
+  50%{transform:scale(1.05)} 
 }
-.quiz-progress-wrap { flex: 1; min-width: 120px; }
-.progress-label { font-size: 11px; font-weight: 700; color: var(--gray-600); margin-bottom: 5px; display: flex; justify-content: space-between; }
+
+.sidebar-progress { width: 100%; }
+.progress-label { font-size: 13px; font-weight: 700; color: var(--gray-600); margin-bottom: 6px; display: flex; justify-content: space-between; }
 .progress-bar { 
-  height: 8px; 
+  height: 9px; 
   background: var(--gray-200); 
   border-radius: 20px; 
   overflow: hidden;
-  position: relative;
 }
 .progress-fill { 
   height: 100%; 
   background: linear-gradient(90deg, var(--blue) 0%, #1a7fe8 40%, var(--gold) 100%);
   border-radius: 20px; 
   transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.8s ease;
-  position: relative;
   box-shadow: 0 0 6px rgba(0,48,135,0.3);
 }
 .progress-fill.near-done {
@@ -371,18 +384,37 @@ body {
   background: linear-gradient(90deg, #0A6032 0%, #16a34a 30%, #F4C430 55%, #E6A800 75%, #ff8800 100%);
   box-shadow: 0 0 14px rgba(230,168,0,0.6);
 }
-.quiz-nav-dots { display: flex; gap: 4px; flex-wrap: wrap; max-width: 280px; overflow-y: auto; max-height: 80px; }
+
+/* Nav dots in sidebar — 5 per row */
+.quiz-nav-dots { 
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.sidebar-submit {
+  width: 100%;
+  padding: 13px 8px;
+  font-size: 15px;
+  transition: opacity 0.5s ease;
+}
 
 /* ===== QUESTION CARD ===== */
+@keyframes borderFlash {
+  0%   { border-color: #FFD700; box-shadow: 0 0 0 3px #FFD700, var(--shadow-md); }
+  25%  { border-color: #00CFFF; box-shadow: 0 0 0 3px #00CFFF, var(--shadow-md); }
+  50%  { border-color: #FF2D2D; box-shadow: 0 0 0 3px #FF2D2D, var(--shadow-md); }
+  75%  { border-color: #00CFFF; box-shadow: 0 0 0 3px #00CFFF, var(--shadow-md); }
+  100% { border-color: #FFD700; box-shadow: 0 0 0 3px #FFD700, var(--shadow-md); }
+}
 .question-card {
   background: white;
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
   margin-bottom: 22px;
-  border: 1.5px solid var(--gray-200);
+  border: 3px solid #FFD700;
   transition: var(--transition);
-  animation: questionIn 0.35s cubic-bezier(0.22,1,0.36,1);
+  animation: questionIn 0.35s cubic-bezier(0.22,1,0.36,1), borderFlash 1.2s linear infinite;
 }
 @keyframes questionIn {
   from { opacity: 0; transform: translateX(20px); }
@@ -409,7 +441,7 @@ body {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0;
   width: 4px; background: transparent;
   transition: background 0.25s ease, width 0.25s ease;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 8px 8px 0;
 }
 /* Ripple effect container */
 .option-btn .ripple {
@@ -503,7 +535,7 @@ body {
   color: #FFFFFF;
   border-color: rgba(255,255,255,0.3);
 }
-.quiz-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.quiz-footer { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
 
 /* ===== RESULT ===== */
 .result-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-xl); overflow: hidden; border: 1.5px solid var(--gray-200); }
@@ -750,20 +782,26 @@ body.violation-flash::after {
   .form-row { grid-template-columns:1fr; }
   .result-info-grid { grid-template-columns:1fr; }
   .header-logo { width:56px; height:56px; }
-  .question-header { padding:18px 20px; }
+  .question-header {
+  border-radius: 36px 36px 0 0; padding:18px 20px; }
   .options-grid { padding:18px 20px; }
   .modal { padding:30px 22px; }
-  .quiz-topbar { padding:14px 18px; }
+  /* Quiz collapses to single column on mobile */
+  .quiz-layout { grid-template-columns: 1fr; }
+  .quiz-sidebar { position:static; flex-direction:row; flex-wrap:wrap; padding:10px; }
+  .timer-box { width:auto; flex:0 0 auto; font-size:18px; }
+  .quiz-nav-dots { grid-template-columns: repeat(8,1fr); }
 }
 
 /* ===== ENHANCED PROGRESS DOTS ===== */
 .nav-dot {
-  width: 24px; height: 24px; border-radius: 6px;
+  width: 100%; aspect-ratio: 1; border-radius: 8px;
   background: var(--gray-200); border: none; cursor: pointer;
-  font-size: 10px; font-weight: 700; color: var(--gray-600);
+  font-size: 12px; font-weight: 700; color: var(--gray-600);
   transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); 
   font-family: inherit;
   position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
 .nav-dot::before {
   content: '';
@@ -839,6 +877,7 @@ body.violation-flash::after {
 
 /* ===== QUESTION HEADER IMPROVEMENT ===== */
 .question-header {
+  border-radius: 36px 36px 0 0;
   background: linear-gradient(135deg, #002570 0%, #003087 40%, #004AAD 100%);
   padding: 24px 30px; display: flex; align-items: flex-start; gap: 16px;
   position: relative; overflow: hidden;
@@ -994,43 +1033,62 @@ body.violation-flash::after {
 
   <!-- SCREEN 3: QUIZ -->
   <div class="screen" id="screenQuiz">
-    <div class="quiz-topbar">
-      <div class="timer-box" id="timerBox">
-        <span class="timer-icon">⏱</span>
-        <span id="timerDisplay">25:00</span>
-      </div>
-      <div class="quiz-progress-wrap">
-        <div class="progress-label">
-          <span>Tiến độ làm bài</span>
-          <span id="progressText">0 / 25</span>
+    <div class="quiz-layout">
+
+      <!-- LEFT: Câu hỏi + đáp án -->
+      <div class="quiz-main">
+        <div class="question-card" id="questionCard">
+          <div class="question-header">
+            <div class="q-num" id="qNum">1</div>
+            <div class="q-text" id="qText">Đang tải câu hỏi...</div>
+          </div>
+          <div class="options-grid" id="optionsGrid"></div>
         </div>
-        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-      </div>
-      <div class="quiz-nav-dots" id="navDots"></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;margin-left:auto">
-        <div id="candidateBadge" style="display:none;align-items:center;gap:6px;background:var(--blue-pale);border:1.5px solid var(--blue-light);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--blue);max-width:170px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
-          <span>👤</span><span id="candidateName" style="overflow:hidden;text-overflow:ellipsis;">—</span>
+        <div class="quiz-footer">
+          
+          <div style="text-align:center">
+            <div style="font-size:13px;color:var(--gray-600);font-weight:600" id="qCounter">Câu 1 / 25</div>
+            <div style="font-size:10px;color:var(--gray-400);margin-top:3px;letter-spacing:.3px">⌨️ <b>1·2·3·4</b> chọn — <b>← →</b> chuyển câu</div>
+          </div>
+          
         </div>
-        <div id="submitLockBadge" style="font-size:10px;color:var(--gray-400);font-weight:600;text-align:right;max-width:170px;"></div>
+      </div>
+
+      <!-- RIGHT: Sidebar -->
+      <div class="quiz-sidebar">
+
+        <!-- Timer -->
+        <div class="timer-box" id="timerBox">
+          <span class="timer-icon">⏱</span>
+          <span id="timerDisplay">30:00</span>
+        </div>
+
+        <!-- Candidate -->
+        <div id="candidateBadge" style="display:none;flex-direction:column;gap:3px;background:var(--blue-pale);border:1.5px solid var(--blue-light);border-radius:10px;padding:10px 12px;font-size:14px;font-weight:700;color:var(--blue);">
+          <span>👤 <span id="candidateName">—</span></span>
+        </div>
+
+        <!-- Progress -->
+        <div class="sidebar-progress">
+          <div class="progress-label">
+            <span>Tiến độ</span>
+            <span id="progressText">0 / 25</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <!-- Nav dots -->
+        <div class="quiz-nav-dots" id="navDots"></div>
+
+        <!-- Submit lock msg -->
+        <div id="submitLockMsg" style="font-size:12px;color:var(--gray-400);font-weight:600;text-align:center;min-height:14px;"></div>
+        <div id="submitLockBadge" style="display:none"></div>
+
+        <!-- Submit button -->
+        <button class="btn btn-danger sidebar-submit" onclick="confirmSubmit()" id="btnSubmit">📤 Nộp Bài</button>
+
       </div>
     </div>
-    <div class="question-card" id="questionCard">
-      <div class="question-header">
-        <div class="q-num" id="qNum">1</div>
-        <div class="q-text" id="qText">Đang tải câu hỏi...</div>
-      </div>
-      <div class="options-grid" id="optionsGrid"></div>
-    </div>
-    <div class="quiz-footer">
-      <button class="btn btn-outline" id="btnPrev" onclick="navigate(-1)">← Câu Trước</button>
-      <div style="text-align:center">
-        <div style="font-size:13px;color:var(--gray-600);font-weight:600" id="qCounter">Câu 1 / 20</div>
-        <div style="font-size:11px;color:var(--gray-400);margin-top:2px" id="submitLockMsg"></div>
-        <div style="font-size:10px;color:var(--gray-400);margin-top:3px;letter-spacing:.3px">⌨️ Phím <b>1·2·3·4</b> chọn đáp án — <b>← →</b> chuyển câu</div>
-      </div>
-      <button class="btn btn-outline" id="btnNext" onclick="navigate(1)">Câu Sau →</button>
-    </div>
-    <button class="btn btn-danger" style="width:100%;margin-top:18px;transition:opacity 0.5s ease" onclick="confirmSubmit()" id="btnSubmit">📤 Nộp Bài Ngay</button>
   </div>
 
   <!-- SCREEN 4: RESULT -->
@@ -2148,8 +2206,8 @@ function renderQuestion() {
     });
     grid.appendChild(btn);
   });
-  document.getElementById('btnPrev').disabled = i === 0;
-  document.getElementById('btnNext').disabled = i === CONFIG.NUM_QUESTIONS - 1;
+  
+  
   updateNavDots();
   updateProgress();
 }
